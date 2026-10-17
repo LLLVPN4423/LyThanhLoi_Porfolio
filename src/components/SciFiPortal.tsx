@@ -50,9 +50,13 @@ export function SciFiPortal({ active, className = "" }: Props) {
         <p className="mt-1 max-w-[8rem] text-xs text-cyan-glow/90 drop-shadow-md">
           {active === "email"
             ? "Routing · mail"
-            : active === "github"
-              ? "Routing · git"
-              : "Select channel"}
+            : active === "phone"
+              ? "Routing · voice"
+              : active === "github"
+                ? "Routing · git"
+                : active === "facebook"
+                  ? "Routing · social"
+                  : "Select channel"}
         </p>
       </div>
     </div>

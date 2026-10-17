@@ -450,6 +450,18 @@ body {
   }
 }
 
+/* Contact — portal center, cards on orbit */
+.contact-orbit {
+  isolation: isolate;
+}
+
+@media (max-width: 480px) {
+  .contact-orbit a.contact-card {
+    width: min(44vw, 9.5rem) !important;
+    padding: 0.75rem !important;
+  }
+}
+
 /* Contact portal */
 .portal-glow-idle {
   border-color: color-mix(in srgb, var(--color-panel-border) 80%, transparent);
