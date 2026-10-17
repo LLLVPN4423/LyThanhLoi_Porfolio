@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@theme {
+  --color-void: #07080f;
+  --color-void-elevated: #0e1019;
+  --color-panel: #12151f;
+  --color-panel-border: #1e2433;
+  --color-cyan-glow: #22d3ee;
+  --color-violet-glow: #a78bfa;
+  --color-text-primary: #e8eaf0;
+  --color-text-muted: #9499ab;
+  --font-display: var(--font-cinzel), serif;
+  --font-body: var(--font-dm-sans), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background: var(--color-void);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  min-height: 100vh;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-cyan-glow) 35%, transparent);
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--color-panel-border) 40%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-panel-border) 40%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 20%, transparent 75%);
+}
+
+.glow-ring {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-cyan-glow) 25%, transparent),
+    0 0 40px -12px color-mix(in srgb, var(--color-violet-glow) 35%, transparent);
+}
+
+.reveal-hidden {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
