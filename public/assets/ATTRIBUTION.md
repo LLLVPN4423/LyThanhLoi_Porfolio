@@ -15,4 +15,6 @@ Ron Cobb / _Alien_ (1979) iconography via Semiotic Standard adaptations.
 | `videos/airlock-door.mp4` | User-provided (Hailuo generation) | Decorative loop |
 | `videos/portal-stargate.mp4` | User-provided (Hailuo generation) | Decorative loop |
 | `videos/yggdrasil-neon.mp4` | User-provided (Hailuo generation) | Decorative loop |
-| `cryogenic-chamber-csc7x.png` | User-provided concept art (CSC-7X) | About capsule |
+| `cryogenic-chamber-csc7x.png` | User-provided concept art (CSC-7X) | Legacy reference |
+| `yggdrasil-cosmic.png` | User-provided AI art | Timeline Yggdrasil |
+| `capsule-stasis.png` | User-provided AI art | About capsule |

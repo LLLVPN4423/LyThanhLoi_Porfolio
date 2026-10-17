@@ -449,6 +449,17 @@ body {
   filter: contrast(1.05) saturate(1.25) brightness(0.7);
 }
 
+/* PNG on black — blend into void background */
+.yggdrasil-png-bleed {
+  mix-blend-mode: screen;
+  filter: contrast(1.06) saturate(1.15) brightness(0.95);
+}
+
+.capsule-isolated-art {
+  mix-blend-mode: screen;
+  filter: contrast(1.05) saturate(1.1) brightness(0.98);
+}
+
 .yggdrasil-edge-fade {
   background: linear-gradient(
       to right,
@@ -461,13 +472,15 @@ body {
 }
 
 .lab-video-bleed,
-.yggdrasil-video-bleed {
+.yggdrasil-video-bleed,
+.yggdrasil-png-bleed {
   transform-origin: center center;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .lab-video-bleed,
-  .yggdrasil-video-bleed {
+  .yggdrasil-video-bleed,
+  .yggdrasil-png-bleed {
     transform: none;
   }
 }

@@ -1,22 +1,12 @@
 "use client";
 
 import { timeline } from "@/data/timeline";
-import { SciFiVideo } from "./SciFiVideo";
 
-const YGG_VIDEO = "/assets/videos/yggdrasil-neon.mp4";
+const YGG_ART = "/assets/yggdrasil-cosmic.png";
 
-/** Full-bleed neon Yggdrasil video + timeline node overlay; SVG fallback */
+/** Full-bleed cosmic Yggdrasil art + timeline node overlay */
 export function YggdrasilTree() {
   const n = timeline.length;
-
-  const svgFallback = (
-    /* eslint-disable-next-line @next/next/no-img-element */
-    <img
-      src="/assets/yggdrasil-commons.svg"
-      alt=""
-      className="yggdrasil-art mx-auto h-full w-full max-w-none object-contain opacity-90"
-    />
-  );
 
   return (
     <div
@@ -24,10 +14,11 @@ export function YggdrasilTree() {
       aria-hidden
     >
       <div className="absolute inset-0 overflow-hidden">
-        <SciFiVideo
-          src={YGG_VIDEO}
-          className="yggdrasil-video-bleed absolute inset-0 h-full w-full min-h-full min-w-full object-cover object-center yggdrasil-video-grade scale-[1.15]"
-          fallback={<div className="flex h-full items-center justify-center px-2">{svgFallback}</div>}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={YGG_ART}
+          alt=""
+          className="yggdrasil-png-bleed absolute inset-0 h-full w-full min-h-full min-w-full object-cover object-center scale-[1.08]"
         />
         <div className="pointer-events-none absolute inset-0 yggdrasil-edge-fade" />
       </div>
