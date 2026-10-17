@@ -449,6 +449,25 @@ body {
   filter: contrast(1.05) saturate(1.25) brightness(0.7);
 }
 
-.capsule-chamber-art {
-  filter: brightness(0.92) contrast(1.05) saturate(1.1);
+.yggdrasil-edge-fade {
+  background: linear-gradient(
+      to right,
+      var(--color-void) 0%,
+      transparent 18%,
+      transparent 82%,
+      color-mix(in srgb, var(--color-void) 85%, transparent) 100%
+    ),
+    linear-gradient(to bottom, transparent 0%, transparent 88%, var(--color-void) 100%);
+}
+
+.lab-video-bleed,
+.yggdrasil-video-bleed {
+  transform-origin: center center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-video-bleed,
+  .yggdrasil-video-bleed {
+    transform: none;
+  }
 }

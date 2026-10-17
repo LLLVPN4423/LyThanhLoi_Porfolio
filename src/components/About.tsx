@@ -24,7 +24,7 @@ export function About() {
           </h2>
         </Reveal>
 
-        <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(220px,280px)_1fr] lg:items-start">
+        <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(240px,340px)_1fr] lg:items-start">
           <Reveal delayMs={80}>
             <LaboratoryCapsule />
           </Reveal>

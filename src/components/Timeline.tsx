@@ -21,7 +21,7 @@ export function Timeline() {
           </h2>
         </Reveal>
 
-        <div className="mt-10 grid gap-8 md:grid-cols-[minmax(140px,200px)_1fr] md:items-start">
+        <div className="relative mt-10 grid gap-8 md:grid-cols-[minmax(260px,36vw)_1fr] md:items-stretch">
           <Reveal delayMs={80}>
             <YggdrasilTree />
           </Reveal>

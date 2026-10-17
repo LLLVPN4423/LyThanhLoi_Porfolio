@@ -5,12 +5,13 @@ import { SciFiVideo } from "./SciFiVideo";
 type Props = {
   doorOpen: boolean;
   smokeActive: boolean;
+  fullBleed?: boolean;
 };
 
 const AIRLOCK_VIDEO = "/assets/videos/airlock-door.mp4";
 
-/** Hailuo airlock clip + SVG fallback; smoke + optional door panels */
-export function LabAirlockScene({ doorOpen, smokeActive }: Props) {
+/** Hailuo airlock clip full-bleed; SVG fallback when motion reduced */
+export function LabAirlockScene({ doorOpen, smokeActive, fullBleed = true }: Props) {
   const svgFallback = (
     <div className="relative h-full w-full">
       <div className="absolute inset-0 flex items-center justify-center opacity-25">
@@ -29,15 +30,21 @@ export function LabAirlockScene({ doorOpen, smokeActive }: Props) {
   );
 
   return (
-    <div className="relative mx-auto mt-10 h-[70%] w-[78%] overflow-hidden rounded-lg border border-cyan-glow/20 bg-void">
+    <div
+      className={
+        fullBleed
+          ? "pointer-events-none absolute inset-0 overflow-hidden"
+          : "relative mx-auto h-full w-full overflow-hidden"
+      }
+    >
       <SciFiVideo
         src={AIRLOCK_VIDEO}
-        className="absolute inset-0 h-full w-full object-cover lab-video-grade"
+        className="lab-video-bleed absolute inset-0 h-full w-full min-h-full min-w-full object-cover lab-video-grade scale-[1.12]"
         fallback={svgFallback}
       />
 
       <div
-        className={`pointer-events-none absolute inset-0 z-[5] bg-gradient-to-t from-void via-transparent to-void/40 ${doorOpen ? "opacity-60" : "opacity-90"}`}
+        className={`pointer-events-none absolute inset-0 z-[5] bg-gradient-to-t from-void/90 via-void/15 to-void/50 ${doorOpen ? "opacity-50" : "opacity-70"}`}
       />
 
       {!doorOpen ? (
@@ -48,7 +55,9 @@ export function LabAirlockScene({ doorOpen, smokeActive }: Props) {
         </div>
       ) : null}
 
-      <div className={`lab-smoke pointer-events-none absolute inset-x-0 bottom-0 z-30 h-[55%] ${smokeActive ? "lab-smoke-active" : ""}`} />
+      <div
+        className={`lab-smoke pointer-events-none absolute inset-x-0 bottom-0 z-30 h-[55%] ${smokeActive ? "lab-smoke-active" : ""}`}
+      />
     </div>
   );
 }
