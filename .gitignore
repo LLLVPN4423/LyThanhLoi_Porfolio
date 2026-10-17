@@ -1,5 +1,6 @@
 # dependencies
 /node_modules
+website-slide-deck/node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -35,3 +36,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.vercel

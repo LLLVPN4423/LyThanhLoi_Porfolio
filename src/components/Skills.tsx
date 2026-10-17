@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { skillGroups, type SkillGroup } from "@/data/skills";
+import { HudSkillCard } from "./HudSkillCard";
 import { Reveal } from "./Reveal";
 
 export function Skills() {
@@ -24,27 +25,13 @@ export function Skills() {
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {skillGroups.map((group, i) => (
-            <Reveal key={group.id} delayMs={i * 60}>
-              <button
-                type="button"
-                onClick={() => setActive(group)}
-                className="group w-full rounded-xl border border-panel-border bg-panel/40 p-5 text-left transition hover:border-cyan-glow/35 hover:bg-panel/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-glow"
-              >
-                <span className="text-2xl text-violet-glow/80" aria-hidden>
-                  {group.rune}
-                </span>
-                <h3 className="mt-3 text-sm font-medium text-text-primary">{group.title}</h3>
-                <p className="mt-2 text-xs text-text-muted">
-                  {group.items.map((s) => s.name).join(" · ")}
-                </p>
-              </button>
-            </Reveal>
+            <HudSkillCard key={group.id} group={group} index={i} onSelect={setActive} />
           ))}
         </div>
 
         {active ? (
           <div
-            className="mt-6 rounded-xl border border-cyan-glow/25 bg-void-elevated p-5"
+            className="mt-6 rounded-xl border border-cyan-glow/25 bg-void-elevated p-5 hud-detail-in"
             role="region"
             aria-label={`${active.title} details`}
           >

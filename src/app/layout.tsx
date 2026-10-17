@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cinzel, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { AmbientSciFi } from "@/components/AmbientSciFi";
 import { Navigation } from "@/components/Navigation";
 import { ScrollProgress } from "@/components/ScrollProgress";
 
@@ -39,10 +40,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${cinzel.variable} ${dmSans.variable} ${jetbrains.variable}`}>
-      <body className="antialiased">
+      <body className="relative antialiased">
+        <AmbientSciFi />
         <ScrollProgress />
         <Navigation />
-        <main>{children}</main>
+        <main className="relative z-[1]">{children}</main>
       </body>
     </html>
   );

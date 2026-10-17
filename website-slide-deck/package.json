@@ -1,0 +1,11 @@
+{
+  "name": "website-slide-deck",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "node generate_deck.mjs"
+  },
+  "dependencies": {
+    "pptxgenjs": "^4.0.1"
+  }
+}

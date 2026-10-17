@@ -2,15 +2,9 @@
 
 import { useState } from "react";
 import { projects, type Project } from "@/data/projects";
+import { projectThemes } from "@/data/projectThemes";
 import { ProjectDetailPanel } from "./ProjectDetailPanel";
 import { Reveal } from "./Reveal";
-
-const accentMap: Record<Project["accent"], string> = {
-  cyan: "from-cyan-glow/15 to-transparent",
-  violet: "from-violet-glow/15 to-transparent",
-  amber: "from-amber-400/15 to-transparent",
-  emerald: "from-emerald-400/15 to-transparent",
-};
 
 export function Projects() {
   const [selected, setSelected] = useState<Project | null>(null);
@@ -31,68 +25,76 @@ export function Projects() {
         </Reveal>
 
         <div className="mt-10 grid gap-5 sm:grid-cols-2">
-          {projects.map((project, i) => (
-            <Reveal key={project.id} delayMs={i * 70}>
-              <article
-                className={`group relative overflow-hidden rounded-xl border border-panel-border bg-panel/30 transition hover:border-cyan-glow/30`}
-              >
-                <div
-                  className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${accentMap[project.accent]} opacity-80`}
-                  aria-hidden
-                />
-                <button
-                  type="button"
-                  onClick={() => setSelected(project)}
-                  className="relative w-full p-5 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-glow"
+          {projects.map((project, i) => {
+            const theme = projectThemes[project.id];
+            return (
+              <Reveal key={project.id} delayMs={i * 70}>
+                <article
+                  className={`project-theme-card group relative overflow-hidden rounded-xl border bg-panel/30 transition hover:scale-[1.01] ${theme.frame}`}
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <span className="text-3xl" aria-hidden>
-                      {project.glyph}
-                    </span>
-                    <span className="font-[family-name:var(--font-mono)] text-[10px] text-text-muted uppercase">
-                      Open record
-                    </span>
-                  </div>
-                  <h3 className="mt-4 text-lg font-medium">{project.name}</h3>
-                  <p className="mt-2 line-clamp-2 text-sm text-text-muted">
-                    {project.shortDescription}
-                  </p>
-                  <div className="mt-4 flex flex-wrap gap-1.5">
-                    {project.technologies.slice(0, 4).map((t) => (
-                      <span
-                        key={t}
-                        className="rounded border border-panel-border/80 bg-void/40 px-2 py-0.5 text-[10px] text-text-muted"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </button>
-                <div className="relative flex gap-2 border-t border-panel-border/80 px-5 py-3">
-                  <a
-                    href={project.repositoryUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs text-cyan-glow hover:underline"
-                    onClick={(e) => e.stopPropagation()}
+                  <div
+                    className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${theme.scan} to-transparent opacity-90`}
+                    aria-hidden
+                  />
+                  <div className="pointer-events-none absolute inset-0 opacity-[0.06] scanline-overlay" aria-hidden />
+
+                  <button
+                    type="button"
+                    onClick={() => setSelected(project)}
+                    className="relative w-full p-5 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-glow"
                   >
-                    GitHub
-                  </a>
-                  {project.demoUrl ? (
+                    <p className="font-[family-name:var(--font-mono)] text-[9px] tracking-widest text-text-muted uppercase">
+                      {theme.label}
+                    </p>
+                    <div className="mt-3 flex items-start justify-between gap-3">
+                      <span className="text-3xl" aria-hidden>
+                        {project.glyph}
+                      </span>
+                      <span className="font-[family-name:var(--font-mono)] text-[10px] text-text-muted uppercase">
+                        Open record
+                      </span>
+                    </div>
+                    <h3 className="mt-4 text-lg font-medium">{project.name}</h3>
+                    <p className="mt-2 line-clamp-2 text-sm text-text-muted">
+                      {project.shortDescription}
+                    </p>
+                    <div className="mt-4 flex flex-wrap gap-1.5">
+                      {project.technologies.slice(0, 4).map((t) => (
+                        <span
+                          key={t}
+                          className={`rounded border px-2 py-0.5 text-[10px] ${theme.tag}`}
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </button>
+                  <div className="relative flex gap-2 border-t border-panel-border/80 px-5 py-3">
                     <a
-                      href={project.demoUrl}
+                      href={project.repositoryUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-emerald-400/90 hover:underline"
+                      className="text-xs text-cyan-glow hover:underline"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      Live Demo
+                      GitHub
                     </a>
-                  ) : null}
-                </div>
-              </article>
-            </Reveal>
-          ))}
+                    {project.demoUrl ? (
+                      <a
+                        href={project.demoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-emerald-400/90 hover:underline"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        Live Demo
+                      </a>
+                    ) : null}
+                  </div>
+                </article>
+              </Reveal>
+            );
+          })}
         </div>
       </div>
 

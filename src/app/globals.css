@@ -68,3 +68,311 @@ body {
     opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
     transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+/* —— Lab door intro —— */
+.lab-intro-exit {
+  animation: lab-fade-out 0.8s ease forwards;
+}
+
+@keyframes lab-fade-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.lab-door-left,
+.lab-door-right {
+  transition: transform 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lab-door-open .lab-door-left {
+  transform: translateX(-92%);
+}
+
+.lab-door-open .lab-door-right {
+  transform: translateX(92%);
+}
+
+.lab-smoke {
+  opacity: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 100%, color-mix(in srgb, var(--color-cyan-glow) 25%, transparent), transparent 70%);
+  filter: blur(8px);
+  transform: translateY(40%);
+}
+
+.lab-smoke-active {
+  animation: lab-smoke-rise 1.8s ease-out forwards;
+}
+
+@keyframes lab-smoke-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(40%) scale(0.8);
+  }
+  40% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20%) scale(1.2);
+  }
+}
+
+.lab-bar-pulse {
+  animation: bar-pulse 2s ease-in-out infinite;
+}
+
+@keyframes bar-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    width: 40%;
+  }
+  50% {
+    opacity: 1;
+    width: 85%;
+  }
+}
+
+.neon-blink {
+  animation: neon-blink 2.5s step-end infinite;
+}
+
+.neon-flicker-text {
+  animation: neon-flicker 3s linear infinite;
+}
+
+.neon-grimoire-boot {
+  animation: neon-grimoire 2.8s ease-out;
+}
+
+@keyframes neon-blink {
+  0%,
+  100% {
+    opacity: 0.35;
+    box-shadow: none;
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 8px color-mix(in srgb, var(--color-cyan-glow) 50%, transparent);
+  }
+}
+
+@keyframes neon-flicker {
+  0%,
+  19%,
+  21%,
+  62%,
+  64%,
+  100% {
+    opacity: 1;
+  }
+  20%,
+  63% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes neon-grimoire {
+  0% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  15% {
+    opacity: 1;
+    text-shadow: 0 0 12px var(--color-cyan-glow);
+  }
+  30%,
+  45% {
+    opacity: 0.4;
+  }
+  60% {
+    opacity: 1;
+    text-shadow: 0 0 18px var(--color-violet-glow);
+  }
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 6px color-mix(in srgb, var(--color-cyan-glow) 40%, transparent);
+  }
+}
+
+.neon-boot-lamp {
+  animation: neon-boot-lamp 0.45s ease-in-out infinite alternate;
+}
+
+.neon-boot-cyan {
+  background: var(--color-cyan-glow);
+}
+
+.neon-boot-violet {
+  background: var(--color-violet-glow);
+  animation-delay: 0.12s;
+}
+
+.neon-boot-emerald {
+  background: #34d399;
+  animation-delay: 0.24s;
+}
+
+@keyframes neon-boot-lamp {
+  from {
+    opacity: 0.25;
+  }
+  to {
+    opacity: 1;
+    box-shadow: 0 0 10px currentColor;
+  }
+}
+
+/* Capsule + HUD */
+.capsule-float {
+  animation: capsule-float 5s ease-in-out infinite;
+}
+
+@keyframes capsule-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.scanline-overlay {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    color-mix(in srgb, var(--color-cyan-glow) 8%, transparent) 2px,
+    color-mix(in srgb, var(--color-cyan-glow) 8%, transparent) 4px
+  );
+}
+
+.hud-card-hidden {
+  opacity: 0;
+  transform: translateX(-16px) skewX(-2deg);
+}
+
+.hud-card-visible {
+  opacity: 1;
+  transform: translateX(0) skewX(0);
+}
+
+.hud-bar {
+  width: 0;
+  animation: hud-bar-fill 1.2s ease forwards;
+}
+
+@keyframes hud-bar-fill {
+  to {
+    width: 100%;
+  }
+}
+
+.hud-detail-in {
+  animation: hud-detail-in 0.35s ease;
+}
+
+@keyframes hud-detail-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* Ambient garden + neon strips */
+.neon-strip {
+  position: absolute;
+  height: 1px;
+  width: 40%;
+  opacity: 0.35;
+  animation: neon-strip-pulse 4s ease-in-out infinite;
+}
+
+.neon-strip-a {
+  top: 12%;
+  left: 5%;
+  background: linear-gradient(90deg, transparent, var(--color-cyan-glow), transparent);
+}
+
+.neon-strip-b {
+  bottom: 18%;
+  right: 4%;
+  background: linear-gradient(90deg, transparent, var(--color-violet-glow), transparent);
+  animation-delay: 1.5s;
+}
+
+@keyframes neon-strip-pulse {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.garden-vine {
+  position: absolute;
+  width: 120px;
+  height: 45%;
+  opacity: 0.12;
+  background: radial-gradient(ellipse at center, #34d399, transparent 70%);
+  filter: blur(20px);
+}
+
+.garden-vine-left {
+  left: -20px;
+  top: 30%;
+}
+
+.garden-vine-right {
+  right: -20px;
+  bottom: 15%;
+}
+
+.ygg-node-pulse {
+  animation: ygg-pulse 3s ease-in-out infinite;
+}
+
+@keyframes ygg-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Contact portal */
+.portal-glow-idle {
+  border-color: color-mix(in srgb, var(--color-panel-border) 80%, transparent);
+  box-shadow: inset 0 0 30px color-mix(in srgb, var(--color-violet-glow) 8%, transparent);
+}
+
+.portal-glow-cyan {
+  border-color: var(--color-cyan-glow);
+  box-shadow:
+    0 0 40px color-mix(in srgb, var(--color-cyan-glow) 45%, transparent),
+    inset 0 0 24px color-mix(in srgb, var(--color-cyan-glow) 20%, transparent);
+}
+
+.portal-glow-violet {
+  border-color: var(--color-violet-glow);
+  box-shadow:
+    0 0 40px color-mix(in srgb, var(--color-violet-glow) 45%, transparent),
+    inset 0 0 24px color-mix(in srgb, var(--color-violet-glow) 20%, transparent);
+}
+
+.portal-ring {
+  animation: portal-spin 12s linear infinite;
+}
+
+@keyframes portal-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

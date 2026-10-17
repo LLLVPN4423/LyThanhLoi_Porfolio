@@ -1,0 +1,97 @@
+[
+  {
+    "id": "S01",
+    "section": "hero",
+    "verified": "code + https://ly-thanh-loi-porfolio.vercel.app"
+  },
+  {
+    "id": "S02",
+    "section": "about",
+    "verified": "code"
+  },
+  {
+    "id": "S03",
+    "section": "skills",
+    "state": "default",
+    "verified": "code"
+  },
+  {
+    "id": "S04",
+    "section": "skills",
+    "state": "expanded",
+    "verified": "code"
+  },
+  {
+    "id": "S05",
+    "section": "projects",
+    "verified": "code"
+  },
+  {
+    "id": "S06",
+    "section": "projects",
+    "verified": "code"
+  },
+  {
+    "id": "S07",
+    "section": "projects",
+    "verified": "code"
+  },
+  {
+    "id": "S08",
+    "section": "project_modal",
+    "state": "before",
+    "verified": "code"
+  },
+  {
+    "id": "S09",
+    "section": "project_modal",
+    "state": "open",
+    "project": "CrayonNote",
+    "verified": "code"
+  },
+  {
+    "id": "S10",
+    "section": "timeline",
+    "verified": "code"
+  },
+  {
+    "id": "S11",
+    "section": "timeline",
+    "verified": "code"
+  },
+  {
+    "id": "S12",
+    "section": "contact_footer",
+    "verified": "code"
+  },
+  {
+    "id": "S13",
+    "section": "responsive_mobile_hero",
+    "verified": "code (Tailwind md: breakpoints)"
+  },
+  {
+    "id": "S14",
+    "section": "responsive_mobile_nav",
+    "verified": "code"
+  },
+  {
+    "id": "S15",
+    "section": "responsive_mobile_modal",
+    "verified": "code"
+  },
+  {
+    "id": "S16",
+    "section": "storyboard_reveal",
+    "verified": "code"
+  },
+  {
+    "id": "S17",
+    "section": "storyboard_modal",
+    "verified": "code"
+  },
+  {
+    "id": "S18",
+    "section": "storyboard_scroll_progress",
+    "verified": "code"
+  }
+]
