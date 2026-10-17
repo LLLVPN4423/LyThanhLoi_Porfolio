@@ -435,3 +435,20 @@ body {
   filter: invert(1) hue-rotate(240deg) saturate(2) brightness(1.1)
     drop-shadow(0 0 16px var(--color-violet-glow));
 }
+
+.lab-video-grade {
+  filter: contrast(1.08) saturate(1.15) brightness(0.75);
+}
+
+.portal-video-grade {
+  filter: contrast(1.1) saturate(1.2) brightness(0.8);
+  mix-blend-mode: screen;
+}
+
+.yggdrasil-video-grade {
+  filter: contrast(1.05) saturate(1.25) brightness(0.7);
+}
+
+.capsule-chamber-art {
+  filter: brightness(0.92) contrast(1.05) saturate(1.1);
+}

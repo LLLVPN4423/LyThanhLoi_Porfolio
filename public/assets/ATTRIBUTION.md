@@ -9,3 +9,10 @@
 | `semiotic-cryogenic.svg` | [louh/semiotic-standard](https://github.com/louh/semiotic-standard) `#004.CRYOGENIC.VAULT` | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 
 Ron Cobb / _Alien_ (1979) iconography via Semiotic Standard adaptations.
+
+| File | Source | Notes |
+|------|--------|--------|
+| `videos/airlock-door.mp4` | User-provided (Hailuo generation) | Decorative loop |
+| `videos/portal-stargate.mp4` | User-provided (Hailuo generation) | Decorative loop |
+| `videos/yggdrasil-neon.mp4` | User-provided (Hailuo generation) | Decorative loop |
+| `cryogenic-chamber-csc7x.png` | User-provided concept art (CSC-7X) | About capsule |
