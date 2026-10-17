@@ -333,6 +333,79 @@ body {
   bottom: 15%;
 }
 
+/* Chronicle interactive timeline */
+.chronicle-focus-glow {
+  background: radial-gradient(
+    ellipse 72% 58% at 50% 42%,
+    color-mix(in srgb, var(--color-cyan-glow) 14%, transparent),
+    transparent 68%
+  );
+}
+
+.chronicle-spine-active {
+  animation: chronicle-spine-draw 0.55s ease-out;
+}
+
+@keyframes chronicle-spine-draw {
+  from {
+    opacity: 0.35;
+    stroke-dashoffset: 8;
+  }
+  to {
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+}
+
+.chronicle-focus-card {
+  animation: chronicle-focus-in 0.45s ease-out;
+}
+
+@keyframes chronicle-focus-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.chronicle-dot-active::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--color-cyan-glow) 45%, transparent);
+  animation: chronicle-dot-ring 2s ease-in-out infinite;
+}
+
+@keyframes chronicle-dot-ring {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.15);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chronicle-spine-active,
+  .chronicle-focus-card,
+  .chronicle-dot-active::after {
+    animation: none;
+  }
+
+  .chronicle-node,
+  .chronicle-node-active {
+    transition: none;
+  }
+}
+
 .ygg-node-pulse {
   animation: ygg-pulse 3s ease-in-out infinite;
 }
