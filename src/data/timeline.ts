@@ -9,12 +9,13 @@ export type TimelineEntry = {
 
 export const timeline: TimelineEntry[] = [
   {
-    id: "edu-hutech",
-    period: "2022 – 2026",
-    title: "Information Technology",
-    org: "HUTECH — Vietnam–Japan Institute",
-    description: "Fourth-year student; focus on software systems, backend, and cross-platform development.",
-    kind: "education",
+    id: "aws-fcj-intern",
+    period: "04/2026 – 07/2026",
+    title: "Intern",
+    org: "AWS Vietnam — First Cloud AI Journey",
+    description:
+      "Participate in hands-on cloud computing training. Gain a thorough understanding of network infrastructure architecture, servers, and large-scale database systems. Manage development tasks through Jira and optimize data flow across the system.",
+    kind: "work",
   },
   {
     id: "work-viet-nghiep",
@@ -22,51 +23,34 @@ export const timeline: TimelineEntry[] = [
     title: "Technician",
     org: "Viet Nghiep Electronics Technology Co., Ltd.",
     description:
-      "Manufacturing circuit boards, programming, and completing electronic products.",
+      "We manufacture circuit boards, program code, and complete electronic products.",
     kind: "work",
   },
   {
     id: "work-apex",
-    period: "2024 – Present",
+    period: "—",
     title: "Tour Guide",
     org: "APEX Vietnam Travel Corporation",
     description:
-      "Lead student groups; communicate in Japanese and English per project schedule.",
+      "Lead student groups, communicating in Japanese and English according to the project schedule.",
     kind: "work",
   },
   {
     id: "work-trainer",
-    period: "—",
+    period: "04/2026 – 07/2026",
     title: "Personal Trainer",
     org: "TODAY FITNESS",
     description:
-      "Plan training schedules, support trainees, and digitize training progress records.",
+      "Plan and optimize training schedules, listen to, share with, and understand the psychology of trainees, and closely monitor, record, and digitize training progress.",
     kind: "work",
   },
   {
-    id: "aws-intern",
-    period: "04/2026 – 07/2026",
-    title: "FCJ Cloud Engineer Intern",
-    org: "AWS Vietnam — First Cloud AI Journey",
+    id: "work-other",
+    period: "2024 – Present",
+    title: "Other Experiences",
+    org: "GS25 · FSI · ShopeeFood · King of Clean Coffee",
     description:
-      "Hands-on cloud training; network infrastructure, servers, large-scale databases; Jira task management and data-flow optimization.",
-    kind: "milestone",
-  },
-  {
-    id: "webinar-fpt",
-    period: "03/2026",
-    title: 'Webinar "Beyond Code"',
-    org: "FPT Software",
-    description:
-      "Enterprise solutions and low-code trends; leadership beyond pure technology.",
-    kind: "milestone",
-  },
-  {
-    id: "bosch-tech",
-    period: "10/2025",
-    title: "TechTogether",
-    org: "Bosch Vietnam",
-    description: "Industry 4.0 experience and career guidance from experts.",
-    kind: "milestone",
+      "Salesperson (GS25), Data Digitizer (FSI), Shipper (ShopeeFood), Barista (King of Clean Coffee) — demonstrates dynamism and the ability to work under high pressure.",
+    kind: "work",
   },
 ];
