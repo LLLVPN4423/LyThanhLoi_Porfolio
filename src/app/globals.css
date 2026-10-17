@@ -376,3 +376,62 @@ body {
     transform: rotate(360deg);
   }
 }
+
+/* Licensed SVG assets — color grading for dark sci-fi UI */
+.lab-semiotic-tint {
+  filter: invert(1) hue-rotate(160deg) saturate(2.2) brightness(0.95)
+    drop-shadow(0 0 8px color-mix(in srgb, var(--color-cyan-glow) 35%, transparent));
+}
+
+.yggdrasil-art {
+  filter: invert(1) hue-rotate(115deg) saturate(1.4) brightness(1.05)
+    drop-shadow(0 0 14px color-mix(in srgb, #34d399 35%, transparent));
+}
+
+.sci-fi-portal-art {
+  filter: invert(1) hue-rotate(175deg) saturate(1.5) brightness(1.1)
+    drop-shadow(0 0 12px color-mix(in srgb, var(--color-cyan-glow) 40%, transparent));
+}
+
+.sci-fi-portal-spin {
+  animation: portal-spin 28s linear infinite;
+}
+
+.sci-fi-portal-inner-spin {
+  animation: portal-spin 18s linear infinite reverse;
+}
+
+.sci-fi-portal-glow {
+  transition: box-shadow 0.45s ease, background 0.45s ease;
+}
+
+.sci-fi-portal-idle {
+  box-shadow: inset 0 0 40px color-mix(in srgb, var(--color-violet-glow) 12%, transparent);
+}
+
+.sci-fi-portal-cyan .sci-fi-portal-art,
+.sci-fi-portal-cyan {
+  filter: none;
+}
+
+.sci-fi-portal-cyan {
+  box-shadow:
+    0 0 48px color-mix(in srgb, var(--color-cyan-glow) 50%, transparent),
+    inset 0 0 30px color-mix(in srgb, var(--color-cyan-glow) 25%, transparent);
+}
+
+.sci-fi-portal-cyan .sci-fi-portal-art {
+  filter: invert(1) hue-rotate(185deg) saturate(2) brightness(1.15)
+    drop-shadow(0 0 16px var(--color-cyan-glow));
+}
+
+.sci-fi-portal-violet {
+  box-shadow:
+    0 0 48px color-mix(in srgb, var(--color-violet-glow) 50%, transparent),
+    inset 0 0 30px color-mix(in srgb, var(--color-violet-glow) 25%, transparent);
+}
+
+.sci-fi-portal-violet .sci-fi-portal-art {
+  filter: invert(1) hue-rotate(240deg) saturate(2) brightness(1.1)
+    drop-shadow(0 0 16px var(--color-violet-glow));
+}

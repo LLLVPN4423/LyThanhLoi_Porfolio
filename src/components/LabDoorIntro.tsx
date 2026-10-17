@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { LabAirlockScene } from "./LabAirlockScene";
 
 const STORAGE_KEY = "ltl-lab-intro-seen";
 
@@ -97,21 +98,10 @@ export function LabDoorIntro({ onComplete }: Props) {
             <span className="neon-flicker-text">authorized</span>
           </div>
 
-          <div className={`lab-door-wrap relative mx-auto mt-12 h-[70%] w-[78%] ${phase === "opening" || phase === "smoke" ? "lab-door-open" : ""}`}>
-            <div className="lab-door lab-door-left absolute inset-y-0 left-0 w-1/2 border-r border-cyan-glow/40 bg-gradient-to-br from-panel to-void-elevated">
-              <div className="absolute inset-4 border border-dashed border-violet-glow/25" />
-            </div>
-            <div className="lab-door lab-door-right absolute inset-y-0 right-0 w-1/2 border-l border-cyan-glow/40 bg-gradient-to-bl from-panel to-void-elevated">
-              <div className="absolute inset-4 border border-dashed border-violet-glow/25" />
-            </div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="font-[family-name:var(--font-display)] text-sm tracking-[0.35em] text-cyan-glow/80 uppercase">
-                airlock
-              </span>
-            </div>
-          </div>
-
-          <div className={`lab-smoke pointer-events-none absolute inset-x-0 bottom-0 h-1/2 ${phase === "smoke" || phase === "opening" ? "lab-smoke-active" : ""}`} />
+          <LabAirlockScene
+            doorOpen={phase === "opening" || phase === "smoke"}
+            smokeActive={phase === "smoke" || phase === "opening"}
+          />
 
           <p className="absolute bottom-4 left-0 right-0 text-center font-[family-name:var(--font-mono)] text-xs text-text-muted">
             {phase === "idle" && "Initializing laboratory interface…"}

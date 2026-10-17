@@ -13,6 +13,12 @@ export function LaboratoryCapsule() {
           </div>
 
           <div className="relative mt-4 aspect-[3/4] overflow-hidden rounded-lg border border-violet-glow/30 bg-void">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/assets/semiotic-cryogenic.svg"
+              alt=""
+              className="absolute inset-0 m-auto h-[92%] w-[92%] object-contain opacity-35 lab-semiotic-tint"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-cyan-glow/10 via-transparent to-violet-glow/10" />
             <div className="absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-cyan-glow/20 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-void to-transparent" />
