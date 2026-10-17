@@ -3,10 +3,10 @@ import { Reveal } from "./Reveal";
 
 const attributes = [
   { label: "Identity", value: profile.nameDisplay },
+  { label: "Date of birth", value: profile.birthDate },
   { label: "Institute", value: profile.education.program },
   { label: "Academy", value: profile.education.school },
   { label: "Cycle", value: profile.education.period },
-  { label: "Status", value: profile.education.status },
   { label: "Focus", value: profile.roles.join(" · ") },
 ];
 
@@ -29,8 +29,16 @@ export function About() {
               <h3 className="font-[family-name:var(--font-mono)] text-xs text-cyan-glow uppercase">
                 Summary
               </h3>
-              <p className="mt-4 text-text-muted leading-relaxed">{profile.intro}</p>
-              <p className="mt-4 text-sm text-text-muted/90">{profile.currentDirection}</p>
+              <div className="mt-4 space-y-5">
+                {profile.aboutSummary.map((block) => (
+                  <div key={block.title}>
+                    <p className="font-[family-name:var(--font-mono)] text-[11px] tracking-wide text-cyan-glow/90 uppercase">
+                      {block.title}
+                    </p>
+                    <p className="mt-2 text-sm leading-relaxed text-text-muted">{block.body}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </Reveal>
 

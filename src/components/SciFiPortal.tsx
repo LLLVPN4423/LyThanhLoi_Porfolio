@@ -2,7 +2,7 @@
 
 import { SciFiVideo } from "./SciFiVideo";
 
-type Channel = "email" | "github" | null;
+type Channel = "email" | "github" | "phone" | "facebook" | null;
 
 type Props = {
   active: Channel;
@@ -14,9 +14,9 @@ const PORTAL_VIDEO = "/assets/videos/portal-stargate.mp4";
 /** Stargate-style portal video + SVG fallback */
 export function SciFiPortal({ active, className = "" }: Props) {
   const tone =
-    active === "email"
+    active === "email" || active === "phone"
       ? "sci-fi-portal-cyan"
-      : active === "github"
+      : active === "github" || active === "facebook"
         ? "sci-fi-portal-violet"
         : "sci-fi-portal-idle";
 
