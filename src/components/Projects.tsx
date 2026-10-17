@@ -27,8 +27,6 @@ function ProjectListCard({
     return (
       <button
         type="button"
-        onMouseEnter={onActivate}
-        onFocus={onActivate}
         onClick={onActivate}
         className={`project-list-compact group relative w-full overflow-hidden rounded-lg border bg-panel/40 p-3 text-left transition-all duration-400 ease-out ${
           isActive
@@ -54,7 +52,6 @@ function ProjectListCard({
   return (
     <article
       className={`project-theme-card group relative overflow-hidden rounded-xl border bg-panel/30 transition-all duration-500 ease-out hover:scale-[1.01] ${theme.frame} ${isActive ? "ring-1 ring-cyan-glow/40" : ""}`}
-      onMouseEnter={onActivate}
     >
       <div
         className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${theme.scan} to-transparent opacity-90`}
@@ -65,7 +62,6 @@ function ProjectListCard({
       <button
         type="button"
         onClick={onActivate}
-        onFocus={onActivate}
         className="relative w-full p-5 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-glow"
       >
         <p className="font-[family-name:var(--font-mono)] text-[9px] tracking-widest text-text-muted uppercase">
@@ -146,12 +142,7 @@ export function Projects() {
           </p>
         </Reveal>
 
-        <div
-          className={`project-archive-stage mt-10 ${split ? "is-split" : ""}`}
-          onMouseLeave={() => {
-            /* keep split until Grid view / Escape — hover only switches active item */
-          }}
-        >
+        <div className={`project-archive-stage mt-10 ${split ? "is-split" : ""}`}>
           <div className={`project-archive-list ${split ? "is-split" : "is-grid"}`}>
             {projects.map((project, i) => (
               <div
