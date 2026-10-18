@@ -1,47 +1,38 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import type { SkillGroup } from "@/data/skills";
 
 type Props = {
   group: SkillGroup;
   index: number;
+  revealed: boolean;
 };
 
-export function HudSkillCard({ group, index }: Props) {
-  const ref = useRef<HTMLElement>(null);
-  const [shown, setShown] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) {
-      setShown(true);
-      return;
-    }
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
-          window.setTimeout(() => setShown(true), index * 120);
-          obs.disconnect();
-        }
-      },
-      { threshold: 0.2 },
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [index]);
-
+export function HudSkillCard({ group, index, revealed }: Props) {
   return (
     <article
-      ref={ref}
-      className={`hud-card hud-skill-card group relative w-full overflow-hidden border bg-void-elevated/80 p-5 text-left transition-all duration-500 ${shown ? "hud-card-visible border-cyan-glow/35" : "hud-card-hidden border-panel-border"}`}
+      className={`hud-card hud-skill-card group relative w-full overflow-hidden border bg-void-elevated/80 p-5 text-left ${
+        revealed ? "hud-skill-revealed border-cyan-glow/35" : "hud-skill-pending border-panel-border"
+      }`}
+      style={revealed ? { animationDelay: `${index * 40}ms` } : undefined}
     >
-      <span className="hud-neon-rail pointer-events-none absolute inset-y-3 left-0 w-[3px]" aria-hidden />
+      <span
+        className={`hud-neon-rail pointer-events-none absolute inset-y-3 left-0 w-[3px] ${revealed ? "hud-neon-flicker" : "opacity-30"}`}
+        aria-hidden
+      />
 
-      <span className="absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 border-cyan-glow/50" aria-hidden />
-      <span className="absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 border-violet-glow/40" aria-hidden />
+      <span
+        className={`pointer-events-none absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 ${revealed ? "hud-corner-flicker border-cyan-glow/70" : "border-cyan-glow/25"}`}
+        aria-hidden
+      />
+      <span
+        className={`pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 ${revealed ? "hud-corner-flicker hud-corner-flicker-delay border-violet-glow/60" : "border-violet-glow/20"}`}
+        aria-hidden
+      />
+
+      {revealed ? (
+        <span className="hud-skill-sweep pointer-events-none absolute inset-y-0 right-0 w-1/3" aria-hidden />
+      ) : null}
 
       <div className="pointer-events-none absolute inset-0 opacity-[0.06] scanline-overlay" aria-hidden />
 
@@ -67,8 +58,7 @@ export function HudSkillCard({ group, index }: Props) {
 
       <div className="mt-4 h-0.5 w-full bg-panel-border">
         <div
-          className="hud-bar h-full bg-gradient-to-r from-cyan-glow to-violet-glow"
-          style={{ animationDelay: `${index * 0.15}s` }}
+          className={`hud-bar h-full bg-gradient-to-r from-cyan-glow to-violet-glow ${revealed ? "hud-bar-lit" : "w-0"}`}
         />
       </div>
     </article>

@@ -10,13 +10,27 @@ import { Timeline } from "@/components/Timeline";
 export default function Home() {
   return (
     <PortfolioShell>
-      <Hero />
-      <About />
-      <Skills />
-      <Projects />
-      <Timeline />
-      <Contact />
-      <Footer />
+      <div className="portfolio-section">
+        <Hero />
+      </div>
+      <div className="portfolio-section">
+        <About />
+      </div>
+      <div className="portfolio-section">
+        <Skills />
+      </div>
+      <div className="portfolio-section">
+        <Projects />
+      </div>
+      <div className="portfolio-section">
+        <Timeline />
+      </div>
+      <div className="portfolio-section">
+        <Contact />
+      </div>
+      <div className="portfolio-section">
+        <Footer />
+      </div>
     </PortfolioShell>
   );
 }

@@ -120,15 +120,217 @@ body.portfolio-intro-active {
 
 .reveal-hidden {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(28px) scale(0.98);
+  filter: blur(6px);
 }
 
 .reveal-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+  filter: blur(0);
   transition:
-    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.portfolio-unveil-active > .portfolio-section {
+  animation: portfolio-section-unveil 0.95s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.portfolio-unveil-active > .portfolio-section:nth-child(1) {
+  animation-delay: 0.08s;
+}
+.portfolio-unveil-active > .portfolio-section:nth-child(2) {
+  animation-delay: 0.16s;
+}
+.portfolio-unveil-active > .portfolio-section:nth-child(3) {
+  animation-delay: 0.24s;
+}
+.portfolio-unveil-active > .portfolio-section:nth-child(4) {
+  animation-delay: 0.32s;
+}
+.portfolio-unveil-active > .portfolio-section:nth-child(5) {
+  animation-delay: 0.4s;
+}
+.portfolio-unveil-active > .portfolio-section:nth-child(6) {
+  animation-delay: 0.48s;
+}
+.portfolio-unveil-active > .portfolio-section:nth-child(7) {
+  animation-delay: 0.56s;
+}
+
+@keyframes portfolio-section-unveil {
+  from {
+    opacity: 0;
+    transform: translateY(36px);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* Skills — CSC-7X capsule video + staged modules */
+.skills-capsule-bleed {
+  min-height: min(72vw, 420px);
+  opacity: 0;
+  transform: translateX(-12%) scale(0.96);
+  transition:
+    opacity 0.85s ease,
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.skills-capsule-bleed.skills-capsule-live {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+.skills-capsule-video {
+  display: block;
+  width: 118%;
+  max-width: none;
+  height: 100%;
+  min-height: min(72vw, 420px);
+  object-fit: contain;
+  object-position: left center;
+  margin-left: -14%;
+  mix-blend-mode: screen;
+  filter: contrast(1.08) saturate(1.12) brightness(0.96);
+}
+
+@media (min-width: 1024px) {
+  .skills-capsule-bleed {
+    min-height: min(52vh, 560px);
+    margin-left: clamp(-4rem, -6vw, -2rem);
+    width: calc(100% + clamp(2rem, 8vw, 6rem));
+  }
+
+  .skills-capsule-video {
+    min-height: min(52vh, 560px);
+    width: 125%;
+    margin-left: -18%;
+    object-fit: cover;
+    object-position: 18% center;
+  }
+}
+
+@media (max-width: 1023px) {
+  .skills-capsule-bleed {
+    overflow: hidden;
+    margin-left: -1.25rem;
+    width: calc(100% + 2.5rem);
+  }
+}
+
+.hud-skill-pending {
+  opacity: 0;
+  transform: translateX(2.5rem);
+  pointer-events: none;
+  max-height: 0;
+  overflow: hidden;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin: 0;
+  border-width: 0;
+}
+
+.hud-skill-revealed {
+  animation: hud-skill-slide-in 0.72s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  pointer-events: auto;
+}
+
+@keyframes hud-skill-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(3rem);
+    filter: brightness(1.65) saturate(1.2);
+    box-shadow: -12px 0 40px color-mix(in srgb, var(--color-cyan-glow) 45%, transparent);
+  }
+  55% {
+    filter: brightness(1.25);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    filter: brightness(1);
+    box-shadow: none;
+  }
+}
+
+.hud-skill-sweep {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--color-cyan-glow) 35%, transparent),
+    transparent
+  );
+  animation: hud-skill-sweep 0.65s ease-out forwards;
+}
+
+@keyframes hud-skill-sweep {
+  from {
+    opacity: 0.9;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-20%);
+  }
+}
+
+.hud-neon-flicker {
+  animation: hud-neon-flicker 0.35s steps(2, end) 3;
+}
+
+.hud-corner-flicker {
+  animation: hud-neon-flicker 0.28s steps(2, end) 4;
+}
+
+.hud-corner-flicker-delay {
+  animation-delay: 0.12s;
+}
+
+@keyframes hud-neon-flicker {
+  0%,
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.35;
+    filter: brightness(1.8);
+  }
+}
+
+.hud-bar-lit {
+  animation: hud-bar-fill 1s ease forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-unveil-active > .portfolio-section,
+  .skills-capsule-bleed,
+  .hud-skill-revealed,
+  .hud-skill-sweep,
+  .hud-neon-flicker,
+  .hud-corner-flicker,
+  .reveal-hidden {
+    animation: none !important;
+    transition: none !important;
+    filter: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .hud-skill-pending {
+    opacity: 1;
+    max-height: none;
+    pointer-events: auto;
+    padding: 1.25rem;
+    border-width: 1px;
+  }
 }
 
 /* —— Lab door intro —— */

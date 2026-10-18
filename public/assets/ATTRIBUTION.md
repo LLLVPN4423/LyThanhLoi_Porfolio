@@ -13,6 +13,7 @@ Ron Cobb / _Alien_ (1979) iconography via Semiotic Standard adaptations.
 | File | Source | Notes |
 |------|--------|--------|
 | `videos/portfolio-intro.mp4` | User-provided (Hailuo generation) | 5s opening intro |
+| `videos/capsule-csc7x.mp4` | User-provided (Hailuo generation) | Skills section capsule |
 | `videos/airlock-door.mp4` | User-provided (Hailuo generation) | Decorative loop |
 | `videos/portal-stargate.mp4` | User-provided (Hailuo generation) | Decorative loop |
 | `videos/yggdrasil-neon.mp4` | User-provided (Hailuo generation) | Decorative loop |

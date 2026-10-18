@@ -15,10 +15,17 @@ function shouldSkipIntro(): boolean {
 
 export function PortfolioShell({ children }: Props) {
   const [phase, setPhase] = useState<"pending" | "intro" | "done">("pending");
+  const [unveil, setUnveil] = useState(false);
 
   useEffect(() => {
     setPhase(shouldSkipIntro() ? "done" : "intro");
   }, []);
+
+  useEffect(() => {
+    if (phase !== "done") return;
+    const id = window.requestAnimationFrame(() => setUnveil(true));
+    return () => window.cancelAnimationFrame(id);
+  }, [phase]);
 
   const onIntroComplete = useCallback(() => setPhase("done"), []);
 
@@ -29,7 +36,7 @@ export function PortfolioShell({ children }: Props) {
     <>
       {showIntro ? <PortfolioIntro onComplete={onIntroComplete} /> : null}
       <div
-        className={`transition-opacity duration-700 ease-out ${introDone ? "opacity-100" : "opacity-0"}`}
+        className={`portfolio-unveil-root transition-opacity duration-700 ease-out ${introDone ? "opacity-100" : "opacity-0"} ${unveil ? "portfolio-unveil-active" : ""}`}
         aria-hidden={!introDone}
       >
         {children}
