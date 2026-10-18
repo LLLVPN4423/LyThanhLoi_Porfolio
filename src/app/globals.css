@@ -38,6 +38,68 @@ body {
   min-height: 100vh;
 }
 
+body.portfolio-intro-active {
+  overflow: hidden;
+}
+
+/* Full-viewport intro — mobile portrait / desktop / ultrawide */
+.portfolio-intro-video {
+  object-fit: cover;
+  object-position: center center;
+  transform: scale(1.06);
+  transform-origin: center center;
+  filter: contrast(1.06) saturate(1.12) brightness(0.82);
+}
+
+@media (min-aspect-ratio: 16/9) {
+  .portfolio-intro-video {
+    transform: scale(1.04);
+  }
+}
+
+@media (max-aspect-ratio: 9/16) {
+  .portfolio-intro-video {
+    object-position: center 42%;
+    transform: scale(1.12);
+  }
+}
+
+@media (min-width: 1280px) and (min-aspect-ratio: 21/9) {
+  .portfolio-intro-video {
+    transform: scale(1.02);
+  }
+}
+
+.portfolio-intro-vignette {
+  background: radial-gradient(
+    ellipse 88% 78% at 50% 48%,
+    transparent 42%,
+    color-mix(in srgb, var(--color-void) 35%, transparent) 100%
+  );
+}
+
+.portfolio-intro-exit {
+  animation: portfolio-intro-fade-out 0.7s ease forwards;
+  pointer-events: none;
+}
+
+@keyframes portfolio-intro-fade-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-intro-video {
+    transform: none;
+  }
+
+  .portfolio-intro-exit {
+    animation-duration: 0.01ms;
+  }
+}
+
 ::selection {
   background: color-mix(in srgb, var(--color-cyan-glow) 35%, transparent);
 }
