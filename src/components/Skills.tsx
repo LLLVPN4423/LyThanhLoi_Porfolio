@@ -120,6 +120,8 @@ export function Skills() {
               </video>
             </div>
             <div className="skills-capsule-edge-feather" aria-hidden />
+            <div className="skills-capsule-side-shade skills-capsule-side-shade--left" aria-hidden />
+            <div className="skills-capsule-side-shade skills-capsule-side-shade--right" aria-hidden />
           </div>
 
           <div className="skills-wing-right flex flex-col gap-2.5 lg:items-start lg:justify-center lg:gap-2">

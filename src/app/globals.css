@@ -38,6 +38,37 @@ body {
   min-height: 100vh;
 }
 
+/* Site-wide parallax (CSS vars from PageParallax) */
+.ambient-parallax-slow {
+  transform: translate3d(0, calc(var(--scroll-y-slow, 0px) * -1), 0);
+  will-change: transform;
+}
+
+.ambient-parallax-fast {
+  transform: translate3d(0, calc(var(--scroll-y-fast, 0px) * -1), 0);
+  will-change: transform;
+}
+
+.parallax-grid-bg {
+  transform: translate3d(0, calc(var(--scroll-y-mid, 0px) * -0.65), 0);
+  will-change: transform;
+}
+
+main {
+  transform: translate3d(0, calc(var(--scroll-y-mid, 0px) * -0.06), 0);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-parallax-slow,
+  .ambient-parallax-fast,
+  .parallax-grid-bg,
+  main {
+    transform: none !important;
+    will-change: auto;
+  }
+}
+
 body.portfolio-intro-active {
   overflow: hidden;
 }
@@ -245,21 +276,26 @@ body.portfolio-intro-active {
   left: 50%;
   top: 56%;
   z-index: 0;
-  width: 132%;
-  height: 118%;
+  width: 118%;
+  height: 112%;
   transform: translate(-50%, -46%);
   border-radius: 50%;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.9s ease;
-  background: radial-gradient(
-    ellipse 50% 48% at 50% 48%,
-    #000000 0%,
-    #040508 26%,
-    color-mix(in srgb, #000 50%, var(--color-void)) 48%,
-    color-mix(in srgb, #000 10%, var(--color-void)) 64%,
-    transparent 80%
-  );
+  background:
+    radial-gradient(
+      ellipse 42% 46% at 50% 48%,
+      #000000 0%,
+      #020305 32%,
+      color-mix(in srgb, #000 65%, var(--color-void)) 52%,
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 38% 44% at 50% 48%,
+      #000000 0%,
+      transparent 68%
+    );
 }
 
 .skills-capsule-core.skills-capsule-live .skills-capsule-backdrop {
@@ -268,11 +304,11 @@ body.portfolio-intro-active {
 
 .skills-capsule-video-mask {
   position: absolute;
-  inset: 2% 0;
+  inset: 4% 8%;
   z-index: 1;
   overflow: hidden;
-  mask-image: radial-gradient(ellipse 72% 68% at 50% 44%, #000 52%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 72% 68% at 50% 44%, #000 52%, transparent 100%);
+  mask-image: radial-gradient(ellipse 56% 64% at 50% 44%, #000 46%, transparent 98%);
+  -webkit-mask-image: radial-gradient(ellipse 56% 64% at 50% 44%, #000 46%, transparent 98%);
 }
 
 .skills-capsule-video {
@@ -284,12 +320,12 @@ body.portfolio-intro-active {
   height: 100%;
   max-width: none;
   margin: 0;
-  transform: translate(-50%, -50%) scale(1.14);
+  transform: translate(-50%, -50%) scale(1.08);
   object-fit: contain;
   object-position: center center;
   mix-blend-mode: screen;
   background: transparent;
-  filter: contrast(1.15) saturate(1.18) brightness(1.12);
+  filter: contrast(1.15) saturate(1.18) brightness(1.14);
   pointer-events: none;
 }
 
@@ -299,13 +335,44 @@ body.portfolio-intro-active {
   z-index: 2;
   pointer-events: none;
   background: radial-gradient(
-    ellipse 70% 66% at 50% 44%,
-    transparent 42%,
-    color-mix(in srgb, var(--color-void) 35%, transparent) 68%,
-    color-mix(in srgb, var(--color-void) 85%, transparent) 88%,
+    ellipse 58% 62% at 50% 44%,
+    transparent 38%,
+    color-mix(in srgb, var(--color-void) 45%, transparent) 62%,
+    color-mix(in srgb, var(--color-void) 92%, transparent) 82%,
     var(--color-void) 100%
   );
-  opacity: 0.92;
+  opacity: 0.95;
+}
+
+.skills-capsule-side-shade {
+  position: absolute;
+  top: 7%;
+  bottom: 9%;
+  width: 26%;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.skills-capsule-side-shade--left {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    var(--color-void) 0%,
+    color-mix(in srgb, var(--color-void) 92%, transparent) 28%,
+    color-mix(in srgb, var(--color-void) 55%, transparent) 52%,
+    transparent 100%
+  );
+}
+
+.skills-capsule-side-shade--right {
+  right: 0;
+  background: linear-gradient(
+    to left,
+    var(--color-void) 0%,
+    color-mix(in srgb, var(--color-void) 92%, transparent) 28%,
+    color-mix(in srgb, var(--color-void) 55%, transparent) 52%,
+    transparent 100%
+  );
 }
 
 @media (min-width: 1024px) {
@@ -316,27 +383,24 @@ body.portfolio-intro-active {
 
   .skills-capsule-backdrop {
     top: 54%;
-    width: 138%;
-    height: 112%;
+    width: 122%;
+    height: 108%;
     transform: translate(-50%, -44%);
-    background: radial-gradient(
-      ellipse 46% 44% at 50% 46%,
-      #000000 0%,
-      #030407 28%,
-      color-mix(in srgb, #000 48%, var(--color-void)) 50%,
-      color-mix(in srgb, #000 8%, var(--color-void)) 66%,
-      transparent 82%
-    );
   }
 
   .skills-capsule-video-mask {
-    mask-image: radial-gradient(ellipse 70% 66% at 50% 42%, #000 54%, transparent 100%);
-    -webkit-mask-image: radial-gradient(ellipse 70% 66% at 50% 42%, #000 54%, transparent 100%);
+    inset: 3% 10%;
+    mask-image: radial-gradient(ellipse 52% 62% at 50% 42%, #000 48%, transparent 98%);
+    -webkit-mask-image: radial-gradient(ellipse 52% 62% at 50% 42%, #000 48%, transparent 98%);
   }
 
   .skills-capsule-video {
-    transform: translate(-50%, -50%) scale(1.16);
+    transform: translate(-50%, -50%) scale(1.1);
     object-position: center 40%;
+  }
+
+  .skills-capsule-side-shade {
+    width: 24%;
   }
 }
 

@@ -3,6 +3,7 @@ import { Cinzel, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AmbientSciFi } from "@/components/AmbientSciFi";
 import { Navigation } from "@/components/Navigation";
+import { PageParallax } from "@/components/PageParallax";
 import { ScrollProgress } from "@/components/ScrollProgress";
 
 const cinzel = Cinzel({
@@ -41,6 +42,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${cinzel.variable} ${dmSans.variable} ${jetbrains.variable}`}>
       <body className="relative antialiased">
+        <PageParallax />
         <AmbientSciFi />
         <ScrollProgress />
         <Navigation />

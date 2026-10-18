@@ -7,7 +7,7 @@ export function Hero() {
       id="hero"
       className="relative flex min-h-[92vh] flex-col justify-center overflow-hidden pt-24 pb-16"
     >
-      <div className="pointer-events-none absolute inset-0 grid-bg opacity-60" aria-hidden />
+      <div className="parallax-grid-bg pointer-events-none absolute inset-0 grid-bg opacity-60" aria-hidden />
       <div
         className="pointer-events-none absolute top-1/3 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-violet-glow/10 blur-3xl"
         aria-hidden
