@@ -173,11 +173,11 @@ body.portfolio-intro-active {
   }
 }
 
-/* Skills — CSC-7X capsule video + staged modules */
+/* Skills — CSC-7X capsule video + staged modules (2-col grid right) */
 .skills-capsule-bleed {
-  min-height: min(72vw, 420px);
+  min-height: min(58vw, 300px);
   opacity: 0;
-  transform: translateX(-12%) scale(0.96);
+  transform: translateX(-14%) scale(0.92);
   transition:
     opacity 0.85s ease,
     transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
@@ -190,30 +190,36 @@ body.portfolio-intro-active {
 
 .skills-capsule-video {
   display: block;
-  width: 118%;
+  width: 128%;
   max-width: none;
   height: 100%;
-  min-height: min(72vw, 420px);
+  min-height: min(58vw, 300px);
   object-fit: contain;
   object-position: left center;
-  margin-left: -14%;
+  margin-left: -18%;
   mix-blend-mode: screen;
   filter: contrast(1.08) saturate(1.12) brightness(0.96);
 }
 
+.skills-modules-rail {
+  align-content: start;
+}
+
 @media (min-width: 1024px) {
   .skills-capsule-bleed {
-    min-height: min(52vh, 560px);
-    margin-left: clamp(-4rem, -6vw, -2rem);
-    width: calc(100% + clamp(2rem, 8vw, 6rem));
+    min-height: min(42vh, 400px);
+    max-height: 420px;
+    margin-left: clamp(-3.5rem, -7vw, -2rem);
+    width: calc(100% + clamp(2.5rem, 10vw, 5rem));
   }
 
   .skills-capsule-video {
-    min-height: min(52vh, 560px);
-    width: 125%;
-    margin-left: -18%;
-    object-fit: cover;
-    object-position: 18% center;
+    min-height: min(42vh, 400px);
+    max-height: 420px;
+    width: 138%;
+    margin-left: -22%;
+    object-fit: contain;
+    object-position: 12% center;
   }
 }
 

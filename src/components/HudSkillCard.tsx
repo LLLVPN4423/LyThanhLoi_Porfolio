@@ -11,7 +11,7 @@ type Props = {
 export function HudSkillCard({ group, index, revealed }: Props) {
   return (
     <article
-      className={`hud-card hud-skill-card group relative w-full overflow-hidden border bg-void-elevated/80 p-5 text-left ${
+      className={`hud-card hud-skill-card group relative h-full w-full overflow-hidden border bg-void-elevated/80 p-4 text-left sm:p-5 ${
         revealed ? "hud-skill-revealed border-cyan-glow/35" : "hud-skill-pending border-panel-border"
       }`}
       style={revealed ? { animationDelay: `${index * 40}ms` } : undefined}

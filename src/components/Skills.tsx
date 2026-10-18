@@ -78,10 +78,10 @@ export function Skills() {
 
         <div
           ref={stageRef}
-          className="skills-capsule-stage relative mt-10 lg:mt-12 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-center lg:gap-6 xl:gap-10"
+          className="skills-capsule-stage relative mt-10 lg:mt-12 lg:grid lg:grid-cols-[minmax(0,34%)_minmax(0,1fr)] lg:items-center lg:gap-4 xl:grid-cols-[minmax(0,30%)_minmax(0,1fr)] xl:gap-8"
         >
           <div
-            className={`skills-capsule-bleed relative mx-auto w-full max-w-md lg:mx-0 lg:max-w-none ${capsuleLive ? "skills-capsule-live" : ""}`}
+            className={`skills-capsule-bleed relative mx-auto w-full max-w-[240px] sm:max-w-[280px] lg:mx-0 lg:max-w-none ${capsuleLive ? "skills-capsule-live" : ""}`}
             aria-hidden
           >
             <video
@@ -96,7 +96,7 @@ export function Skills() {
             </video>
           </div>
 
-          <div className="skills-modules-rail relative mt-8 flex flex-col gap-3 sm:gap-4 lg:mt-0">
+          <div className="skills-modules-rail relative mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-3.5 lg:mt-0 lg:gap-4">
             {skillGroups.map((group, i) => (
               <HudSkillCard
                 key={group.id}
