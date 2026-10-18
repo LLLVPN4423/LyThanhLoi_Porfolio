@@ -101,7 +101,7 @@ export function Skills() {
           </div>
 
           <div
-            className={`skills-capsule-core relative flex justify-center overflow-visible ${capsuleLive ? "skills-capsule-live" : ""}`}
+            className={`skills-capsule-core ${capsuleLive ? "skills-capsule-live" : ""}`}
             aria-hidden
           >
             <video

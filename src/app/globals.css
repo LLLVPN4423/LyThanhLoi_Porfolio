@@ -203,20 +203,27 @@ body.portfolio-intro-active {
 
 .skills-wing-left {
   grid-area: left;
+  position: relative;
+  z-index: 2;
 }
 
 .skills-wing-right {
   grid-area: right;
+  position: relative;
+  z-index: 2;
 }
 
+/* No isolation — screen blend must composite with wings behind black pixels */
 .skills-capsule-core {
   grid-area: capsule;
   position: relative;
+  z-index: 1;
   justify-self: center;
   width: min(58vw, 240px);
   height: min(72vw, 320px);
   overflow: visible;
-  isolation: isolate;
+  background: transparent;
+  pointer-events: none;
   opacity: 0;
   transform: scale(0.9);
   transition:
@@ -234,15 +241,16 @@ body.portfolio-intro-active {
   left: 50%;
   top: 50%;
   display: block;
-  width: 132%;
-  height: 132%;
+  width: 100%;
+  height: 100%;
   max-width: none;
   margin: 0;
-  transform: translate(-50%, -50%) scale(1.08);
-  object-fit: cover;
-  object-position: center 44%;
+  transform: translate(-50%, -50%) scale(1.14);
+  object-fit: contain;
+  object-position: center center;
   mix-blend-mode: screen;
-  filter: contrast(1.12) saturate(1.16) brightness(1.02);
+  background: transparent;
+  filter: contrast(1.15) saturate(1.18) brightness(1.12);
   pointer-events: none;
 }
 
@@ -253,10 +261,8 @@ body.portfolio-intro-active {
   }
 
   .skills-capsule-video {
-    width: 128%;
-    height: 128%;
-    transform: translate(-50%, -50%) scale(1.12);
-    object-position: center 42%;
+    transform: translate(-50%, -50%) scale(1.16);
+    object-position: center 40%;
   }
 }
 
