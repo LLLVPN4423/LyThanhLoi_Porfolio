@@ -104,6 +104,7 @@ export function Skills() {
             className={`skills-capsule-core ${capsuleLive ? "skills-capsule-live" : ""}`}
             aria-hidden
           >
+            <div className="skills-capsule-backdrop" />
             <video
               className="skills-capsule-video pointer-events-none"
               autoPlay
