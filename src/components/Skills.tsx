@@ -1,21 +1,30 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { skillGroups } from "@/data/skills";
 import { HudSkillCard } from "./HudSkillCard";
 import { Reveal } from "./Reveal";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 const CAPSULE_VIDEO = "/assets/videos/capsule-csc7x.mp4";
-const CAPSULE_LEAD_MS = 900;
-const MODULE_STAGGER_MS = 220;
+const CAPSULE_LEAD_MS = 850;
+const PAIR_STAGGER_MS = 260;
+
+const LEFT_MODULES = skillGroups.slice(0, 3);
+const RIGHT_MODULES = skillGroups.slice(3, 6);
 
 export function Skills() {
   const stageRef = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
   const [inView, setInView] = useState(false);
   const [capsuleLive, setCapsuleLive] = useState(false);
-  const [visibleModules, setVisibleModules] = useState(0);
+  /** 0–3: each step reveals left[i] + right[i] together */
+  const [revealedPairs, setRevealedPairs] = useState(0);
+
+  const pairCount = useMemo(
+    () => Math.max(LEFT_MODULES.length, RIGHT_MODULES.length),
+    [],
+  );
 
   useEffect(() => {
     const el = stageRef.current;
@@ -23,7 +32,7 @@ export function Skills() {
     if (reduced) {
       setInView(true);
       setCapsuleLive(true);
-      setVisibleModules(skillGroups.length);
+      setRevealedPairs(pairCount);
       return;
     }
     const obs = new IntersectionObserver(
@@ -33,37 +42,39 @@ export function Skills() {
           obs.disconnect();
         }
       },
-      { threshold: 0.15 },
+      { threshold: 0.12 },
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [reduced]);
+  }, [reduced, pairCount]);
 
   useEffect(() => {
     if (!inView || reduced) return;
-    const t = window.setTimeout(() => setCapsuleLive(true), 120);
+    const t = window.setTimeout(() => setCapsuleLive(true), 100);
     return () => window.clearTimeout(t);
   }, [inView, reduced]);
 
   useEffect(() => {
     if (!capsuleLive || reduced) return;
+    const timers: number[] = [];
     const t0 = window.setTimeout(() => {
-      let count = 0;
+      let step = 0;
       const tick = () => {
-        count += 1;
-        setVisibleModules(count);
-        if (count < skillGroups.length) {
-          window.setTimeout(tick, MODULE_STAGGER_MS);
+        step += 1;
+        setRevealedPairs(step);
+        if (step < pairCount) {
+          timers.push(window.setTimeout(tick, PAIR_STAGGER_MS));
         }
       };
       tick();
     }, CAPSULE_LEAD_MS);
-    return () => window.clearTimeout(t0);
-  }, [capsuleLive, reduced]);
+    timers.push(t0);
+    return () => timers.forEach((id) => window.clearTimeout(id));
+  }, [capsuleLive, reduced, pairCount]);
 
   return (
     <section id="skills" className="scroll-mt-24 border-t border-panel-border py-20">
-      <div className="mx-auto max-w-6xl px-4 md:px-6">
+      <div className="mx-auto max-w-7xl px-4 md:px-6">
         <Reveal>
           <p className="font-[family-name:var(--font-mono)] text-xs tracking-widest text-cyan-glow/80 uppercase">
             Technical Abilities
@@ -72,16 +83,25 @@ export function Skills() {
             Skill Modules
           </h2>
           <p className="mt-3 max-w-2xl text-sm text-text-muted">
-            Verified skills from my profile — capsule sync, then module deploy.
+            Verified skills from my profile — capsule sync, modules deploy to both wings.
           </p>
         </Reveal>
 
-        <div
-          ref={stageRef}
-          className="skills-capsule-stage relative mt-10 lg:mt-12 lg:grid lg:grid-cols-[minmax(0,34%)_minmax(0,1fr)] lg:items-center lg:gap-4 xl:grid-cols-[minmax(0,30%)_minmax(0,1fr)] xl:gap-8"
-        >
+        <div ref={stageRef} className="skills-orbit-stage relative mt-10 lg:mt-12">
+          <div className="skills-wing-left flex flex-col gap-3 lg:items-end lg:justify-center lg:gap-3.5">
+            {LEFT_MODULES.map((group, i) => (
+              <HudSkillCard
+                key={group.id}
+                group={group}
+                index={i}
+                side="left"
+                revealed={revealedPairs > i}
+              />
+            ))}
+          </div>
+
           <div
-            className={`skills-capsule-bleed relative mx-auto w-full max-w-[240px] sm:max-w-[280px] lg:mx-0 lg:max-w-none ${capsuleLive ? "skills-capsule-live" : ""}`}
+            className={`skills-capsule-core relative flex justify-center overflow-visible ${capsuleLive ? "skills-capsule-live" : ""}`}
             aria-hidden
           >
             <video
@@ -96,13 +116,14 @@ export function Skills() {
             </video>
           </div>
 
-          <div className="skills-modules-rail relative mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-3.5 lg:mt-0 lg:gap-4">
-            {skillGroups.map((group, i) => (
+          <div className="skills-wing-right flex flex-col gap-3 lg:items-start lg:justify-center lg:gap-3.5">
+            {RIGHT_MODULES.map((group, i) => (
               <HudSkillCard
                 key={group.id}
                 group={group}
-                index={i}
-                revealed={visibleModules > i}
+                index={i + 3}
+                side="right"
+                revealed={revealedPairs > i}
               />
             ))}
           </div>
