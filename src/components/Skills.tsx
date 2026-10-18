@@ -88,7 +88,7 @@ export function Skills() {
         </Reveal>
 
         <div ref={stageRef} className="skills-orbit-stage relative mt-10 lg:mt-12">
-          <div className="skills-wing-left flex flex-col gap-3 lg:items-end lg:justify-center lg:gap-3.5">
+          <div className="skills-wing-left flex flex-col gap-2.5 lg:items-end lg:justify-center lg:gap-2">
             {LEFT_MODULES.map((group, i) => (
               <HudSkillCard
                 key={group.id}
@@ -116,7 +116,7 @@ export function Skills() {
             </video>
           </div>
 
-          <div className="skills-wing-right flex flex-col gap-3 lg:items-start lg:justify-center lg:gap-3.5">
+          <div className="skills-wing-right flex flex-col gap-2.5 lg:items-start lg:justify-center lg:gap-2">
             {RIGHT_MODULES.map((group, i) => (
               <HudSkillCard
                 key={group.id}

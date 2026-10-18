@@ -186,10 +186,18 @@ body.portfolio-intro-active {
 
 @media (min-width: 1024px) {
   .skills-orbit-stage {
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-columns: minmax(0, 320px) minmax(240px, 22vw) minmax(0, 320px);
     grid-template-areas: "left capsule right";
-    gap: 1rem 1.25rem;
+    justify-content: center;
+    gap: 0.75rem 1.5rem;
     align-items: center;
+  }
+}
+
+@media (min-width: 1280px) {
+  .skills-orbit-stage {
+    grid-template-columns: minmax(0, 340px) minmax(260px, 280px) minmax(0, 340px);
+    gap: 0.75rem 2rem;
   }
 }
 
@@ -203,11 +211,14 @@ body.portfolio-intro-active {
 
 .skills-capsule-core {
   grid-area: capsule;
+  position: relative;
   justify-self: center;
-  width: min(52vw, 200px);
-  min-height: min(50vw, 240px);
+  width: min(58vw, 240px);
+  height: min(72vw, 320px);
+  overflow: visible;
+  isolation: isolate;
   opacity: 0;
-  transform: scale(0.88);
+  transform: scale(0.9);
   transition:
     opacity 0.85s ease,
     transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
@@ -219,30 +230,41 @@ body.portfolio-intro-active {
 }
 
 .skills-capsule-video {
+  position: absolute;
+  left: 50%;
+  top: 50%;
   display: block;
-  width: 155%;
+  width: 132%;
+  height: 132%;
   max-width: none;
-  height: auto;
-  min-height: min(50vw, 240px);
-  max-height: min(46vh, 300px);
-  margin-left: 50%;
-  transform: translateX(-50%);
-  object-fit: contain;
-  object-position: center center;
+  margin: 0;
+  transform: translate(-50%, -50%) scale(1.08);
+  object-fit: cover;
+  object-position: center 44%;
   mix-blend-mode: screen;
-  filter: contrast(1.1) saturate(1.14) brightness(0.98);
+  filter: contrast(1.12) saturate(1.16) brightness(1.02);
+  pointer-events: none;
 }
 
 @media (min-width: 1024px) {
   .skills-capsule-core {
-    width: min(22vw, 220px);
-    min-height: min(38vh, 280px);
+    width: clamp(260px, 18vw, 300px);
+    height: clamp(380px, 52vh, 520px);
   }
 
   .skills-capsule-video {
-    width: 168%;
-    min-height: min(38vh, 280px);
-    max-height: 320px;
+    width: 128%;
+    height: 128%;
+    transform: translate(-50%, -50%) scale(1.12);
+    object-position: center 42%;
+  }
+}
+
+@media (max-width: 1023px) {
+  .skills-wing-left,
+  .skills-wing-right {
+    max-width: min(100%, 340px);
+    justify-self: center;
   }
 }
 
