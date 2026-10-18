@@ -54,16 +54,10 @@ body {
   will-change: transform;
 }
 
-main {
-  transform: translate3d(0, calc(var(--scroll-y-mid, 0px) * -0.06), 0);
-  will-change: transform;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .ambient-parallax-slow,
   .ambient-parallax-fast,
-  .parallax-grid-bg,
-  main {
+  .parallax-grid-bg {
     transform: none !important;
     will-change: auto;
   }
@@ -74,9 +68,23 @@ body.portfolio-intro-active {
 }
 
 /* Full-viewport intro — mobile portrait / desktop / ultrawide */
+.portfolio-intro {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  width: 100vw;
+  max-width: 100%;
+}
+
 .portfolio-intro-video {
   object-fit: cover;
   object-position: center center;
+  min-width: 100%;
+  min-height: 100%;
+  width: 100%;
+  height: 100%;
   transform: scale(1.06);
   transform-origin: center center;
   filter: contrast(1.06) saturate(1.12) brightness(0.82);

@@ -55,7 +55,7 @@ export function PortfolioIntro({ onComplete }: Props) {
 
   return (
     <div
-      className={`portfolio-intro fixed inset-0 z-[999] flex items-center justify-center bg-void ${exiting ? "portfolio-intro-exit" : ""}`}
+      className={`portfolio-intro z-[999] flex items-center justify-center overflow-hidden bg-void ${exiting ? "portfolio-intro-exit" : ""}`}
       role="dialog"
       aria-label="Portfolio opening sequence"
     >

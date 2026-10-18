@@ -4,6 +4,7 @@ import "./globals.css";
 import { AmbientSciFi } from "@/components/AmbientSciFi";
 import { Navigation } from "@/components/Navigation";
 import { PageParallax } from "@/components/PageParallax";
+import { PortfolioShell } from "@/components/PortfolioShell";
 import { ScrollProgress } from "@/components/ScrollProgress";
 
 const cinzel = Cinzel({
@@ -46,7 +47,9 @@ export default function RootLayout({
         <AmbientSciFi />
         <ScrollProgress />
         <Navigation />
-        <main className="relative z-[1]">{children}</main>
+        <PortfolioShell>
+          <main className="relative z-[1]">{children}</main>
+        </PortfolioShell>
       </body>
     </html>
   );
