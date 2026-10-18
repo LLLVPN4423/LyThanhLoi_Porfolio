@@ -186,7 +186,6 @@ body.portfolio-intro-active {
     "left right";
   gap: 1rem 0.75rem;
   align-items: start;
-  isolation: isolate;
 }
 
 @media (min-width: 1024px) {
