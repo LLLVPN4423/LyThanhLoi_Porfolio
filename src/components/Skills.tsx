@@ -75,19 +75,21 @@ export function Skills() {
   return (
     <section id="skills" className="scroll-mt-24 border-t border-panel-border py-20">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <Reveal>
-          <p className="font-[family-name:var(--font-mono)] text-xs tracking-widest text-cyan-glow/80 uppercase">
-            Technical Abilities
-          </p>
-          <h2 className="mt-2 font-[family-name:var(--font-display)] text-3xl md:text-4xl">
-            Skill Modules
-          </h2>
-          <p className="mt-3 max-w-2xl text-sm text-text-muted">
-            Verified skills from my profile — capsule sync, modules deploy to both wings.
-          </p>
-        </Reveal>
+        <div className="skills-section-intro relative z-10">
+          <Reveal>
+            <p className="font-[family-name:var(--font-mono)] text-xs tracking-widest text-cyan-glow/80 uppercase">
+              Technical Abilities
+            </p>
+            <h2 className="mt-2 font-[family-name:var(--font-display)] text-3xl md:text-4xl">
+              Skill Modules
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm text-text-muted">
+              Verified skills from my profile — capsule sync, modules deploy to both wings.
+            </p>
+          </Reveal>
+        </div>
 
-        <div ref={stageRef} className="skills-orbit-stage relative mt-10 lg:mt-12">
+        <div ref={stageRef} className="skills-orbit-stage relative mt-14 lg:mt-20">
           <div className="skills-wing-left flex flex-col gap-2.5 lg:items-end lg:justify-center lg:gap-2">
             {LEFT_MODULES.map((group, i) => (
               <HudSkillCard
@@ -105,16 +107,19 @@ export function Skills() {
             aria-hidden
           >
             <div className="skills-capsule-backdrop" />
-            <video
-              className="skills-capsule-video pointer-events-none"
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="metadata"
-            >
-              <source src={CAPSULE_VIDEO} type="video/mp4" />
-            </video>
+            <div className="skills-capsule-video-mask">
+              <video
+                className="skills-capsule-video pointer-events-none"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+              >
+                <source src={CAPSULE_VIDEO} type="video/mp4" />
+              </video>
+            </div>
+            <div className="skills-capsule-edge-feather" aria-hidden />
           </div>
 
           <div className="skills-wing-right flex flex-col gap-2.5 lg:items-start lg:justify-center lg:gap-2">

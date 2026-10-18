@@ -174,6 +174,10 @@ body.portfolio-intro-active {
 }
 
 /* Skills — centered capsule, modules wing left/right */
+.skills-section-intro {
+  padding-bottom: 0.25rem;
+}
+
 .skills-orbit-stage {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -182,6 +186,7 @@ body.portfolio-intro-active {
     "left right";
   gap: 1rem 0.75rem;
   align-items: start;
+  isolation: isolate;
 }
 
 @media (min-width: 1024px) {
@@ -239,37 +244,42 @@ body.portfolio-intro-active {
 .skills-capsule-backdrop {
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 56%;
   z-index: 0;
-  width: 155%;
-  height: 148%;
-  transform: translate(-50%, -50%);
+  width: 132%;
+  height: 118%;
+  transform: translate(-50%, -46%);
   border-radius: 50%;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.9s ease;
   background: radial-gradient(
-    ellipse 52% 50% at 50% 44%,
+    ellipse 50% 48% at 50% 48%,
     #000000 0%,
-    #040508 22%,
-    color-mix(in srgb, #000 55%, var(--color-void)) 42%,
-    color-mix(in srgb, #000 18%, var(--color-void)) 58%,
-    transparent 76%
+    #040508 26%,
+    color-mix(in srgb, #000 50%, var(--color-void)) 48%,
+    color-mix(in srgb, #000 10%, var(--color-void)) 64%,
+    transparent 80%
   );
-  box-shadow:
-    0 0 80px 20px color-mix(in srgb, #000 75%, transparent),
-    0 0 120px 40px color-mix(in srgb, var(--color-void) 90%, transparent);
 }
 
 .skills-capsule-core.skills-capsule-live .skills-capsule-backdrop {
   opacity: 1;
 }
 
+.skills-capsule-video-mask {
+  position: absolute;
+  inset: 2% 0;
+  z-index: 1;
+  overflow: hidden;
+  mask-image: radial-gradient(ellipse 72% 68% at 50% 44%, #000 52%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 72% 68% at 50% 44%, #000 52%, transparent 100%);
+}
+
 .skills-capsule-video {
   position: absolute;
   left: 50%;
   top: 50%;
-  z-index: 1;
   display: block;
   width: 100%;
   height: 100%;
@@ -284,6 +294,21 @@ body.portfolio-intro-active {
   pointer-events: none;
 }
 
+.skills-capsule-edge-feather {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 70% 66% at 50% 44%,
+    transparent 42%,
+    color-mix(in srgb, var(--color-void) 35%, transparent) 68%,
+    color-mix(in srgb, var(--color-void) 85%, transparent) 88%,
+    var(--color-void) 100%
+  );
+  opacity: 0.92;
+}
+
 @media (min-width: 1024px) {
   .skills-capsule-core {
     width: clamp(260px, 18vw, 300px);
@@ -291,16 +316,23 @@ body.portfolio-intro-active {
   }
 
   .skills-capsule-backdrop {
-    width: 168%;
-    height: 155%;
+    top: 54%;
+    width: 138%;
+    height: 112%;
+    transform: translate(-50%, -44%);
     background: radial-gradient(
-      ellipse 48% 46% at 50% 42%,
+      ellipse 46% 44% at 50% 46%,
       #000000 0%,
-      #030407 24%,
-      color-mix(in srgb, #000 50%, var(--color-void)) 46%,
-      color-mix(in srgb, #000 12%, var(--color-void)) 62%,
-      transparent 78%
+      #030407 28%,
+      color-mix(in srgb, #000 48%, var(--color-void)) 50%,
+      color-mix(in srgb, #000 8%, var(--color-void)) 66%,
+      transparent 82%
     );
+  }
+
+  .skills-capsule-video-mask {
+    mask-image: radial-gradient(ellipse 70% 66% at 50% 42%, #000 54%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 66% at 50% 42%, #000 54%, transparent 100%);
   }
 
   .skills-capsule-video {
