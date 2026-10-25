@@ -65,11 +65,11 @@ export const projects: Project[] = [
   },
   {
     id: "aiko-tarot",
-    name: "Bé Tabby Tarot (Pet Tarot)",
+    name: "Bé Aiko Tarot (Pet Tarot)",
     shortDescription:
       "Bilingual (VI/EN) pet-themed tarot web app — 22 Major Arcana with shuffle and journal.",
     purpose:
-      "Warm, accessible tarot readings inspired by a tabby cat — web experience with animations and local journal.",
+      "Warm, accessible tarot readings starring Aiko — celestial cat deck with animations and a local reading journal.",
     features: [
       "1 / 3 / 5 card spreads with themes",
       "Upright & reversed meanings (VI + EN)",
@@ -78,9 +78,44 @@ export const projects: Project[] = [
       "Next.js / TypeScript frontend",
     ],
     technologies: ["TypeScript", "React", "Next.js"],
+    role: "Sole developer",
     repositoryUrl: "https://github.com/LLLVPN4423/Aiko_Tarot_web",
+    demoUrl: "https://pet-tarot.vercel.app",
+    demoVerified: true,
     accent: "amber",
     glyph: "☽",
+  },
+  {
+    id: "trang-tran-hair",
+    name: "Trang Tran Hair Salon — Website",
+    shortDescription:
+      "Full-stack salon site: portfolio, service pricing, Moroccanoil shop, SePay checkout, bookings, loyalty, and admin portal.",
+    purpose:
+      "Production web platform for Trang Tran Hair Salon (Sóc Trăng) — customer-facing storefront plus back-office operations.",
+    features: [
+      "Hero, artist profile, lookbook, and configurable hair gallery",
+      "Service catalog, cart, and SePay bank-transfer checkout",
+      "Customer sign-up (email + Google), loyalty points, and promotions",
+      "Booking requests stored in database with account tracking",
+      "Admin portal (services, products, orders, appointments, customers)",
+      "Deployed on Cloudflare Pages with API on Google Cloud Run",
+    ],
+    technologies: [
+      "React",
+      "Vite",
+      "TypeScript",
+      "Tailwind CSS",
+      ".NET",
+      "Firebase",
+      "Cloudflare Pages",
+      "Google Cloud Run",
+    ],
+    role: "Sole developer",
+    repositoryUrl: "https://github.com/LLLVPN4423/Trang_Tran_Web",
+    demoUrl: "https://trangtran-hair.pages.dev",
+    demoVerified: true,
+    accent: "violet",
+    glyph: "✂",
   },
   {
     id: "aws-report",

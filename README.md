@@ -40,5 +40,7 @@ Deploying via **Vercel** or **GitHub Actions** (Linux) is unaffected.
 | Project | URL |
 |--------|-----|
 | AWS Internship Report Site | https://LLLVPN4423.github.io/aws-internship-report-site/ |
+| Bé Aiko Tarot (Pet Tarot) | https://pet-tarot.vercel.app |
+| Trang Tran Hair Salon — Website | https://trangtran-hair.pages.dev |
 
 Other projects link to GitHub only until a demo URL is confirmed.

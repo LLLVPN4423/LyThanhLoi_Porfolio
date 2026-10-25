@@ -75,7 +75,8 @@ SKILL_DETAIL = ("Programming Languages", ["C# (.NET 9 / 10)", "Java", "JavaScrip
 PROJECTS = [
     ("violet", "✎", "CrayonNote", "Cross-platform note-taking app (.NET MAUI) with AI-powered speech-to-text.", ".NET MAUI", "C#", "SQLite (ORM)", "OpenAI Whisper API"),
     ("cyan", "文", "MiniHongo", "Mobile app for Japanese vocabulary and Kanji learning across platforms.", ".NET MAUI", "C#", "SQLite", "RESTful API"),
-    ("amber", "☽", "Bé Tabby Tarot (Pet Tarot)", "Bilingual (VI/EN) pet-themed tarot web app — 22 Major Arcana with shuffle and journal.", "TypeScript", "React", "Next.js"),
+    ("amber", "☽", "Bé Aiko Tarot (Pet Tarot)", "Bilingual (VI/EN) pet-themed tarot web app — 22 Major Arcana with shuffle and journal.", "TypeScript", "React", "Next.js"),
+    ("violet", "✂", "Trang Tran Hair Salon — Website", "Full-stack salon site: portfolio, pricing, shop, SePay checkout, bookings, loyalty, and admin portal.", "React", "Vite", ".NET", "Cloudflare Pages"),
     ("emerald", "☁", "AWS Internship Report Site", "Bilingual Hugo site documenting AWS Vietnam FCJ Cloud Engineer internship.", "Hugo", "GitHub Actions", "GitHub Pages"),
     ("cyan", "☑", "Task Management System", "Online task management and team collaboration with permissions and progress tracking.", "Java Spring Boot", "MySQL", "Spring Security", "RESTful API"),
     ("violet", "♫", "Music Player (Desktop)", "Windows multimedia player with modern UI, playlists, and multiple formats.", "C#", "WinForms", ".NET", "NUnit"),

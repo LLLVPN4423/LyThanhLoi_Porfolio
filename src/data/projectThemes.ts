@@ -25,11 +25,18 @@ export const projectThemes: Record<Project["id"], ProjectTheme> = {
     scan: "from-cyan-glow/25",
   },
   "aiko-tarot": {
-    label: "ORACLE deck / PET SIGIL",
+    label: "ORACLE DECK / AIKO SIGIL",
     frame: "border-amber-400/40 shadow-[inset_0_0_40px_rgba(251,191,36,0.08)]",
     corner: "before:border-amber-400/50",
     tag: "bg-amber-400/10 text-amber-300 border-amber-400/30",
     scan: "from-amber-400/20",
+  },
+  "trang-tran-hair": {
+    label: "SALON NET / CLOUD FRONT",
+    frame: "border-violet-glow/40 shadow-[0_0_28px_-8px_rgba(167,139,250,0.35)]",
+    corner: "before:border-violet-glow/55",
+    tag: "bg-violet-glow/12 text-violet-glow border-violet-glow/30",
+    scan: "from-violet-glow/20",
   },
   "aws-report": {
     label: "CLOUD LOG / FCJ STREAM",
