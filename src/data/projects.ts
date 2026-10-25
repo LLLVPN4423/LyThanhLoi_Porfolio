@@ -80,7 +80,7 @@ export const projects: Project[] = [
     technologies: ["TypeScript", "React", "Next.js"],
     role: "Sole developer",
     repositoryUrl: "https://github.com/LLLVPN4423/Aiko_Tarot_web",
-    demoUrl: "https://pet-tarot.vercel.app",
+    demoUrl: "https://pet-tarot-rose.vercel.app",
     demoVerified: true,
     accent: "amber",
     glyph: "☽",
