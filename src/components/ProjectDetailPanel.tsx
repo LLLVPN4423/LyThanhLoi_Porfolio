@@ -114,9 +114,34 @@ export function ProjectDetailView({ project, onBack }: Props) {
             rel="noopener noreferrer"
             className="rounded-lg bg-panel px-4 py-2 text-sm text-cyan-glow hover:bg-panel/80"
           >
-            View Source (GitHub)
+            {project.sourceRepos?.length
+              ? "Source — Mai Yen Vy"
+              : "View Source (GitHub)"}
           </a>
-          {project.demoUrl ? (
+          {project.sourceRepos?.map((repo) => (
+            <a
+              key={repo.url}
+              href={repo.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg bg-panel/60 px-4 py-2 text-sm text-cyan-glow/90 hover:bg-panel/80"
+            >
+              Source — {repo.label}
+            </a>
+          ))}
+          {project.liveDemos?.map((demo) => (
+            <a
+              key={demo.url}
+              href={demo.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg border border-panel-border px-4 py-2 text-sm text-text-primary hover:border-emerald-400/40"
+            >
+              Live — {demo.label}
+              {project.demoVerified ? "" : " (unverified)"}
+            </a>
+          ))}
+          {!project.liveDemos?.length && project.demoUrl ? (
             <a
               href={project.demoUrl}
               target="_blank"

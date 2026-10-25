@@ -1,3 +1,5 @@
+export type ProjectLink = { label: string; url: string };
+
 export type Project = {
   id: string;
   name: string;
@@ -8,8 +10,10 @@ export type Project = {
   status?: string;
   role?: string;
   repositoryUrl: string;
+  sourceRepos?: ProjectLink[];
   demoUrl?: string;
   demoVerified?: boolean;
+  liveDemos?: ProjectLink[];
   accent: "cyan" | "violet" | "amber" | "emerald";
   glyph: string;
 };
@@ -116,6 +120,56 @@ export const projects: Project[] = [
     demoVerified: true,
     accent: "violet",
     glyph: "✂",
+  },
+  {
+    id: "client-portfolios",
+    name: "Client Personal Portfolios",
+    shortDescription:
+      "Three custom portfolio sites for individual clients — layout, content structure, and production deploy.",
+    purpose:
+      "Deliver polished personal-brand sites for clients (distinct from full product builds like the salon platform). Each site is tailored to the person’s profile and hosted on GitHub Pages or Vercel.",
+    features: [
+      "Mai Yen Vy — personal portfolio (GitHub Pages)",
+      "Trần Dan Dan — personal portfolio (GitHub Pages)",
+      "Trang Tran — stylist / brand portfolio (Vercel); pairs with the salon commerce platform as a lighter showcase site",
+      "Responsive sections, client-driven content, and verified live URLs",
+    ],
+    technologies: [
+      "HTML / CSS",
+      "JavaScript",
+      "Responsive UI",
+      "GitHub Pages",
+      "Vercel",
+    ],
+    role: "Sole developer (design & implementation)",
+    repositoryUrl: "https://github.com/LLLVPN4423/MaiYenVy_Portfolio",
+    sourceRepos: [
+      {
+        label: "Trần Dan Dan",
+        url: "https://github.com/LLLVPN4423/porfolio_Tran_Dan_Dan",
+      },
+      {
+        label: "Trang Tran",
+        url: "https://github.com/LLLVPN4423/Trang_Tran_Porfolio",
+      },
+    ],
+    liveDemos: [
+      {
+        label: "Mai Yen Vy",
+        url: "https://lllvpn4423.github.io/MaiYenVy_Portfolio/",
+      },
+      {
+        label: "Trần Dan Dan",
+        url: "https://lllvpn4423.github.io/porfolio_Tran_Dan_Dan/",
+      },
+      {
+        label: "Trang Tran",
+        url: "https://trang-tran-portfolio.vercel.app/",
+      },
+    ],
+    demoVerified: true,
+    accent: "emerald",
+    glyph: "◉",
   },
   {
     id: "aws-report",

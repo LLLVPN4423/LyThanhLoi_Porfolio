@@ -95,7 +95,14 @@ function ProjectListCard({
         >
           GitHub
         </a>
-        {project.demoUrl ? (
+        {project.liveDemos?.length ? (
+          <span
+            className="text-xs text-emerald-400/90"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {project.liveDemos.length} live sites
+          </span>
+        ) : project.demoUrl ? (
           <a
             href={project.demoUrl}
             target="_blank"

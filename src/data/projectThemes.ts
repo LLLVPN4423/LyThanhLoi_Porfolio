@@ -38,6 +38,13 @@ export const projectThemes: Record<Project["id"], ProjectTheme> = {
     tag: "bg-violet-glow/12 text-violet-glow border-violet-glow/30",
     scan: "from-violet-glow/20",
   },
+  "client-portfolios": {
+    label: "CLIENT BRAND / PORTFOLIO RING",
+    frame: "border-emerald-400/35 shadow-[inset_0_0_24px_rgba(52,211,153,0.06)]",
+    corner: "before:border-emerald-400/50",
+    tag: "bg-emerald-400/10 text-emerald-300 border-emerald-400/30",
+    scan: "from-emerald-400/18",
+  },
   "aws-report": {
     label: "CLOUD LOG / FCJ STREAM",
     frame: "border-emerald-400/40 shadow-[0_0_20px_-4px_rgba(52,211,153,0.4)]",
