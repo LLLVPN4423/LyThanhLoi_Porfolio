@@ -65,7 +65,11 @@ export const skillGroups: SkillGroup[] = [
     items: [
       { name: "Git / GitHub" },
       { name: "Adobe XD", note: "UI/UX" },
+      { name: "Figma", note: "UI/UX" },
+      { name: "Canva", note: "Design & decks" },
       { name: "GitHub Copilot" },
+      { name: "Cursor", note: "AI IDE" },
+      { name: "Devin (Windsurf)", note: "AI IDE" },
       { name: "Gemini, ChatGPT, Claude", note: "Prompt engineering" },
       { name: "Google Workspace" },
     ],

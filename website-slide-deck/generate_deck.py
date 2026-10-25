@@ -67,7 +67,7 @@ SKILL_GROUPS = [
     ("◇", "Databases", "SQL Server · MySQL · SQLite · Firebase"),
     ("✦", "Architecture & Patterns", "MVVM · Repository Pattern · Dependency Injection · RESTful API"),
     ("◎", "Testing & Quality", "NUnit · Gauge Framework"),
-    ("⎔", "Tools, AI & Platforms", "Git / GitHub · Adobe XD · GitHub Copilot · Gemini, ChatGPT, Claude · Google Workspace"),
+    ("⎔", "Tools, AI & Platforms", "Git / GitHub · Adobe XD · Figma · Canva · GitHub Copilot · Cursor · Devin (Windsurf) · Gemini, ChatGPT, Claude · Google Workspace"),
 ]
 
 SKILL_DETAIL = ("Programming Languages", ["C# (.NET 9 / 10)", "Java", "JavaScript (React)"])
