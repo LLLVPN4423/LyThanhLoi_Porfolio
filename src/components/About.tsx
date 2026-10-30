@@ -63,41 +63,22 @@ export function About() {
                 </dl>
               </div>
 
-              <div className="rounded-xl border border-panel-border bg-panel/40 p-6">
+              <div>
                 <h3 className="font-[family-name:var(--font-mono)] text-xs text-cyan-glow uppercase">
                   Personal interests
                 </h3>
-                <p className="mt-2 text-xs leading-relaxed text-text-muted">
-                  Open a dossier — each topic will grow into its own themed space.
-                </p>
-                <ul className="mt-4 flex flex-col gap-2">
+                <div className="mt-3 flex flex-wrap gap-2">
                   {personalDossiers.map((d) => (
-                    <li key={d.slug}>
-                      <Link
-                        href={`/dossier/${d.slug}`}
-                        className="group flex items-center gap-3 rounded-lg border border-panel-border bg-void/50 px-4 py-3 text-left transition-colors hover:border-cyan-glow/35 hover:bg-panel/50"
-                      >
-                        <span
-                          className="text-lg text-cyan-glow/80 transition-transform group-hover:scale-110"
-                          aria-hidden
-                        >
-                          {d.glyph}
-                        </span>
-                        <span className="min-w-0 flex-1">
-                          <span className="block text-sm font-medium text-text-primary">
-                            {d.label}
-                          </span>
-                          <span className="mt-0.5 block text-[11px] leading-snug text-text-muted">
-                            {d.hint}
-                          </span>
-                        </span>
-                        <span className="shrink-0 font-[family-name:var(--font-mono)] text-[10px] tracking-wide text-cyan-glow/70 uppercase opacity-0 transition-opacity group-hover:opacity-100">
-                          Open
-                        </span>
-                      </Link>
-                    </li>
+                    <Link
+                      key={d.slug}
+                      href={`/dossier/${d.slug}`}
+                      title={d.hint}
+                      className="rounded-lg border border-panel-border bg-panel px-4 py-2 text-sm text-cyan-glow hover:bg-panel/80"
+                    >
+                      {d.label}
+                    </Link>
                   ))}
-                </ul>
+                </div>
               </div>
             </div>
           </Reveal>
