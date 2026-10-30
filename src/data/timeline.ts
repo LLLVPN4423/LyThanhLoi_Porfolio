@@ -54,12 +54,48 @@ export const timeline: TimelineEntry[] = [
     kind: "work",
   },
   {
-    id: "work-other",
-    period: "2024 – Present",
-    title: "Other Experiences",
-    org: "GS25 · FSI · ShopeeFood · King of Clean Coffee",
+    id: "work-shopeefood",
+    period: "02/2025 – Present",
+    title: "Delivery Partner (Part-time)",
+    org: "ShopeeFood",
     description:
-      "Salesperson (GS25), Data Digitizer (FSI), Shipper (ShopeeFood), Barista (King of Clean Coffee) — demonstrates dynamism and the ability to work under high pressure.",
+      "Part-time shipper: deliver food and goods across districts in Ho Chi Minh City.",
+    kind: "work",
+  },
+  {
+    id: "milestone-vua-cafe",
+    period: "06/2026",
+    title: "Professional Barista Training",
+    org: "VUA CAFÉ SẠCH — CaPheNguyenChat.vn",
+    description:
+      "Certificate of completion — Professional Practical Barista Training (Pha chế thực chiến chuyên nghiệp), completed with excellence. Certificate no. VCS-2026-0003. Program motto: real learning, real practice, real business.",
+    kind: "milestone",
+  },
+  {
+    id: "work-fsi",
+    period: "10/2024 – 11/2024",
+    title: "Data Digitizer",
+    org: "FSI",
+    description:
+      "Scanning and data entry: convert physical documents into digital records for National Archives Center No. 2 (Trung tâm Lưu trữ Quốc gia II). Project duration approximately two months.",
+    kind: "work",
+  },
+  {
+    id: "work-gs25",
+    period: "03/2024 – 08/2024",
+    title: "Sales Associate",
+    org: "GS25 Vietnam",
+    description:
+      "Cashier, customer service, and in-store merchandising — product layout and shelf organization.",
+    kind: "work",
+  },
+  {
+    id: "work-family-business",
+    period: "2010 – Present",
+    title: "Family Business Operations",
+    org: "Wholesale & inter-province delivery (Southern Vietnam)",
+    description:
+      "Inventory and purchasing, order picking, motorcycle deliveries and assisting truck loads, invoicing and payment collection. Ship general merchandise — snacks, consumer goods, corrugated cartons — across Southern Vietnam provinces.",
     kind: "work",
   },
 ];
