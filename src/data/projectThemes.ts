@@ -31,6 +31,20 @@ export const projectThemes: Record<Project["id"], ProjectTheme> = {
     tag: "bg-amber-400/10 text-amber-300 border-amber-400/30",
     scan: "from-amber-400/20",
   },
+  "study-desk": {
+    label: "LEARN DESK / BILINGUAL PATH",
+    frame: "border-cyan-glow/42 shadow-[0_0_26px_-8px_rgba(34,211,238,0.4)]",
+    corner: "before:border-cyan-glow/55",
+    tag: "bg-cyan-glow/12 text-cyan-glow border-cyan-glow/32",
+    scan: "from-cyan-glow/22",
+  },
+  "pt-coach": {
+    label: "FORCE PROTO / WELLNESS HUD",
+    frame: "border-emerald-400/38 shadow-[0_0_22px_-6px_rgba(52,211,153,0.35)]",
+    corner: "before:border-emerald-400/52",
+    tag: "bg-emerald-400/10 text-emerald-300 border-emerald-400/32",
+    scan: "from-emerald-400/20",
+  },
   "trang-tran-hair": {
     label: "SALON NET / CLOUD FRONT",
     frame: "border-violet-glow/40 shadow-[0_0_28px_-8px_rgba(167,139,250,0.35)]",

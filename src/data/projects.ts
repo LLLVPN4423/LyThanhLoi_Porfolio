@@ -90,6 +90,56 @@ export const projects: Project[] = [
     glyph: "☽",
   },
   {
+    id: "study-desk",
+    name: "Study Desk",
+    shortDescription:
+      "Bilingual study workspace — desk for PDF/MP3, deadlines, and JP (JLPT) + EN (IELTS/CEFR) paths with FSRS reviews.",
+    purpose:
+      "Combine a personal learning desk (files, audio, tasks, Pomodoro) with placement-driven Japanese and English study tracks seeded from open datasets — unofficial JLPT/IELTS practice.",
+    features: [
+      "Upload PDF/MP3, folders/tags, tasks, Pomodoro, desk themes, study-room links",
+      "JP: OpenJLPT vocab/grammar/kanji, placement, roadmap, timed mocks, culture modules",
+      "EN: CEFR-J vocabulary & grammar, placement, roadmap, SRS, timed mocks",
+      "FSRS reviews, highlight→flashcard, JSON backup; freemium path flags (local session)",
+    ],
+    technologies: [
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "OpenJLPT",
+      "CEFR-J",
+      "howler.js",
+    ],
+    role: "Sole developer",
+    repositoryUrl: "https://github.com/LLLVPN4423/Study_Desk",
+    demoUrl: "https://study-desk-livid.vercel.app",
+    demoVerified: true,
+    accent: "cyan",
+    glyph: "机",
+  },
+  {
+    id: "pt-coach",
+    name: "PT Desk (PT Coach)",
+    shortDescription:
+      "Personal workout & meal-plan coach — onboarding, InBody macros, exercise library, and daily check-ins.",
+    purpose:
+      "Self-hosted fitness desk for training and nutrition planning with clear medical disclaimers — not a substitute for professional PT or medical advice.",
+    features: [
+      "Health onboarding with constraints, red flags, and clearance disclaimers",
+      "Manual InBody → TDEE/macros and age-group training plans",
+      "~367 exercises from free-exercise-db with swap-by-muscle-group and form video links",
+      "Meal plans from foods catalog + Open Food Facts barcode lookup",
+      "Daily workout/meal/water check-in, body metrics history, JSON export/import",
+    ],
+    technologies: ["Next.js", "TypeScript", "localStorage", "Open Food Facts API"],
+    role: "Sole developer",
+    repositoryUrl: "https://github.com/LLLVPN4423/pt-coach-webapp",
+    demoUrl: "https://pt-coach-webapp.vercel.app",
+    demoVerified: true,
+    accent: "emerald",
+    glyph: "⚡",
+  },
+  {
     id: "trang-tran-hair",
     name: "Trang Tran Hair Salon — Website",
     shortDescription:
