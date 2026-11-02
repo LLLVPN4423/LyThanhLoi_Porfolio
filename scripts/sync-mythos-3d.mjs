@@ -28,7 +28,6 @@ const glbs = [
   "mythos/models/bridge_shell_v3.glb",
   "mythos/models/console_bank_v3.glb",
   "mythos/models/opt/capsule_hero_v3_opt.glb",
-  "mythos/models/project_cabinet_v3.glb",
   "mythos/models/nexus_portal_v3.glb",
 ];
 
@@ -50,18 +49,17 @@ ensureDir(dstRoot);
 copyFile(path.join(srcRoot, "index-mythos.html"), path.join(dstRoot, "index.html"));
 
 let html = fs.readFileSync(path.join(dstRoot, "index.html"), "utf8");
-if (!html.includes("['2D Portfolio','/']")) {
+html = html.replaceAll(
+  "https://ly-thanh-loi-porfolio.vercel.app/",
+  "/"
+);
+if (!html.includes("['2D Portfolio','/']") && !html.includes('["2D Portfolio","/"]')) {
   html = html.replace(
     "['Facebook','https://www.facebook.com/ly.loi.235603']],",
     "['Facebook','https://www.facebook.com/ly.loi.235603'],['2D Portfolio','/']],"
   );
 }
 if (!html.includes("← 2D Portfolio")) {
-  html = html.replace(
-    "</div></div>\n<script>",
-    '</div><p style="margin-top:18px"><a href="/" style="color:var(--c)">← 2D Portfolio</a></p></div>\n<script>'
-  );
-  // boot closes before script — try boot-specific replace
   html = html.replace(
     '<div><button id="b1" disabled>▶ Enter ship (audio)</button><button id="b2" disabled>Silent</button></div></div>',
     '<div><button id="b1" disabled>▶ Enter ship (audio)</button><button id="b2" disabled>Silent</button></div><p style="margin-top:18px"><a href="/" style="color:var(--c)">← 2D Portfolio</a></p></div>'

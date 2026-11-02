@@ -94,26 +94,25 @@ const CONFIG={
  /* Phase 8 sequential: planet v2 + interior/airlock v3 + portal v3 (v1/v2/opt retained on disk) */
  models:[
   /* 8C Planet */
-  {file:'mythos/models/planet/planet_terrain_v2.glb',parent:'ext',beat:0,fit:false,at:[{p:[0,-0.2,0],r:[0,180,0]}]},
-  {file:'mythos/models/planet/planet_ridge_v2.glb',parent:'ext',beat:0,fit:false,at:[{p:[0,-0.2,0],r:[0,180,0]}]},
-  {file:'mythos/models/planet/planet_cliff_v2.glb',parent:'ext',beat:0,fit:false,at:[{p:[0,-0.2,0],r:[0,180,0]}]},
-  {file:'mythos/models/planet/planet_ruin_v2.glb',parent:'ext',beat:0,fit:false,at:[{p:[0,-0.2,0],r:[0,180,0]}]},
-  {file:'mythos/models/planet/planet_flora_field_v2.glb',parent:'ext',beat:0,fit:false,at:[{p:[0,-0.2,0],r:[0,180,0]}]},
-  {file:'mythos/models/planet/planet_crash_collar_v2.glb',parent:'ext',beat:0,fit:false,at:[{p:[0,-0.4,-62],r:[0,180,0]}]},
+  {file:'mythos/models/planet/planet_terrain_v2.glb',parent:'ext',beat:0,fit:false,crit:1,at:[{p:[0,-0.2,0],r:[0,180,0]}]},
+  {file:'mythos/models/planet/planet_ridge_v2.glb',parent:'ext',beat:0,fit:false,crit:1,at:[{p:[0,-0.2,0],r:[0,180,0]}]},
+  {file:'mythos/models/planet/planet_cliff_v2.glb',parent:'ext',beat:0,fit:false,crit:1,at:[{p:[0,-0.2,0],r:[0,180,0]}]},
+  {file:'mythos/models/planet/planet_ruin_v2.glb',parent:'ext',beat:0,fit:false,crit:1,at:[{p:[0,-0.2,0],r:[0,180,0]}]},
+  {file:'mythos/models/planet/planet_flora_field_v2.glb',parent:'ext',beat:0,fit:false,crit:1,at:[{p:[0,-0.2,0],r:[0,180,0]}]},
+  {file:'mythos/models/planet/planet_crash_collar_v2.glb',parent:'ext',beat:0,fit:false,crit:1,at:[{p:[0,-0.4,-62],r:[0,180,0]}]},
   /* 8B Exterior structure */
-  {file:'mythos/models/airlock_assembly_v3.glb',parent:'ext',beat:0,size:14,at:[{p:[0,-1.6,-62],r:[0,180,0]}]},
-  {file:'mythos/models/opt/hull_module_left_v2_opt.glb',parent:'ext',beat:0,size:20,at:[{p:[-16,-1.6,-72],r:[0,185,0]}]},
-  {file:'mythos/models/opt/hull_module_right_v2_opt.glb',parent:'ext',beat:0,size:20,at:[{p:[16,-1.6,-72],r:[0,175,0]}]},
-  {file:'mythos/models/opt/wreck_silhouette_v2_opt.glb',parent:'ext',beat:0,size:36,at:[{p:[-70,-2.0,-95],r:[0,55,8]}]},
-  /* 8B Interior */
+  {file:'mythos/models/airlock_assembly_v3.glb',parent:'ext',beat:0,size:14,crit:1,at:[{p:[0,-1.6,-62],r:[0,180,0]}]},
+  /* heavy exterior — after first frame / enter */
+  {file:'mythos/models/opt/hull_module_left_v2_opt.glb',parent:'ext',beat:0,size:20,late:1,at:[{p:[-16,-1.6,-72],r:[0,185,0]}]},
+  {file:'mythos/models/opt/hull_module_right_v2_opt.glb',parent:'ext',beat:0,size:20,late:1,at:[{p:[16,-1.6,-72],r:[0,175,0]}]},
+  {file:'mythos/models/opt/wreck_silhouette_v2_opt.glb',parent:'ext',beat:0,size:36,late:1,at:[{p:[-70,-2.0,-95],r:[0,55,8]}]},
+  /* 8B Interior — scroll / after enter */
   {file:'mythos/models/corridor_segment_A_v3.glb',parent:'int',beat:1,size:10.5,lodR:72,at:[{p:[0,0,-70]},{p:[0,0,-90]}]},
   {file:'mythos/models/corridor_segment_B_v3.glb',parent:'int',beat:1,size:10.5,lodR:72,at:[{p:[0,0,-80]}]},
   {file:'mythos/models/interior_prop_kit_v3.glb',parent:'int',beat:1,size:3.2,lodR:70,at:[{p:[-10.5,0,-112],r:[0,20,0]},{p:[12.5,0,-110],r:[0,-35,0]}]},
   {file:'mythos/models/bridge_shell_v3.glb',parent:'int',beat:2,size:38,lodR:80,at:[{p:[2,0,-124]}]},
   {file:'mythos/models/console_bank_v3.glb',parent:'int',beat:2,size:13,lodR:70,at:[{p:[2,0,-139],r:[0,180,0]}]},
   {file:'mythos/models/opt/capsule_hero_v3_opt.glb',parent:'int',beat:2,size:9.5,lodR:70,hide:['capsule'],at:[{p:[0,0.2,-130]}]},
-  /* cabinet retired — Chronicle hologram owns the right wall */
-  {file:'mythos/models/project_cabinet_v3.glb',parent:'int',beat:2,size:14.5,lodR:70,at:[{p:[18.8,-40,-124.5],r:[0,180,0]}],hide:[]},
   {file:'mythos/models/interior_prop_kit_v3.glb',parent:'int',beat:2,size:4.5,lodR:70,at:[{p:[-12,0,-134],r:[0,90,0]},{p:[16,0,-134],r:[0,-90,0]}]}
  ]
 };
@@ -135,7 +134,7 @@ if(!window.THREE){document.body.innerHTML='<p style="padding:20px">Không tải 
 const T=THREE,$=i=>document.getElementById(i),V=(x,y,z)=>new T.Vector3(x,y,z),cl=T.MathUtils.clamp,rn=Math.random,mob=innerWidth<700;
 /* Phase 6 — URL / hash quality + fps (serve may strip ?query on redirect) */
 const _qs=new URLSearchParams(location.search||(location.hash.startsWith('#')?location.hash.slice(1):''));const _q=_qs.get('q');if(_q==='dev'||_q==='cinematic')CONFIG.quality=_q;const SHOW_FPS=_qs.get('fps')==='1';if(SHOW_FPS)$('fps').style.display='block';
-$('ct').innerHTML=CONFIG.contacts.map(c=>'<a href="'+c[1]+'">'+c[0]+'</a>').join('');const Q=CONFIG.quality==='cinematic',rd=new T.WebGLRenderer({antialias:!mob&&Q,powerPreference:Q?'high-performance':'default'});rd.setPixelRatio(Math.min(devicePixelRatio,mob?1:(Q?1.75:1.25)));rd.setSize(innerWidth,innerHeight);rd.outputEncoding=T.sRGBEncoding;rd.toneMapping=T.ACESFilmicToneMapping;rd.toneMappingExposure=Q?1.35:1.2;$('stage').appendChild(rd.domElement);
+$('ct').innerHTML=CONFIG.contacts.map(c=>'<a href="'+c[1]+'">'+c[0]+'</a>').join('');const Q=CONFIG.quality==='cinematic',rd=new T.WebGLRenderer({antialias:!mob&&Q,powerPreference:'high-performance',alpha:false});rd.setPixelRatio(Math.min(devicePixelRatio,mob?1:(Q?1.35:1.1)));rd.setSize(innerWidth,innerHeight);rd.outputEncoding=T.sRGBEncoding;rd.toneMapping=T.ACESFilmicToneMapping;rd.toneMappingExposure=Q?1.25:1.12;$('stage').appendChild(rd.domElement);
 const sc=new T.Scene(),cam=new T.PerspectiveCamera(innerWidth<innerHeight?75:60,innerWidth/innerHeight,.1,700);
 /* Phase 8E — readable night-planet sky (not crushed black) */
 sc.background=new T.Color(0x122030);sc.fog=new T.FogExp2(0x152636,.0034);const FOG_COL=sc.fog.color;
@@ -143,7 +142,7 @@ const ext=new T.Group(),int=new T.Group(),fx=new T.Group();sc.add(ext,int,fx);
 /* HDRI deferred after first paint (Phase 6) — Poly Haven CC0 */
 /* Phase 7G — skip HDRI on mobile (VRAM + decode) */
 function loadHDRI(){if(mob||!T.RGBELoader)return;new T.RGBELoader().load('assets/hdri/industrial_sunset_puresky_1k.hdr',tex=>{tex.mapping=T.EquirectangularReflectionMapping;if(T.PMREMGenerator){const p=new T.PMREMGenerator(rd);p.compileEquirectangularShader();sc.environment=p.fromEquirectangular(tex).texture;tex.dispose();p.dispose()}else sc.environment=tex})}
-if(!mob)setTimeout(loadHDRI,Q?200:600);
+if(Q&&!mob)setTimeout(loadHDRI,1200);
 const MS=(c,e,i,o)=>new T.MeshStandardMaterial(Object.assign({color:c,emissive:e||0,emissiveIntensity:i||1,roughness:.75,metalness:.3},o||{}));
 const mh=MS(0x1d292e),mi=MS(0x141d21),mv=MS(0x1a3a28,0x0a2a18,.18,{roughness:.92}),mc=new T.MeshBasicMaterial({color:0x37f2ff}),ma=new T.MeshBasicMaterial({color:0xffb300});
 const B=(w,h,d,x,y,z,m,g)=>{const o=new T.Mesh(new T.BoxGeometry(w,h,d),m);o.position.set(x,y,z);(g||sc).add(o);return o};
@@ -196,7 +195,7 @@ for(let i=0;i<(mob?6:14);i++){const o=new T.Mesh(new T.SphereGeometry(.18+rn()*.
 for(let i=0;i<(mob?5:12);i++){const o=new T.Mesh(new T.SphereGeometry(.12+rn()*.18,5,4),mossMat);o.position.set((rn()-.5)*6,.2+rn()*6.5,-70-rn()*65);int.add(o)}
 const hazeMats=[];
 function hazeCard(w,h,y,z,op,col){const m=new T.MeshBasicMaterial({color:col||0x1a3040,transparent:true,opacity:op,depthWrite:false,side:T.DoubleSide});hazeMats.push(m);const o=new T.Mesh(new T.PlaneGeometry(w,h),m);o.position.set(0,y,z);ext.add(o);return o}
-const GN=mob?120:(Q?420:240),gdg=new T.BufferGeometry(),gdp=new Float32Array(GN*3);for(let i=0;i<GN;i++)gdp.set([(rn()-.5)*90,0.4+rn()*4,(rn()-.5)*100-20],i*3);gdg.setAttribute('position',new T.BufferAttribute(gdp,3));
+const GN=mob?50:(Q?160:90),gdg=new T.BufferGeometry(),gdp=new Float32Array(GN*3);for(let i=0;i<GN;i++)gdp.set([(rn()-.5)*90,0.4+rn()*4,(rn()-.5)*100-20],i*3);gdg.setAttribute('position',new T.BufferAttribute(gdp,3));
 const gDust=new T.Points(gdg,new T.PointsMaterial({color:0xb8c8c0,size:.06,sizeAttenuation:true,transparent:true,opacity:.28,depthWrite:false}));gDust.frustumCulled=false;ext.add(gDust);
 /* keep hidden doors for scroll open anim */
 
@@ -206,7 +205,7 @@ const dl=B(4,8,.6,-2,4,-62,MS(0x222e33,0x331a00,.5),ext),dr=B(4,8,.6,2,4,-62,MS(
 const shaftMat=()=>new T.MeshBasicMaterial({color:0xa8d8e8,transparent:true,opacity:0,blending:T.AdditiveBlending,depthWrite:false,side:T.DoubleSide});
 const shafts=[];function addShaft(x,y,z,w,h,ry,g){const m=new T.Mesh(new T.PlaneGeometry(w,h),shaftMat());m.position.set(x,y,z);m.rotation.y=ry;g.add(m);shafts.push(m);return m}
 addShaft(0,5.5,-62,2.2,9,0,ext);addShaft(-2.2,5.2,-74,1.4,7,.15,int);if(!mob){addShaft(2.2,5.2,-74,1.4,7,-.15,int);addShaft(0,5.8,-84,1.6,7.5,0,int)}addShaft(0,5.5,-112,1.8,8,0,int);if(Q&&!mob)addShaft(0,4.8,-130,2.4,7.2,0,int);
-const DN=mob?80:(Q?280:140),dg=new T.BufferGeometry(),dp=new Float32Array(DN*3);for(let i=0;i<DN;i++)dp.set([(rn()-.5)*7,1+rn()*6,-65-rn()*75],i*3);dg.setAttribute('position',new T.BufferAttribute(dp,3));
+const DN=mob?30:(Q?100:55),dg=new T.BufferGeometry(),dp=new Float32Array(DN*3);for(let i=0;i<DN;i++)dp.set([(rn()-.5)*7,1+rn()*6,-65-rn()*75],i*3);dg.setAttribute('position',new T.BufferAttribute(dp,3));
 const dust=new T.Points(dg,new T.PointsMaterial({color:0xcfe8f0,size:.04,transparent:true,opacity:.35,depthWrite:false,blending:T.AdditiveBlending}));dust.frustumCulled=false;int.add(dust);
 /* capsule + thuyền trưởng */
 const cp=new T.Group();cp.position.set(0,0,-130);cp.name='capsule';int.add(cp);
@@ -262,31 +261,37 @@ function setChronicle(i,warn){const n=CONFIG.chronicle.length;if(i!=null)chronId
 (function buildChronHits(){const n=CONFIG.chronicle.length,top=108,bot=CHRON_H-36,step=(bot-top)/Math.max(1,n-1),lx=36;for(let i=0;i<n;i++){const cy=top+i*step,u=lx/CHRON_W,v=1-cy/CHRON_H;const hit=new T.Mesh(new T.SphereGeometry(.32,8,8),new T.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false,depthTest:false}));hit.position.set((u-.5)*CHRON_PW,(v-.5)*CHRON_PH,.06);hit.userData.chronI=i;hit.renderOrder=9;chronMesh.add(hit);chronHits.push(hit)}
 const body=new T.Mesh(new T.PlaneGeometry(CHRON_PW*.52,CHRON_PH*.62),new T.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false}));body.position.set(CHRON_PW*.2,0,.04);body.userData.chronNext=1;body.renderOrder=9;chronMesh.add(body);chronHits.push(body)})();
 /* nổ */
-B(7,.4,7,0,-.4,-130,MS(0x1d292e,0x37f2ff,.15),fx);const N=mob?800:(Q?3000:1400),eg=new T.BufferGeometry(),ep=new Float32Array(N*3),ev=[];for(let i=0;i<N;i++)ev.push(V(rn()-.5,rn()-.5,rn()-.5).normalize().multiplyScalar(.3+rn()*rn()*1.6));eg.setAttribute('position',new T.BufferAttribute(ep,3));
+B(7,.4,7,0,-.4,-130,MS(0x1d292e,0x37f2ff,.15),fx);const N=mob?280:(Q?900:480),eg=new T.BufferGeometry(),ep=new Float32Array(N*3),ev=[];for(let i=0;i<N;i++)ev.push(V(rn()-.5,rn()-.5,rn()-.5).normalize().multiplyScalar(.3+rn()*rn()*1.6));eg.setAttribute('position',new T.BufferAttribute(ep,3));
 const exp=new T.Points(eg,new T.PointsMaterial({color:0xff9a3c,size:.5,transparent:true,blending:T.AdditiveBlending,depthWrite:false}));exp.frustumCulled=false;fx.add(exp);
 const ND=Q?36:22,dm=new T.InstancedMesh(new T.BoxGeometry(1,1,1),mh,ND),dv=[],dsz=[],dd=new T.Object3D();for(let i=0;i<ND;i++){dv.push(V(rn()-.5,rn()-.5,rn()-.5).normalize().multiplyScalar(.5+rn()*1.2));dsz.push(.25+rn()*.9)}dm.frustumCulled=false;dm.visible=false;fx.add(dm);
 const swv=new T.Mesh(new T.SphereGeometry(1,Q?24:12,Q?16:8),new T.MeshBasicMaterial({color:0xffb060,transparent:true,opacity:0,wireframe:true,blending:T.AdditiveBlending}));fx.add(swv);const ol=new T.PointLight(0xff8a30,0,120);ol.position.set(0,4,-128);fx.add(ol);const OR=V(0,3.5,-128);
 /* không gian + cổng */
-const STARN=Q?1600:700,stg=new T.BufferGeometry(),sp=new Float32Array(STARN*3);for(let i=0;i<STARN;i++){const v=V(rn()-.5,rn()-.5,rn()-.5).normalize().multiplyScalar(320);sp.set([v.x,v.y,v.z],i*3)}stg.setAttribute('position',new T.BufferAttribute(sp,3));const stars=new T.Points(stg,new T.PointsMaterial({color:0xd0e0f0,size:.55,sizeAttenuation:true,transparent:true,opacity:.55,depthWrite:false}));sc.add(stars);
+const STARN=mob?180:(Q?500:280),stg=new T.BufferGeometry(),sp=new Float32Array(STARN*3);for(let i=0;i<STARN;i++){const v=V(rn()-.5,rn()-.5,rn()-.5).normalize().multiplyScalar(320);sp.set([v.x,v.y,v.z],i*3)}stg.setAttribute('position',new T.BufferAttribute(sp,3));const stars=new T.Points(stg,new T.PointsMaterial({color:0xd0e0f0,size:.55,sizeAttenuation:true,transparent:true,opacity:.55,depthWrite:false}));sc.add(stars);
 const PZ=-170,portal=new T.Group();portal.position.set(0,0,PZ);sc.add(portal);const prs=[];let portalReady=null;
-const PTN=Q?360:180,pg=new T.BufferGeometry(),pp=new Float32Array(PTN*3);for(let i=0;i<PTN;i++){const a=rn()*6.28,r=1.6+rn()*1.2;pp.set([Math.cos(a)*r,1.6+Math.sin(a)*r*.1,(rn()-.5)*.8],i*3)}pg.setAttribute('position',new T.BufferAttribute(pp,3));const pts=new T.Points(pg,new T.PointsMaterial({color:0x7ffcff,size:.055,sizeAttenuation:true,transparent:true,opacity:.5,blending:T.AdditiveBlending,depthWrite:false}));portal.add(pts);
+const PTN=mob?48:(Q?120:72),pg=new T.BufferGeometry(),pp=new Float32Array(PTN*3);for(let i=0;i<PTN;i++){const a=rn()*6.28,r=1.6+rn()*1.2;pp.set([Math.cos(a)*r,1.6+Math.sin(a)*r*.1,(rn()-.5)*.8],i*3)}pg.setAttribute('position',new T.BufferAttribute(pp,3));const pts=new T.Points(pg,new T.PointsMaterial({color:0x7ffcff,size:.055,sizeAttenuation:true,transparent:true,opacity:.5,blending:T.AdditiveBlending,depthWrite:false}));portal.add(pts);
 /* mưa bão */
-const RN=mob?600:(Q?2500:1100),rg=new T.BufferGeometry(),rp=new Float32Array(RN*3);for(let i=0;i<RN;i++)rp.set([(rn()-.5)*120,rn()*50-10,(rn()-.5)*120],i*3);rg.setAttribute('position',new T.BufferAttribute(rp,3));const rain=new T.Points(rg,new T.PointsMaterial({color:0xbfe8d8,size:.18,transparent:true,opacity:.6,depthWrite:false}));rain.frustumCulled=false;sc.add(rain);
+const RN=mob?180:(Q?700:360),rg=new T.BufferGeometry(),rp=new Float32Array(RN*3);for(let i=0;i<RN;i++)rp.set([(rn()-.5)*120,rn()*50-10,(rn()-.5)*120],i*3);rg.setAttribute('position',new T.BufferAttribute(rp,3));const rain=new T.Points(rg,new T.PointsMaterial({color:0xbfe8d8,size:.18,transparent:true,opacity:.55,depthWrite:false}));rain.frustumCulled=false;sc.add(rain);
 /* Phase 6 — lazy GLB by beat + shared clones */
 const GL=T.GLTFLoader?new T.GLTFLoader():null;if(GL&&T.DRACOLoader){const dr=new T.DRACOLoader();dr.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');GL.setDRACOLoader(dr)}
-let _loadN=0,_loadOk=0,_loadFail=0;const _loadTotal=(CONFIG.models||[]).length+2;const _beatStarted={},_bootReady={ok:false};let _b0Pend=0;
-function _loadUI(){const el=$('loadstat');if(!el)return;const done=_loadOk+_loadFail>=_loadTotal;el.textContent=done?('Assets '+_loadOk+'/'+_loadTotal+(_loadFail?' · '+_loadFail+' missing':'')+' · '+CONFIG.quality):(('Streaming… '+_loadOk+'/'+_loadTotal)+(_bootReady.ok?' · enter OK':''))}
+let _loadN=0,_loadOk=0,_loadFail=0,_critOk=0,_entered=false,_lateQueued=false;
+const _models=CONFIG.models||[],_critNeed=_models.filter(m=>m.crit).length||3,_loadTotal=_models.length+1;
+const _beatStarted={},_bootReady={ok:false},_q=[],_maxC=mob?2:3;let _active=0;
+function _loadUI(){const el=$('loadstat');if(!el)return;const done=_loadOk+_loadFail>=_loadTotal;if(_bootReady.ok)el.textContent=done?('Assets ready · '+CONFIG.quality):('Ready — enter anytime · background '+_loadOk+'/'+_loadTotal);else el.textContent='Preparing first view… '+Math.min(_critOk,_critNeed)+'/'+_critNeed}
+function enqueue(m){if(!m||m._queued)return;m._queued=1;_q.push(m);pump()}
+function pump(){while(_active<_maxC&&_q.length){const m=_q.shift();_active++;slot(m)}}
 /* Phase 7G — instance LOD registry (distance cull by Z proximity) */
 const lodNodes=[],capHide=[];
 function cloneShare(src){const c=src.clone(false);if(src.isMesh){c.geometry=src.geometry;c.material=src.material;c.frustumCulled=true}src.children.forEach(ch=>c.add(cloneShare(ch)));return c}
 function tuneMats(o,lod,opts){const aniso=mob?1:(Q?4:1);const dropAo=!!mob||lod===1;const planet=!!(opts&&opts.planet);const ship=!!(opts&&opts.ship);o.traverse(n=>{if(!n.isMesh||!n.material)return;n.frustumCulled=true;if(n.geometry)n.geometry.computeBoundingSphere();const mats=Array.isArray(n.material)?n.material:[n.material];mats.forEach(mat=>{['map','normalMap','roughnessMap','metalnessMap','aoMap','emissiveMap'].forEach(k=>{const tex=mat[k];if(!tex)return;tex.anisotropy=aniso;if(planet&&(k==='map'||k==='normalMap'||k==='roughnessMap')){tex.wrapS=tex.wrapT=T.RepeatWrapping;tex.repeat.set(k==='map'?4:3,k==='map'?4:3);tex.needsUpdate=true}});if(planet){const nm=((n.name||'')+'|'+(mat.name||'')).toLowerCase();const flora=!!(opts&&opts.flora)||/flora|bio|plant|moss|vine|leaf/.test(nm);if(mat.emissiveIntensity!=null)mat.emissiveIntensity=Math.min(mat.emissiveIntensity,flora?0.03:0.06);if(flora){if(mat.color)mat.color.setHex(0x152618);if(mat.emissive)mat.emissive.setHex(0x07140a);mat.emissiveIntensity=.02;if(mat.map)mat.color.multiplyScalar(.55)}else{if(mat.color){const mx=Math.max(mat.color.r,mat.color.g,mat.color.b);if(mx>.72)mat.color.multiplyScalar(.55/mx)}if(!mat.map&&mat.color)mat.color.setHex(0x3a4a3c)}if(mat.roughness!=null)mat.roughness=Math.min(.96,Math.max(.62,mat.roughness));if(mat.metalness!=null)mat.metalness=Math.min(mat.metalness,.12);if(mat.emissiveIntensity!=null)mat.emissiveIntensity=Math.min(mat.emissiveIntensity,.05)}if(ship){if(mat.color){mat.color.offsetHSL(.02,-.08,-.04);mat.color.r=Math.min(1,mat.color.r*.85+.08);mat.color.g=Math.min(1,mat.color.g*.9+.04);mat.color.b=Math.min(1,mat.color.b*.7);const mx=Math.max(mat.color.r,mat.color.g,mat.color.b);if(mx<.1)mat.color.setRGB(.18,.2,.16)}if(mat.metalness!=null)mat.metalness=Math.min(.38,Math.max(.08,mat.metalness*.7));if(mat.roughness!=null)mat.roughness=Math.min(.95,Math.max(.62,mat.roughness+.12));if(mat.emissiveIntensity!=null&&mat.emissiveIntensity>0)mat.emissiveIntensity=Math.min(mat.emissiveIntensity,.12);else if(mat.emissive){mat.emissive.setHex(0x081410);mat.emissiveIntensity=.03}}if(dropAo&&mat.aoMap){mat.aoMap=null;mat.needsUpdate=true}if(lod===1&&mat.normalMap&&mat.normalScale)mat.normalScale.set(.35,.35);mat.needsUpdate=true})})}
+function queueLate(){if(_lateQueued)return;_lateQueued=true;_models.filter(m=>m.late).forEach(enqueue)}
 function unlockBoot(){if(_bootReady.ok)return;_bootReady.ok=true;$('b1').disabled=false;$('b2').disabled=false;_loadUI()}
-function slot(m){if(!GL)return;/* Phase 7G: mobile skips far wreck (heavy + rarely framed) */if(mob&&/wreck_silhouette/.test(m.file)){_loadOk++;_loadUI();return}_loadN++;const isB0=(m.beat||0)===0;if(isB0)_b0Pend++;const ok=g=>{const o=g.scene;o.traverse(n=>{if(n.isMesh&&n.material&&n.material.isMeshBasicMaterial){const q=n.material;n.material=new T.MeshStandardMaterial({color:q.color,vertexColors:q.vertexColors,roughness:.8,metalness:.3,emissive:q.color,emissiveIntensity:.07})}});const isPlanet=/planet\//.test(m.file),isFlora=/flora/.test(m.file),isCap=/capsule/.test(m.file),isShip=/airlock|hull_module|wreck_silhouette|corridor|bridge|console|cabinet|capsule|interior_prop/.test(m.file);tuneMats(o,0,isPlanet?{planet:true,flora:isFlora}:isShip?{ship:true}:null);if(isCap)o.traverse(n=>{if(!n.isMesh||!n.material)return;[].concat(n.material).forEach(mat=>{if(mat.emissiveIntensity!=null)mat.emissiveIntensity=Math.min(mat.emissiveIntensity||0,.08);if(mat.emissive&&mat.emissive.r+mat.emissive.g+mat.emissive.b>1.8)mat.emissive.multiplyScalar(.25)})});
+function finishSlot(m,ok){_active=Math.max(0,_active-1);if(ok)_loadOk++;else _loadFail++;if(m&&m.crit){_critOk++;if(_critOk>=Math.min(2,_critNeed))unlockBoot()}if(_loadOk+_loadFail>=3)unlockBoot();_loadUI();pump()}
+function slot(m){if(!GL){finishSlot(m,false);return}/* Phase 7G: mobile skips far wreck (heavy + rarely framed) */if(mob&&/wreck_silhouette/.test(m.file)){finishSlot(m,true);return}_loadN++;const ok=g=>{const o=g.scene;o.traverse(n=>{if(n.isMesh&&n.material&&n.material.isMeshBasicMaterial){const q=n.material;n.material=new T.MeshStandardMaterial({color:q.color,vertexColors:q.vertexColors,roughness:.8,metalness:.3,emissive:q.color,emissiveIntensity:.07})}});const isPlanet=/planet\//.test(m.file),isFlora=/flora/.test(m.file),isCap=/capsule/.test(m.file),isShip=/airlock|hull_module|wreck_silhouette|corridor|bridge|console|cabinet|capsule|interior_prop/.test(m.file);tuneMats(o,0,isPlanet?{planet:true,flora:isFlora}:isShip?{ship:true}:null);if(isCap)o.traverse(n=>{if(!n.isMesh||!n.material)return;[].concat(n.material).forEach(mat=>{if(mat.emissiveIntensity!=null)mat.emissiveIntensity=Math.min(mat.emissiveIntensity||0,.08);if(mat.emissive&&mat.emissive.r+mat.emissive.g+mat.emissive.b>1.8)mat.emissive.multiplyScalar(.25)})});
 const w=new T.Group();if(m.fit===false){w.add(o)}else{const b=new T.Box3().setFromObject(o),z=b.getSize(V(0,0,0)),k=(m.size||1)/Math.max(z.x,z.y,z.z,.001);o.scale.setScalar(k);b.setFromObject(o);const ct=b.getCenter(V(0,0,0));o.position.set(-ct.x,-b.min.y,-ct.z);w.add(o)}
-(m.at||[{p:[0,0,0]}]).forEach(a=>{const q=cloneShare(w);q.position.set(...a.p);q.rotation.set(...(a.r||[0,0,0]).map(d=>d*Math.PI/180));q.scale.setScalar(a.s||1);if(m.parent==='int'){q.userData.lodZ=a.p[2];q.userData.lodR=m.lodR||58;lodNodes.push(q);if(isCap||/bridge_shell|cabinet|console|corridor/.test(m.file)||(/interior_prop/.test(m.file)&&a.p[0]>3)||(/hull_module|airlock/.test(m.file)&&Math.abs(a.p[2]+130)<20))capHide.push(q)}(m.parent=='int'?int:ext).add(q)});(m.hide||[]).forEach(n=>{const h=sc.getObjectByName(n);if(!h)return;h.traverse(c=>{if(c.isLight)return;if(c.isMesh||c.isPoints)c.visible=false})});_loadOk++;if(isB0){_b0Pend--;if(_b0Pend<=0||_loadOk>=3)unlockBoot()}_loadUI()};
-const fail=()=>{_loadFail++;if(isB0){_b0Pend--;if(_b0Pend<=0||_loadOk+_loadFail>=3)unlockBoot()}_loadUI();console.warn('GLB fail',m.file)};
+(m.at||[{p:[0,0,0]}]).forEach(a=>{const q=cloneShare(w);q.position.set(...a.p);q.rotation.set(...(a.r||[0,0,0]).map(d=>d*Math.PI/180));q.scale.setScalar(a.s||1);if(m.parent==='int'){q.userData.lodZ=a.p[2];q.userData.lodR=m.lodR||58;lodNodes.push(q);if(isCap||/bridge_shell|cabinet|console|corridor/.test(m.file)||(/interior_prop/.test(m.file)&&a.p[0]>3)||(/hull_module|airlock/.test(m.file)&&Math.abs(a.p[2]+130)<20))capHide.push(q)}(m.parent=='int'?int:ext).add(q)});(m.hide||[]).forEach(n=>{const h=sc.getObjectByName(n);if(!h)return;h.traverse(c=>{if(c.isLight)return;if(c.isMesh||c.isPoints)c.visible=false})});finishSlot(m,true)};
+const fail=()=>{finishSlot(m,false);console.warn('GLB fail',m.file)};
 const e=EMBED[m.file];if(e){const bin=atob(e),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);GL.parse(u.buffer,'',ok,fail)}else GL.load((CONFIG.modelDir||'assets/')+m.file,ok,undefined,fail)}
-function ensureBeat(b){if(_beatStarted[b])return;_beatStarted[b]=true;if(b===3){loadPortal();return}(CONFIG.models||[]).filter(m=>(m.beat||0)===b).forEach(slot);_loadUI()}
+function ensureBeat(b){if(_beatStarted[b])return;_beatStarted[b]=true;if(b===3){loadPortal();return}_models.filter(m=>(m.beat||0)===b&&!m.late).forEach(enqueue);_loadUI()}
 function loadPortal(){if(!GL){_loadFail++;_loadUI();return}if(portalReady)return;
 const WANT_RING=9.2;/* aperture radius in world units — dominates climax */
 const placeFit=(o,size)=>{const b0=new T.Box3().setFromObject(o),sz=b0.getSize(V(0,0,0)),k=size/Math.max(sz.x,sz.y,sz.z,.001);o.scale.setScalar(k);const b=new T.Box3().setFromObject(o),c=b.getCenter(V(0,0,0));o.position.set(-c.x,-b.min.y,-c.z);return o};
@@ -310,15 +315,16 @@ if(b.max.y<.55||(s.y<1.4&&Math.max(s.x,s.z)>5&&b.min.y<1.6))n.visible=false;
 if(/^(CoreDisk|ApertureInner|PrimaryOuterBand|PylonDebris|PylonFall|PylonStump|Foundation|FoundLip|FloorPanel|Plinth|PlinthCap|PlinthInlay|Trench)/.test(nm))n.visible=false;
 if(/^Pylon(Shaft|Cap|Rib|Emit|Base)_4/.test(nm))n.visible=false;
 const mats=[].concat(n.material||[]);if(/Primary(Inner)?Band|PrimaryRing|ApertureFrame/.test(nm))mats.forEach(mat=>{if(!mat)return;if(mat.color)mat.color.multiplyScalar(.4);if(mat.emissive){mat.emissive.setHex(0x08180f);mat.emissiveIntensity=.1}})});
-if(!prs.length)prs.push(o);_loadOk++;_loadUI();_loadOk++;_loadUI()
-},undefined,()=>{_loadFail++;_loadUI();_loadFail++;_loadUI();const cy=WANT_RING+.55;for(let i=0;i<8;i++){const r=new T.Mesh(new T.TorusGeometry(WANT_RING*.85+i*.28,.08,8,48),new T.MeshBasicMaterial({color:i%2?0x5dff8a:0x37f2ff,transparent:true,opacity:.85}));r.position.set(0,cy,-i*.35);portal.add(r);prs.push(r)}seedFx(portal,V(0,cy,0),WANT_RING);window.__portalWantCY=cy})}
-ensureBeat(0);setTimeout(()=>ensureBeat(1),Q?1200:800);setTimeout(()=>ensureBeat(2),Q?2800:2000);setTimeout(()=>ensureBeat(3),Q?5000:3500);setTimeout(unlockBoot,8000);_loadUI();
-/* hậu kỳ — bloom on cinematic / desktop only (Aspire DEV skips composer) */
+if(!prs.length)prs.push(o);_loadOk++;_loadUI()
+},undefined,()=>{_loadFail++;_loadUI();const cy=WANT_RING+.55;for(let i=0;i<8;i++){const r=new T.Mesh(new T.TorusGeometry(WANT_RING*.85+i*.28,.08,8,48),new T.MeshBasicMaterial({color:i%2?0x5dff8a:0x37f2ff,transparent:true,opacity:.85}));r.position.set(0,cy,-i*.35);portal.add(r);prs.push(r)}seedFx(portal,V(0,cy,0),WANT_RING);window.__portalWantCY=cy})}
+ensureBeat(0);setTimeout(unlockBoot,4000);_loadUI();
+/* hậu kỳ — bloom only for cinematic desktop */
 let comp=null,bloom=null;if(Q&&!mob&&T.EffectComposer&&T.UnrealBloomPass){comp=new T.EffectComposer(rd);comp.addPass(new T.RenderPass(sc,cam));bloom=new T.UnrealBloomPass(new T.Vector2(innerWidth,innerHeight),BLOOM_BASE,.55,.88);comp.addPass(bloom)}
 /* âm thanh */
 let AC,wg,hg,sg,sr,tg;function audio(){AC=new(window.AudioContext||window.webkitAudioContext)();const nb=AC.createBuffer(1,AC.sampleRate*2,AC.sampleRate),d=nb.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;const n=AC.createBufferSource();n.buffer=nb;n.loop=true;const f=AC.createBiquadFilter();f.type='lowpass';f.frequency.value=500;wg=AC.createGain();wg.gain.value=0;n.connect(f);f.connect(wg);wg.connect(AC.destination);n.start();const o=AC.createOscillator();o.frequency.value=55;hg=AC.createGain();hg.gain.value=0;o.connect(hg);hg.connect(AC.destination);o.start();sr=AC.createOscillator();sr.type='sawtooth';sg=AC.createGain();sg.gain.value=0;sr.connect(sg);sg.connect(AC.destination);sr.start();const tn=AC.createOscillator();tn.frequency.value=3200;tg=AC.createGain();tg.gain.value=0;tn.connect(tg);tg.connect(AC.destination);tn.start();window._nb=nb}
 function boom(v){if(!AC)return;const s=AC.createBufferSource();s.buffer=window._nb;const f=AC.createBiquadFilter();f.type='lowpass';f.frequency.value=300;const g=AC.createGain();g.gain.setValueAtTime(v||.9,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+2.5);s.connect(f);f.connect(g);g.connect(AC.destination);s.start()}
-$('b1').onclick=()=>{audio();$('boot').style.display='none'};$('b2').onclick=()=>$('boot').style.display='none';
+function enterWorld(withAudio){if(_entered){$('boot').style.display='none';return}_entered=true;if(withAudio)audio();$('boot').style.display='none';queueLate();ensureBeat(1);_loadUI()}
+$('b1').onclick=()=>enterWorld(true);$('b2').onclick=()=>enterWorld(false);
 /* tương tác — archive cards + chronicle nodes */
 const rc=new T.Raycaster(),ms=new T.Vector2(9,9);let hov=-1,chronHov=-1;
 function openProject(i){const p=P[i];if(!p)return;$('it').textContent=p.name;const sec=(t,b)=>'<div class="sec"><b>'+t+'</b>'+b+'</div>';let h=sec('Overview','<p>'+p.blurb+'</p>');if(p.purpose)h+=sec('Problem & Purpose','<p>'+p.purpose+'</p>');if(p.contribution)h+=sec('Contribution','<p>'+p.contribution+'</p>');if(p.features&&p.features.length)h+=sec('Features','<ul>'+p.features.map(f=>'<li>'+f+'</li>').join('')+'</ul>');$('id').innerHTML=h;$('ic').innerHTML=sec('Technology Stack',(p.stack||[]).map(t=>'<span class=chip>'+t+'</span>').join(''));$('il').innerHTML=(p.links||[]).map(l=>'<a target=_blank rel=noopener href="'+l.url+'">'+l.label+'</a>').join('');$('info').style.display='block'}
