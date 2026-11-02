@@ -32,7 +32,7 @@ export const profile = {
   facebook: "https://www.facebook.com/ly.loi.235603?locale=vi_VN",
   github: "https://github.com/LLLVPN4423",
   githubHandle: "LLLVPN4423",
-  mythosUrl: "/3d/",
+  mythosUrl: "/3d/index.html",
   education: {
     school: "Ho Chi Minh City University of Technology (HUTECH)",
     program: "Information Technology — Vietnam–Japan Institute",
