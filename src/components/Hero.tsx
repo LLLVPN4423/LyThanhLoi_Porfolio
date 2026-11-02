@@ -47,6 +47,12 @@ export function Hero() {
                 View Projects
               </a>
               <a
+                href={profile.mythosUrl}
+                className="rounded-lg border border-cyan-glow/50 px-5 py-2.5 text-sm text-cyan-glow transition hover:border-cyan-glow hover:bg-cyan-glow/10"
+              >
+                Enter 3D Mythos
+              </a>
+              <a
                 href={profile.github}
                 target="_blank"
                 rel="noopener noreferrer"

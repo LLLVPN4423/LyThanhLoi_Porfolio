@@ -1,0 +1,427 @@
+<!DOCTYPE html><html lang="vi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lý Thành Lợi — Mythos Nexus (Phase 8)</title>
+<style>
+:root{--c:#37f2ff;--g:#5dff8a;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:#030608;color:#d8fbff;font:14px/1.5 "Courier New",monospace;height:1400vh}
+#stage{position:fixed;inset:0}#stage canvas{display:block}
+.ov{position:fixed;z-index:10;pointer-events:none}
+#hud{left:14px;top:calc(14px + env(safe-area-inset-top,0px));color:var(--c);letter-spacing:.2em;font-size:12px;text-shadow:0 0 8px var(--c)}
+#bar{left:0;top:0;height:3px;background:var(--c);width:0}
+#red{inset:0;background:radial-gradient(circle,transparent 22%,rgba(255,0,20,.72));opacity:0}
+#flash{inset:0;background:radial-gradient(circle at 50% 45%,#ffb060 0%,#ff4028 42%,#120810 100%);opacity:0;z-index:30}
+#ko{inset:0;background:#000;opacity:0;z-index:28;pointer-events:none}
+#ct{left:0;right:0;bottom:calc(28px + env(safe-area-inset-bottom,0px));text-align:center;opacity:0;transition:opacity .6s;z-index:35}
+#ct.on{opacity:1;pointer-events:auto}
+#ct a,button{display:inline-block;margin:6px;padding:12px 18px;border:1px solid var(--c);color:#e8fbff;text-decoration:none;background:rgba(2,18,28,.88);box-shadow:0 0 18px rgba(55,242,255,.35);font:inherit;cursor:pointer;backdrop-filter:blur(6px)}
+#ct a:hover,button:hover{background:var(--c);color:#031018}
+#info{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,92vw);max-height:min(82vh,740px);overflow:auto;z-index:20;display:none;padding:16px 18px;background:rgba(5,30,36,.92);border:1px solid var(--c);box-shadow:0 0 30px rgba(55,242,255,.5);pointer-events:auto}
+#info h3{margin:0 0 8px;color:var(--c);letter-spacing:.15em}#info a{color:var(--g);margin-right:12px;display:inline-block;margin-top:4px}
+#info .sec{margin:10px 0 0}#info .sec b{display:block;color:var(--c);font-size:11px;letter-spacing:.12em;margin-bottom:4px}
+#info .sec p{margin:0;color:#d8fbff;line-height:1.45}#info .sec ul{margin:4px 0 0;padding-left:18px}#info .sec li{margin:2px 0;color:#d8fbff}
+#info #ic{margin-top:8px}#info #il{margin-top:10px}
+.chip{display:inline-block;border:1px solid var(--g);color:var(--g);padding:0 6px;margin:2px;font-size:11px}
+#boot{position:fixed;inset:0;z-index:40;background:#030608;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px}
+#boot h1{font-size:clamp(30px,7vw,72px);margin:0;letter-spacing:.1em;text-shadow:0 0 22px var(--c)}
+#lt,#lb{left:0;right:0;height:50%;background:#000;z-index:25;display:none}#lt{top:0;box-shadow:0 10px 70px 30px #000}#lb{bottom:0;box-shadow:0 -10px 70px 30px #000}
+#vg{inset:0;background:radial-gradient(ellipse at center,transparent 35%,rgba(0,0,0,.85));opacity:0;z-index:24}
+#fps{right:14px;top:calc(14px + env(safe-area-inset-top,0px));color:#8ab;font-size:11px;letter-spacing:.08em;display:none}
+</style></head><body>
+<div id="stage"></div><div class="ov" id="lt"></div><div class="ov" id="lb"></div><div class="ov" id="vg"></div><div class="ov" id="bar"></div><div class="ov" id="hud"></div><div class="ov" id="fps"></div><div class="ov" id="red"></div><div class="ov" id="ko"></div><div class="ov" id="flash"></div>
+<div class="ov" id="ct"></div>
+<div id="info"><button style="float:right;margin:0" onclick="this.parentNode.style.display='none'">✕</button><h3 id="it"></h3><div id="id"></div><div id="ic"></div><div id="il"></div></div>
+<div id="boot"><p style="color:var(--c);letter-spacing:.3em">MYTHOS NEXUS · PHASE 8 SEQUENTIAL · LOG 2026</p><h1>LÝ THÀNH LỢI</h1><p>Backend Developer · Team Lead · UI/UX</p><p style="color:#8ab;font-size:12px;max-width:480px">3D Mythos experience · switch anytime to the classic 2D portfolio. Tip: <code>#q=cinematic</code> · <code>#fps=1</code></p><p id="loadstat" style="color:#6a8;font-size:11px;min-height:1.2em"></p><div><button id="b1" disabled>▶ Enter ship (audio)</button><button id="b2" disabled>Silent</button></div><p style="margin-top:18px"><a href="/" style="color:var(--c)">← 2D Portfolio</a></p></div>
+<script>
+/* ============================================================
+   CONFIG — CHỈNH NỘI DUNG Ở ĐÂY, KHÔNG CẦN ĐỤNG VÀO CODE BÊN DƯỚI
+   ============================================================ */
+const CONFIG={
+ /* assets/ + relative file paths (mythos + legacy Kenney) */
+ modelDir:'assets/',
+ quality:'dev', /* 'dev' | 'cinematic' — Aspire 7 default; override ?q= */
+
+ /* Profile — LEFT of capsule; tall readable plane, stacked layout fills height */
+ profile:{
+  W:880,H:1280,w:5.4,h:7.4,x:-5.2,y:4.2,z:-126.9,ry:.22,ap:.38,bp:.51,
+  summary:[
+   ['Development orientation','Building a solid foundation in system operations and administration. Aiming to combine the logical thinking of the development platform.'],
+   ['Self-learning skills','Passionate about researching and practicing new standards/technologies. Possesses strong technical document reading skills and can quickly master management tools, software, or technical platforms specific to each project.'],
+   ['Optimal thinking','Emphasizes accuracy in data processing and system architecture design. Always focuses on standardizing processes, minimizing technical risks, and optimizing actual operational performance.'],
+   ['Discipline & Adaptability','Maintaining a high level of physical fitness and a disciplined work ethic. Capable of maintaining high levels of focus to stay on schedule, and adapting flexibly to demanding workloads or environments requiring hands-on experience.']
+  ],
+  attrs:[['Identity','Ly Thanh Loi'],['Date of birth','04 / 04 / 2004'],['Institute','Information Technology — Vietnam–Japan Institute'],['Academy','Ho Chi Minh City University of Technology (HUTECH)'],['Cycle','2022 – 2026'],['Focus','Backend Developer · Team Lead · UI/UX Optimization']],
+  interests:['Strength & fitness training','Theories, philosophy & science','Languages & publication design','Electronics & devices']
+ },
+ /* Skill HUD cards — LEFT of capsule (below/stacked with profile) */
+ skillModules:[
+  {id:'HUD_MODULE_01',title:'Programming Languages',tags:['C# (.NET 9/10)','Java','JavaScript (React)']},
+  {id:'HUD_MODULE_02',title:'Frameworks & Platforms',tags:['.NET MAUI','ASP.NET Core','Spring Boot (J2EE)','WinForms']},
+  {id:'HUD_MODULE_03',title:'Databases',tags:['SQL Server','MySQL','SQLite','Firebase']},
+  {id:'HUD_MODULE_04',title:'Architecture & Patterns',tags:['MVVM','Repository Pattern','Dependency Injection','RESTful API']},
+  {id:'HUD_MODULE_05',title:'Testing & Quality',tags:['NUnit','Gauge Framework']},
+  {id:'HUD_MODULE_06',title:'Tools, AI & Platforms',tags:['Git / GitHub','Adobe XD','Figma','Canva','Copilot','Cursor','Devin','Gemini/ChatGPT/Claude','Google Workspace']}
+ ],
+ /* Chronicle timeline — sourced from portfolio timeline.ts */
+ chronicle:[
+  {date:'09/2026 – Present',tag:'Field Ops',role:'Platform Admin',org:'Trang Tran Hair Salon — Web & digital channels',brief:'Own salon website, API uptime, and remote digital presence — daily health checks, weekly reports, SEO & GBP.',detail:'Own the salon website, API uptime, and remote digital presence while the in-salon team handles day-to-day DM, Zalo, and bookings. Daily (async): monitor site/API health, fix booking, login, or shop issues, and share revenue plus orders or appointments that need action. Weekly: one-page report (revenue, backlog, top services) and CSV exports on request. Monthly: summary reporting, SEO checklist (Google Search Console, sitemap), pricing and web content updates, and Zalo/call support for contract or loyalty-point errors. Google Business Profile: hours, address, photos, website links, reviews and Q&A (target 1–2 day response); public Fanpage replies when access is granted. Advise on Meta/Google ads and support setup or optimization when the salon allocates budget.'},
+  {date:'04/2026 – 07/2026',tag:'Field Ops',role:'Intern',org:'AWS Vietnam — First Cloud AI Journey',brief:'Hands-on cloud training — networks, servers, large-scale databases; Jira task flow.',detail:'Participate in hands-on cloud computing training. Gain a thorough understanding of network infrastructure architecture, servers, and large-scale database systems. Manage development tasks through Jira and optimize data flow across the system.'},
+  {date:'04/2024 – 06/2024',tag:'Field Ops',role:'Technician',org:'Viet Nghiep Electronics Technology Co., Ltd.',brief:'Manufacture circuit boards, program code, and complete electronic products.',detail:'We manufacture circuit boards, program code, and complete electronic products.'},
+  {date:'—',tag:'Field Ops',role:'Tour Guide',org:'APEX Vietnam Travel Corporation',brief:'Lead student groups in Japanese and English per project schedule.',detail:'Lead student groups, communicating in Japanese and English according to the project schedule.'},
+  {date:'04/2026 – 07/2026',tag:'Field Ops',role:'Personal Trainer',org:'TODAY FITNESS',brief:'Plan training schedules, coach trainees, and digitize progress tracking.',detail:'Plan and optimize training schedules, listen to, share with, and understand the psychology of trainees, and closely monitor, record, and digitize training progress.'},
+  {date:'02/2025 – Present',tag:'Field Ops',role:'Delivery Partner (Part-time)',org:'ShopeeFood',brief:'Part-time shipper across districts in Ho Chi Minh City.',detail:'Part-time shipper: deliver food and goods across districts in Ho Chi Minh City.'},
+  {date:'06/2026',tag:'Milestone',role:'Professional Barista Training',org:'VUA CAFÉ SẠCH — CaPheNguyenChat.vn',brief:'Certificate of completion with excellence — VCS-2026-0003.',detail:'Certificate of completion — Professional Practical Barista Training (Pha chế thực chiến chuyên nghiệp), completed with excellence. Certificate no. VCS-2026-0003. Program motto: real learning, real practice, real business.'},
+  {date:'10/2024 – 11/2024',tag:'Field Ops',role:'Data Digitizer',org:'FSI',brief:'Scan and digitize documents for National Archives Center No. 2.',detail:'Scanning and data entry: convert physical documents into digital records for National Archives Center No. 2 (Trung tâm Lưu trữ Quốc gia II). Project duration approximately two months.'},
+  {date:'03/2024 – 08/2024',tag:'Field Ops',role:'Sales Associate',org:'GS25 Vietnam',brief:'Cashier, customer service, and in-store merchandising.',detail:'Cashier, customer service, and in-store merchandising — product layout and shelf organization.'},
+  {date:'2010 – Present',tag:'Field Ops',role:'Family Business Operations',org:'Wholesale & inter-province delivery (Southern Vietnam)',brief:'Inventory, deliveries, invoicing — wholesale across Southern Vietnam.',detail:'Inventory and purchasing, order picking, motorcycle deliveries and assisting truck loads, invoicing and payment collection. Ship general merchandise — snacks, consumer goods, corrugated cartons — across Southern Vietnam provinces.'}
+ ],
+ /* Project Archive — blurb on card; full detail on click */
+ projects:[
+  {name:'CrayonNote',blurb:'Cross-platform note-taking app (.NET MAUI) with AI-powered speech-to-text.',purpose:'Optimize digitization of audio recordings and multimedia data management on mobile devices.',contribution:'End-to-end development',features:['Cross-platform .NET MAUI client','Local data with SQLite ORM','Speech-to-text via OpenAI Whisper API','Azure OpenAI integration','MVVM architecture'],stack:['.NET MAUI','C#','SQLite (ORM)','OpenAI Whisper API','Azure OpenAI','MVVM'],links:[{label:'View Source (GitHub)',url:'https://github.com/LLLVPN4423/CrayonNote'}]},
+  {name:'MiniHongo',blurb:'Mobile app for Japanese vocabulary and Kanji learning across platforms.',purpose:'Interactive learning tool that manages a large vocabulary database seamlessly on multiple platforms.',contribution:'Team lead, Backend-dev, UI/UX Optimization',features:['Vocabulary and Kanji study flows','SQLite local storage','RESTful API backend','MVVM pattern','UI/UX optimization'],stack:['.NET MAUI','C#','SQLite','RESTful API','MVVM'],links:[{label:'View Source (GitHub)',url:'https://github.com/LLLVPN4423/miNihongo'}]},
+  {name:'Bé Aiko Tarot (Pet Tarot)',blurb:'Bilingual (VI/EN) pet-themed tarot web app — 22 Major Arcana with shuffle and journal.',purpose:'Warm, accessible tarot readings starring Aiko — celestial cat deck with animations and a local reading journal.',contribution:'Sole developer',features:['1 / 3 / 5 card spreads with themes','Upright & reversed meanings (VI + EN)','Shuffle and flip animations','Reading journal in browser (localStorage)','Next.js / TypeScript frontend'],stack:['TypeScript','React','Next.js'],links:[{label:'View Source (GitHub)',url:'https://github.com/LLLVPN4423/Aiko_Tarot_web'},{label:'Live Demo',url:'https://pet-tarot-rose.vercel.app'}]},
+  {name:'Study Desk',blurb:'Bilingual study workspace — desk for PDF/MP3, deadlines, and JP (JLPT) + EN (IELTS/CEFR) paths with FSRS reviews.',purpose:'Combine a personal learning desk (files, audio, tasks, Pomodoro) with placement-driven Japanese and English study tracks seeded from open datasets — unofficial JLPT/IELTS practice.',contribution:'Sole developer',features:['Upload PDF/MP3, folders/tags, tasks, Pomodoro, desk themes, study-room links','JP: OpenJLPT vocab/grammar/kanji, placement, roadmap, timed mocks, culture modules','EN: CEFR-J vocabulary & grammar, placement, roadmap, SRS, timed mocks','FSRS reviews, highlight→flashcard, JSON backup; freemium path flags (local session)'],stack:['Next.js','TypeScript','Tailwind CSS','OpenJLPT','CEFR-J','howler.js'],links:[{label:'View Source (GitHub)',url:'https://github.com/LLLVPN4423/Study_Desk'},{label:'Live Demo',url:'https://study-desk-livid.vercel.app'}]},
+  {name:'PT Desk (PT Coach)',blurb:'Personal workout & meal-plan coach — onboarding, InBody macros, exercise library, and daily check-ins.',purpose:'Self-hosted fitness desk for training and nutrition planning with clear medical disclaimers — not a substitute for professional PT or medical advice.',contribution:'Sole developer',features:['Health onboarding with constraints, red flags, and clearance disclaimers','Manual InBody → TDEE/macros and age-group training plans','~367 exercises from free-exercise-db with swap-by-muscle-group and form video links','Meal plans from foods catalog + Open Food Facts barcode lookup','Daily workout/meal/water check-in, body metrics history, JSON export/import'],stack:['Next.js','TypeScript','localStorage','Open Food Facts API'],links:[{label:'View Source (GitHub)',url:'https://github.com/LLLVPN4423/pt-coach-webapp'},{label:'Live Demo',url:'https://pt-coach-webapp.vercel.app'}]},
+  {name:'Trang Tran Hair Salon — Website',blurb:'Full-stack salon site: portfolio, service pricing, Moroccanoil shop, SePay checkout, bookings, loyalty, and admin portal.',purpose:'Production web platform for Trang Tran Hair Salon (Sóc Trăng) — customer-facing storefront plus back-office operations.',contribution:'Sole developer',features:['Hero, artist profile, lookbook, and configurable hair gallery','Service catalog, cart, and SePay bank-transfer checkout','Customer sign-up (email + Google), loyalty points, and promotions','Booking requests stored in database with account tracking','Admin portal (services, products, orders, appointments, customers)','Deployed on Cloudflare Pages with API on Google Cloud Run'],stack:['React','Vite','TypeScript','Tailwind CSS','.NET','Firebase','Cloudflare Pages','Google Cloud Run'],links:[{label:'View Source (GitHub)',url:'https://github.com/LLLVPN4423/Trang_Tran_Web'},{label:'Live Demo',url:'https://trangtran-hair.pages.dev'}]},
+  {name:'Client Personal Portfolios',blurb:'Three custom portfolio sites for individual clients — layout, content structure, and production deploy.',purpose:'Deliver polished personal-brand sites for clients (distinct from full product builds like the salon platform). Each site is tailored to the person\'s profile and hosted on GitHub Pages or Vercel.',contribution:'Sole developer (design & implementation)',features:['Mai Yen Vy — personal portfolio (GitHub Pages)','Trần Dan Dan — personal portfolio (GitHub Pages)','Trang Tran — stylist / brand portfolio (Vercel); pairs with the salon commerce platform as a lighter showcase site','Responsive sections, client-driven content, and verified live URLs'],stack:['HTML / CSS','JavaScript','Responsive UI','GitHub Pages','Vercel'],links:[{label:'Source — Mai Yen Vy',url:'https://github.com/LLLVPN4423/MaiYenVy_Portfolio'},{label:'Source — Trần Dan Dan',url:'https://github.com/LLLVPN4423/porfolio_Tran_Dan_Dan'},{label:'Source — Trang Tran',url:'https://github.com/LLLVPN4423/Trang_Tran_Porfolio'},{label:'Live — Mai Yen Vy',url:'https://lllvpn4423.github.io/MaiYenVy_Portfolio/'},{label:'Live — Trần Dan Dan',url:'https://lllvpn4423.github.io/porfolio_Tran_Dan_Dan/'},{label:'Live — Trang Tran',url:'https://trang-tran-portfolio.vercel.app/'}]},
+  {name:'AWS Internship Report',blurb:'Bilingual Hugo site documenting AWS Vietnam FCJ Cloud Engineer internship.',purpose:'Structured internship report with automated deploy to GitHub Pages.',features:['Hugo static site with hugo-theme-learn','English & Vietnamese content','GitHub Actions CI/CD','GitHub Pages hosting'],stack:['Hugo','GitHub Actions','GitHub Pages'],links:[{label:'View Source (GitHub)',url:'https://github.com/LLLVPN4423/aws-internship-report-site'},{label:'Live Demo',url:'https://LLLVPN4423.github.io/aws-internship-report-site/'}]},
+  {name:'Task Management System',blurb:'Online task management and team collaboration with permissions and progress tracking.',purpose:'Support teams with role-based access, task tracking, and collaboration workflows.',contribution:'Team lead, Backend-dev',features:['User permission management','Task and progress tracking','RESTful API','Spring Security'],stack:['Java Spring Boot','MySQL','Spring Security','Hibernate (JPA)','RESTful API'],links:[{label:'View Source (GitHub)',url:'https://github.com/LLLVPN4423/TaskManager'}]},
+  {name:'Music Player (Desktop)',blurb:'Windows multimedia player with modern UI, playlists, and multiple formats.',purpose:'Desktop playback experience with playlist management and tested quality workflows.',contribution:'Team lead, Backend-dev, UI/UX Design',features:['Playlist management','Multiple audio formats','Modern WinForms UI','Automated testing (Gauge, NUnit)'],stack:['C#','WinForms','.NET','NUnit','Gauge','Adobe XD'],links:[{label:'View Source (GitHub)',url:'https://github.com/LLLVPN4423/MusicProject_FinalCCPM'}]}
+ ],
+
+ contacts:[['✉ Email','mailto:ltl2004123@gmail.com'],['☎ 0939 222 854','tel:0939222854'],['GitHub','https://github.com/LLLVPN4423'],['Facebook','https://www.facebook.com/ly.loi.235603'],['2D Portfolio','/']],
+
+ /* Phase 8 sequential: planet v2 + interior/airlock v3 + portal v3 (v1/v2/opt retained on disk) */
+ models:[
+  /* 8C Planet */
+  {file:'mythos/models/planet/planet_terrain_v2.glb',parent:'ext',beat:0,fit:false,at:[{p:[0,-0.2,0],r:[0,180,0]}]},
+  {file:'mythos/models/planet/planet_ridge_v2.glb',parent:'ext',beat:0,fit:false,at:[{p:[0,-0.2,0],r:[0,180,0]}]},
+  {file:'mythos/models/planet/planet_cliff_v2.glb',parent:'ext',beat:0,fit:false,at:[{p:[0,-0.2,0],r:[0,180,0]}]},
+  {file:'mythos/models/planet/planet_ruin_v2.glb',parent:'ext',beat:0,fit:false,at:[{p:[0,-0.2,0],r:[0,180,0]}]},
+  {file:'mythos/models/planet/planet_flora_field_v2.glb',parent:'ext',beat:0,fit:false,at:[{p:[0,-0.2,0],r:[0,180,0]}]},
+  {file:'mythos/models/planet/planet_crash_collar_v2.glb',parent:'ext',beat:0,fit:false,at:[{p:[0,-0.4,-62],r:[0,180,0]}]},
+  /* 8B Exterior structure */
+  {file:'mythos/models/airlock_assembly_v3.glb',parent:'ext',beat:0,size:14,at:[{p:[0,-1.6,-62],r:[0,180,0]}]},
+  {file:'mythos/models/opt/hull_module_left_v2_opt.glb',parent:'ext',beat:0,size:20,at:[{p:[-16,-1.6,-72],r:[0,185,0]}]},
+  {file:'mythos/models/opt/hull_module_right_v2_opt.glb',parent:'ext',beat:0,size:20,at:[{p:[16,-1.6,-72],r:[0,175,0]}]},
+  {file:'mythos/models/opt/wreck_silhouette_v2_opt.glb',parent:'ext',beat:0,size:36,at:[{p:[-70,-2.0,-95],r:[0,55,8]}]},
+  /* 8B Interior */
+  {file:'mythos/models/corridor_segment_A_v3.glb',parent:'int',beat:1,size:10.5,lodR:72,at:[{p:[0,0,-70]},{p:[0,0,-90]}]},
+  {file:'mythos/models/corridor_segment_B_v3.glb',parent:'int',beat:1,size:10.5,lodR:72,at:[{p:[0,0,-80]}]},
+  {file:'mythos/models/interior_prop_kit_v3.glb',parent:'int',beat:1,size:3.2,lodR:70,at:[{p:[-10.5,0,-112],r:[0,20,0]},{p:[12.5,0,-110],r:[0,-35,0]}]},
+  {file:'mythos/models/bridge_shell_v3.glb',parent:'int',beat:2,size:38,lodR:80,at:[{p:[2,0,-124]}]},
+  {file:'mythos/models/console_bank_v3.glb',parent:'int',beat:2,size:13,lodR:70,at:[{p:[2,0,-139],r:[0,180,0]}]},
+  {file:'mythos/models/opt/capsule_hero_v3_opt.glb',parent:'int',beat:2,size:9.5,lodR:70,hide:['capsule'],at:[{p:[0,0.2,-130]}]},
+  /* cabinet retired — Chronicle hologram owns the right wall */
+  {file:'mythos/models/project_cabinet_v3.glb',parent:'int',beat:2,size:14.5,lodR:70,at:[{p:[18.8,-40,-124.5],r:[0,180,0]}],hide:[]},
+  {file:'mythos/models/interior_prop_kit_v3.glb',parent:'int',beat:2,size:4.5,lodR:70,at:[{p:[-12,0,-134],r:[0,90,0]},{p:[16,0,-134],r:[0,-90,0]}]}
+ ]
+};
+const EMBED=/*EMBED*/{};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/DRACOLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/RGBELoader.js"></script>
+<script>
+(function(){
+if(!window.THREE){document.body.innerHTML='<p style="padding:20px">Không tải được Three.js.</p>';return}
+const T=THREE,$=i=>document.getElementById(i),V=(x,y,z)=>new T.Vector3(x,y,z),cl=T.MathUtils.clamp,rn=Math.random,mob=innerWidth<700;
+/* Phase 6 — URL / hash quality + fps (serve may strip ?query on redirect) */
+const _qs=new URLSearchParams(location.search||(location.hash.startsWith('#')?location.hash.slice(1):''));const _q=_qs.get('q');if(_q==='dev'||_q==='cinematic')CONFIG.quality=_q;const SHOW_FPS=_qs.get('fps')==='1';if(SHOW_FPS)$('fps').style.display='block';
+$('ct').innerHTML=CONFIG.contacts.map(c=>'<a href="'+c[1]+'">'+c[0]+'</a>').join('');const Q=CONFIG.quality==='cinematic',rd=new T.WebGLRenderer({antialias:!mob&&Q,powerPreference:Q?'high-performance':'default'});rd.setPixelRatio(Math.min(devicePixelRatio,mob?1:(Q?1.75:1.25)));rd.setSize(innerWidth,innerHeight);rd.outputEncoding=T.sRGBEncoding;rd.toneMapping=T.ACESFilmicToneMapping;rd.toneMappingExposure=Q?1.35:1.2;$('stage').appendChild(rd.domElement);
+const sc=new T.Scene(),cam=new T.PerspectiveCamera(innerWidth<innerHeight?75:60,innerWidth/innerHeight,.1,700);
+/* Phase 8E — readable night-planet sky (not crushed black) */
+sc.background=new T.Color(0x122030);sc.fog=new T.FogExp2(0x152636,.0034);const FOG_COL=sc.fog.color;
+const ext=new T.Group(),int=new T.Group(),fx=new T.Group();sc.add(ext,int,fx);
+/* HDRI deferred after first paint (Phase 6) — Poly Haven CC0 */
+/* Phase 7G — skip HDRI on mobile (VRAM + decode) */
+function loadHDRI(){if(mob||!T.RGBELoader)return;new T.RGBELoader().load('assets/hdri/industrial_sunset_puresky_1k.hdr',tex=>{tex.mapping=T.EquirectangularReflectionMapping;if(T.PMREMGenerator){const p=new T.PMREMGenerator(rd);p.compileEquirectangularShader();sc.environment=p.fromEquirectangular(tex).texture;tex.dispose();p.dispose()}else sc.environment=tex})}
+if(!mob)setTimeout(loadHDRI,Q?200:600);
+const MS=(c,e,i,o)=>new T.MeshStandardMaterial(Object.assign({color:c,emissive:e||0,emissiveIntensity:i||1,roughness:.75,metalness:.3},o||{}));
+const mh=MS(0x1d292e),mi=MS(0x141d21),mv=MS(0x1a3a28,0x0a2a18,.18,{roughness:.92}),mc=new T.MeshBasicMaterial({color:0x37f2ff}),ma=new T.MeshBasicMaterial({color:0xffb300});
+const B=(w,h,d,x,y,z,m,g)=>{const o=new T.Mesh(new T.BoxGeometry(w,h,d),m);o.position.set(x,y,z);(g||sc).add(o);return o};
+const CY=new T.Color(0x5ec8d8),RD=new T.Color(0xff2030);
+/* Phase 8E cinematic lighting — brighter establishing + motivated interiors */
+const hemi=new T.HemisphereLight(0x9ab4c4,0x2e2418,1.0);sc.add(hemi);
+const dir=new T.DirectionalLight(0xe8f0f8,1.35);dir.position.set(36,72,28);sc.add(dir);
+const rim=new T.DirectionalLight(0x6a90b0,.65);rim.position.set(-48,30,-26);sc.add(rim);
+const planetFill=new T.DirectionalLight(0xa8c4d8,.7);planetFill.position.set(-6,28,56);sc.add(planetFill);
+const keyWarm=new T.DirectionalLight(0xe0c4a0,.0);keyWarm.position.set(8,14,-100);sc.add(keyWarm);
+const intFill=new T.HemisphereLight(0x6a9aaa,0x1a1010,0);sc.add(intFill);
+const bridgeKey=new T.PointLight(0xb0d8e8,0,48);bridgeKey.position.set(0,7,-128);sc.add(bridgeKey);
+const airKey=new T.SpotLight(0xc8e4f0,0,56,Math.PI/6.2,.42,1);airKey.position.set(0,16,-48);airKey.target.position.set(0,2.5,-62);sc.add(airKey,airKey.target);
+const rl=[[0,8,-122],[11,7,-124],[0,5.5,-82],[0,4.5,-66],[0,4.5,-130]].map(p=>{const l=new T.PointLight(0x5ab8c8,.7,42);l.position.set(...p);sc.add(l);return l});
+/* corridor ceiling practicals (match segment Z placements) */
+const corrL=[-70,-80,-90].map(z=>{const l=new T.PointLight(0x9ad8e8,0,26);l.position.set(0,6.4,z);sc.add(l);return l});
+const corrSpot=new T.SpotLight(0xc0e4f0,0,55,Math.PI/4.5,.55,1);corrSpot.position.set(0,5.5,-72);corrSpot.target.position.set(0,2.8,-105);sc.add(corrSpot,corrSpot.target);
+const cabFill=new T.PointLight(0x7ac0d0,0,20);cabFill.position.set(7.2,4.4,-125.0);sc.add(cabFill);
+const chronFill=new T.PointLight(0x5ab0c8,0,18);chronFill.position.set(0,3.6,-120.5);sc.add(chronFill);
+const capKey=new T.PointLight(0x8ae0f0,.0,18);capKey.position.set(2.5,5,-127);sc.add(capKey);
+const capRim=new T.PointLight(0xd0a060,.0,14);capRim.position.set(-3,3.2,-132);sc.add(capRim);
+const portalFill=new T.PointLight(0x5dff8a,0,64);portalFill.position.set(0,5.8,-170);sc.add(portalFill);
+const bl=[0,1].map(()=>{const l=new T.PointLight(0xff2030,0,36);sc.add(l);return l});
+const BLOOM_BASE=Q?.22:.16;
+const E0=.875,WM=['⚠ NHIỆT ĐỘ LÕI VƯỢT NGƯỠNG','⚠ ÁP SUẤT KHOANG GIẢM','⚠ MẤT KẾT NỐI HOLOGRAM','⚠ RÒ RỈ PLASMA','⚠ SẬP KẾT CẤU','⚠ SƠ TÁN NGAY'],evd=[];
+/* warning impacts during long alarm — boom at E0 → blackout → eye-open → portal */
+const EV=[[.78,-8,3,-138],[.795,14,9,-128],[.81,17,3,-122],[.825,-13,6,-118],[.838,8,.5,-112],[.85,2,10,-136],[.86,-4,2,-127],[.868,0,6,-124]];
+const al=[[-14,10.5,-103],[24,10.5,-103],[-14,10.5,-141],[24,10.5,-141],[5,11.5,-122]].map(q=>B(.9,.6,.9,q[0],q[1],q[2],MS(0x300000,0xff2030,0),int));
+const SPN=EV.length*90,spg=new T.BufferGeometry(),spa=new Float32Array(SPN*3),spv=[];for(let i=0;i<SPN;i++)spv.push(V(rn()-.5,rn()-.3,rn()-.5).normalize().multiplyScalar(.4+rn()*1.4));spg.setAttribute('position',new T.BufferAttribute(spa,3));
+const sprk=new T.Points(spg,new T.PointsMaterial({color:0xffa040,size:.28,transparent:true,blending:T.AdditiveBlending,depthWrite:false}));sprk.frustumCulled=false;int.add(sprk);const el=new T.PointLight(0xff9040,0,50);int.add(el);
+/* Crash overgrowth — moss / vines / hull breaches (ship must look abandoned) */
+const vines=[];const lamps=[];
+const mossMat=MS(0x3d6a32,0x1a3a18,.22,{roughness:.96,metalness:.02});
+const vineMat=MS(0x4a7a38,0x204820,.18,{roughness:.94,metalness:0});
+const rustMat=MS(0x5a3a22,0x2a1408,.08,{roughness:.92,metalness:.12});
+const breachMat=new T.MeshStandardMaterial({color:0x030507,roughness:.88,metalness:.4,side:T.DoubleSide,emissive:0x101820,emissiveIntensity:.15});
+function addMoss(x,y,z,sx,sy,sz,g,rx,ry,rz){const grp=new T.Group();grp.position.set(x,y,z);grp.rotation.set(rx||0,ry||0,rz||0);const base=new T.Mesh(new T.BoxGeometry(sx,sy*.45,sz),mossMat);grp.add(base);for(let i=0;i<5;i++){const clump=new T.Mesh(new T.IcosahedronGeometry(.12+rn()*.2,0),vineMat);clump.position.set((rn()-.5)*sx*.7,sy*.3+rn()*.25,(rn()-.5)*sz*.7);clump.scale.set(1+rn(),.6+rn()*.8,1+rn());grp.add(clump)}(g||ext).add(grp);return grp}
+function addBreach(x,y,z,r,g,rx,ry){const o=new T.Mesh(new T.CircleGeometry(r,10),breachMat);o.position.set(x,y,z);o.rotation.set(rx||0,ry||0,0);(g||ext).add(o);const lip=new T.Mesh(new T.TorusGeometry(r*1.08,r*.16,6,14),rustMat);lip.position.copy(o.position);lip.rotation.copy(o.rotation);(g||ext).add(lip);const jagged=new T.Mesh(new T.RingGeometry(r*.55,r*1.15,8),rustMat);jagged.position.copy(o.position);jagged.rotation.copy(o.rotation);(g||ext).add(jagged);return o}
+function addVine(pts,rad,g){const curve=new T.CatmullRomCurve3(pts.map(p=>V(...p)));const geo=new T.TubeGeometry(curve,Math.max(8,pts.length*4),rad,6,false);const mesh=new T.Mesh(geo,vineMat);mesh.userData.n=geo.index?geo.index.count:geo.attributes.position.count;vines.push(mesh);(g||ext).add(mesh);pts.forEach((p,i)=>{if(i%2){const leaf=new T.Mesh(new T.SphereGeometry(rad*2.2,5,4),mossMat);leaf.position.set(p[0]+(rn()-.5)*.15,p[1],p[2]+(rn()-.5)*.15);leaf.scale.set(1.4,.5,1);(g||ext).add(leaf)}});return mesh}
+/* exterior — airlock face + hull overgrown (hero FOV) */
+[[-2.4,.35,-60.5,1.8,.22,1.1],[2.2,.4,-60.8,1.6,.2,1],[ -1.8,5.8,-61.2,2.4,.16,1.2],[1.6,6.2,-61,2,.14,1],[0,7.4,-62.5,3.2,.18,1.4],[-5,1.2,-58,2.2,.18,1.4],[4.5,0.9,-59,1.8,.15,1.1],[-9,3.5,-68,2.6,.2,1.6],[8,2.8,-70,2.2,.18,1.3],[-14,1.4,-74,3,.22,1.8],[13,4.2,-76,2.4,.16,1.2],[-6,5.5,-72,2,.12,.9],[7,0.5,-66,1.6,.25,2.2],[-3.5,2.8,-61.5,1.2,.35,.6],[3.2,3.1,-61.6,1.1,.3,.55]].forEach(q=>addMoss(...q,ext));
+[[-2.6,3.8,-61.2,.95,ext,0,Math.PI],[2.8,4.0,-61.4,.8,ext,0,Math.PI],[0,6.8,-61.8,1.15,ext,0,Math.PI],[-11,2.2,-71,1.3,ext,0,1.2],[10.5,5.0,-73,1.0,ext,0,-1.1]].forEach(q=>addBreach(...q));
+[[[-3.5,.1,-58],[-2.8,2.2,-59.5],[-2.2,4.8,-61],[-1.4,7.0,-62.5]],[[3.2,.15,-58.5],[2.6,2.5,-60],[2.0,5.0,-61.2],[1.3,7.1,-63]],[[-6,.2,-56],[-4.5,2.5,-58],[-3,5.5,-60],[-1.5,7.2,-63]],[[5,.3,-57],[4,2.8,-59],[3.2,5.2,-61],[2,7,-64]],[[-12,.4,-70],[-10,3,-71],[-8.5,5.5,-72],[-7,7.5,-74]],[[11,.5,-71],[9.5,2.8,-72],[8,5.2,-74],[6.5,7,-76]]].forEach(p=>addVine(p,.08+rn()*.05,ext));
+/* hanging flora clumps on hull */
+for(let i=0;i<(mob?6:14);i++){const o=new T.Mesh(new T.SphereGeometry(.18+rn()*.22,6,5),vineMat);o.position.set((rn()-.5)*18,1+rn()*7,-58-rn()*22);o.scale.set(1,.6+rn(),1);ext.add(o)}
+/* interior — corridor + bridge moss / breaches in camera path */
+[[-1.8,.12,-71,1.6,.14,1],[1.9,.14,-73,1.4,.12,.9],[-2.2,5.6,-75,1.8,.12,1.2],[2.1,5.9,-79,1.6,.1,1],[-2.0,.15,-82,1.5,.14,.85],[2.2,.18,-86,1.3,.12,.8],[-2.4,6.0,-88,2,.12,1.3],[2.3,6.2,-92,1.8,.1,1.1],[-1.6,.12,-96,1.4,.12,.7],[0,7.0,-100,2.6,.12,1.5],[-3.2,2.8,-78,1.1,.2,.5],[3.0,3.2,-90,1.0,.18,.45],[-8,0.2,-118,2,.14,1.2],[10,0.25,-120,1.8,.12,1],[-10,7.5,-126,2.2,.12,1.3],[12,6.8,-128,1.6,.1,1],[-4,0.15,-132,1.5,.12,.9],[5,7.8,-134,2,.1,1.1],[-2.5,5.5,-128,1.4,.14,.8],[3.2,0.2,-130,1.3,.12,.7]].forEach(q=>addMoss(q[0],q[1],q[2],q[3],q[4],q[5],int));
+[[-3.8,3.4,-74,.75,int,0,Math.PI/2],[3.8,4.0,-80,.7,int,0,-Math.PI/2],[-3.9,3.6,-88,.85,int,0,Math.PI/2],[3.9,4.4,-96,.8,int,0,-Math.PI/2],[0,7.5,-104,1.0,int,Math.PI/2,0],[-9,3.5,-122,1.0,int,0,1.1],[11,5.2,-126,.8,int,0,-1.0],[-2.5,2.8,-136,.6,int,0,.4]].forEach(q=>addBreach(...q));
+[[[-2.8,.1,-70],[-2.5,2.4,-74],[-2.1,5.2,-78],[-1.6,6.8,-82]],[[2.6,.15,-76],[2.3,2.8,-80],[2.0,5.5,-84],[1.5,7.0,-88]],[[-2.5,.1,-90],[-2.2,3.0,-94],[-1.8,5.8,-98],[-1.2,7.2,-102]],[[-8,.2,-116],[-6,3.5,-120],[-3,6.5,-124],[0,7.8,-128]],[[9,.3,-118],[7,3.2,-122],[4,6,-126],[1,7.5,-130]]].forEach(p=>addVine(p,.06+rn()*.04,int));
+for(let i=0;i<(mob?5:12);i++){const o=new T.Mesh(new T.SphereGeometry(.12+rn()*.18,5,4),mossMat);o.position.set((rn()-.5)*6,.2+rn()*6.5,-70-rn()*65);int.add(o)}
+const hazeMats=[];
+function hazeCard(w,h,y,z,op,col){const m=new T.MeshBasicMaterial({color:col||0x1a3040,transparent:true,opacity:op,depthWrite:false,side:T.DoubleSide});hazeMats.push(m);const o=new T.Mesh(new T.PlaneGeometry(w,h),m);o.position.set(0,y,z);ext.add(o);return o}
+const GN=mob?120:(Q?420:240),gdg=new T.BufferGeometry(),gdp=new Float32Array(GN*3);for(let i=0;i<GN;i++)gdp.set([(rn()-.5)*90,0.4+rn()*4,(rn()-.5)*100-20],i*3);gdg.setAttribute('position',new T.BufferAttribute(gdp,3));
+const gDust=new T.Points(gdg,new T.PointsMaterial({color:0xb8c8c0,size:.06,sizeAttenuation:true,transparent:true,opacity:.28,depthWrite:false}));gDust.frustumCulled=false;ext.add(gDust);
+/* keep hidden doors for scroll open anim */
+
+const dl=B(4,8,.6,-2,4,-62,MS(0x222e33,0x331a00,.5),ext),dr=B(4,8,.6,2,4,-62,MS(0x222e33,0x331a00,.5),ext);dl.visible=dr.visible=false;
+/* Phase 7C: corridor GLBs carry cable trays — no interior neon vines */
+/* Phase 7F — cheap volumetric shafts (additive planes) + interior dust */
+const shaftMat=()=>new T.MeshBasicMaterial({color:0xa8d8e8,transparent:true,opacity:0,blending:T.AdditiveBlending,depthWrite:false,side:T.DoubleSide});
+const shafts=[];function addShaft(x,y,z,w,h,ry,g){const m=new T.Mesh(new T.PlaneGeometry(w,h),shaftMat());m.position.set(x,y,z);m.rotation.y=ry;g.add(m);shafts.push(m);return m}
+addShaft(0,5.5,-62,2.2,9,0,ext);addShaft(-2.2,5.2,-74,1.4,7,.15,int);if(!mob){addShaft(2.2,5.2,-74,1.4,7,-.15,int);addShaft(0,5.8,-84,1.6,7.5,0,int)}addShaft(0,5.5,-112,1.8,8,0,int);if(Q&&!mob)addShaft(0,4.8,-130,2.4,7.2,0,int);
+const DN=mob?80:(Q?280:140),dg=new T.BufferGeometry(),dp=new Float32Array(DN*3);for(let i=0;i<DN;i++)dp.set([(rn()-.5)*7,1+rn()*6,-65-rn()*75],i*3);dg.setAttribute('position',new T.BufferAttribute(dp,3));
+const dust=new T.Points(dg,new T.PointsMaterial({color:0xcfe8f0,size:.04,transparent:true,opacity:.35,depthWrite:false,blending:T.AdditiveBlending}));dust.frustumCulled=false;int.add(dust);
+/* capsule + thuyền trưởng */
+const cp=new T.Group();cp.position.set(0,0,-130);cp.name='capsule';int.add(cp);
+const cb=(r1,r2,h,y,m)=>{const o=new T.Mesh(new T.CylinderGeometry(r1,r2,h,32),m);o.position.y=y;cp.add(o);return o};
+cb(2.6,2.8,.8,.4,mh);cb(2.3,2.3,.6,6.7,mh);cb(2.1,2.1,.15,.9,MS(0,0x37f2ff,.8));
+const gl=new T.Mesh(new T.CylinderGeometry(2,2,5.6,32,1,true),new T.MeshStandardMaterial({color:0x66ffff,transparent:true,opacity:.05,emissive:0x052a30,emissiveIntensity:.15,side:T.DoubleSide,depthWrite:false}));gl.position.y=3.7;cp.add(gl);
+const sk=MS(0xc9a58c,0x201008,.3),su=MS(0x16384a,0x0a4a60,.8);
+[[new T.CapsuleGeometry(.55,1.5,4,12),0,3.5,su],[new T.SphereGeometry(.5,16,12),0,5,sk],[new T.CylinderGeometry(.14,.14,1.8),-.8,3.6,su],[new T.CylinderGeometry(.14,.14,1.8),.8,3.6,su],[new T.CylinderGeometry(.18,.18,2),-.3,1.9,su],[new T.CylinderGeometry(.18,.18,2),.3,1.9,su]].forEach(a=>{const o=new T.Mesh(a[0],a[3]);o.position.set(a[1],a[2],0);cp.add(o)});
+const cl1=new T.PointLight(0x37f2ff,.55,12);cl1.position.y=3.5;cp.add(cl1);
+const rings=[0,1,2].map(i=>{const r=new T.Mesh(new T.TorusGeometry(3+i*.5,.04,8,64),new T.MeshBasicMaterial({color:i==1?0x5dff8a:0x37f2ff}));r.rotation.x=Math.PI/2;cp.add(r);return r});
+/* hologram painters — Profile / Skill cards / Chronicle / Archive */
+const HM=[];
+function mkTex(draw,W,H){const S=2,c=document.createElement('canvas');c.width=W*S;c.height=H*S;const g=c.getContext('2d');g.scale(S,S);draw(g,W,H);const X=new T.CanvasTexture(c);X.anisotropy=8;X.minFilter=T.LinearFilter;X.magFilter=T.LinearFilter;X.generateMipmaps=false;X.userData.sf=18/H;return X}
+function wrapTxt(g,text,maxW){const out=[];let q='';String(text).split(/\s+/).forEach(w=>{const n=q?q+' '+w:w;if(q&&g.measureText(n).width>maxW){out.push(q);q=w}else q=n});if(q)out.push(q);return out}
+function tx(t,ls,W,H){return mkTex((g,W,H)=>{g.fillStyle='rgba(4,18,26,.96)';g.fillRect(0,0,W,H);g.strokeStyle='#37f2ff';g.lineWidth=2;g.strokeRect(3,3,W-6,H-6);g.fillStyle='#37f2ff';let tf=24;const title=String(t).toUpperCase();g.font='bold '+tf+'px "Courier New",monospace';while(g.measureText(title).width>W-36&&tf>13){tf--;g.font='bold '+tf+'px "Courier New",monospace'}g.fillText(title,18,16+tf);g.fillRect(18,24+tf,W-36,2);g.fillStyle='#eef8ff';g.font='14px "Courier New",monospace';let y=40+tf;ls.forEach(l=>{wrapTxt(g,l,W-36).forEach(r=>{g.fillText(r,18,y);y+=18})})},W,H)}
+function txProfile(cfg){const W=cfg.W,H=cfg.H,S=3,c=document.createElement('canvas');c.width=W*S;c.height=H*S;const g=c.getContext('2d');g.scale(S,S);
+g.fillStyle='#070b12';g.fillRect(0,0,W,H);g.strokeStyle='rgba(55,242,255,.65)';g.lineWidth=3;g.strokeRect(14,14,W-28,H-28);
+g.fillStyle='#37f2ff';g.font='bold 44px "Courier New",monospace';g.fillText('PROFILE',36,64);g.fillRect(36,76,W-72,3);
+const pad=36,top=100,bot=H-32,band=bot-top;
+/* height budget: attrs 20% · summary 62% · interests 18% */
+const yA=top,hA=band*.20,yS=yA+hA,hS=band*.62,yI=yS+hS,hI=band*.18;
+g.fillStyle='rgba(55,242,255,.85)';g.font='bold 18px "Courier New",monospace';g.fillText('ATTRIBUTES',pad,yA+8);
+const cols=2,rows=Math.ceil(cfg.attrs.length/cols),cellW=(W-pad*2-16)/cols,cellH=(hA-28)/rows;
+cfg.attrs.forEach(([k,v],i)=>{const col=i%cols,row=(i/cols)|0,x=pad+col*(cellW+16),y=yA+26+row*cellH;g.fillStyle='rgba(130,160,185,.95)';g.font='13px "Courier New",monospace';g.fillText(k,x,y+4);g.fillStyle='#ffffff';g.font='bold 15px "Courier New",monospace';let ay=y+24;wrapTxt(g,v,cellW-8).forEach(r=>{g.fillText(r,x,ay);ay+=18})});
+g.fillStyle='rgba(55,242,255,.85)';g.font='bold 18px "Courier New",monospace';g.fillText('SUMMARY',pad,yS+8);
+const nSum=cfg.summary.length,sSlot=(hS-24)/nSum;
+cfg.summary.forEach(([h,b],i)=>{const y0=yS+22+i*sSlot,ch=sSlot-10;g.fillStyle='rgba(55,242,255,.14)';g.fillRect(pad,y0,W-pad*2,ch);g.strokeStyle='rgba(55,242,255,.3)';g.strokeRect(pad,y0,W-pad*2,ch);g.fillStyle='#37f2ff';g.font='bold 17px "Courier New",monospace';g.fillText(h,pad+18,y0+24);g.fillStyle='#eaf4fc';g.font='15px "Courier New",monospace';let ly=y0+46,maxY=y0+ch-8;wrapTxt(g,b,W-pad*2-40).forEach(r=>{if(ly>maxY)return;g.fillText(r,pad+18,ly);ly+=20})});
+g.fillStyle='rgba(55,242,255,.85)';g.font='bold 18px "Courier New",monospace';g.fillText('INTERESTS',pad,yI+8);
+const iN=cfg.interests.length,iSlot=(hI-20)/Math.ceil(iN/2),iCols=2,iW=(W-pad*2-16)/iCols;
+cfg.interests.forEach((t,i)=>{const col=i%iCols,row=(i/iCols)|0,x=pad+col*(iW+16),y=yI+22+row*iSlot,ch=Math.max(40,iSlot-8);g.fillStyle='rgba(18,34,46,.98)';g.fillRect(x,y,iW-4,ch);g.strokeStyle='rgba(55,242,255,.55)';g.lineWidth=2;g.strokeRect(x,y,iW-4,ch);g.fillStyle='#e8f8ff';g.font='14px "Courier New",monospace';let iy=y+ch*.42;wrapTxt(g,t,iW-24).forEach(r=>{g.fillText(r,x+12,iy);iy+=18})});
+const X=new T.CanvasTexture(c);X.anisotropy=8;X.minFilter=T.LinearFilter;X.magFilter=T.LinearFilter;X.generateMipmaps=false;X.userData.sf=32/H;return X}
+function txSkillCard(m){const W=480,H=200;return mkTex((g,W,H)=>{g.fillStyle='rgba(6,12,20,.97)';g.fillRect(0,0,W,H);g.fillStyle='#37f2ff';g.fillRect(0,0,3,H);g.strokeStyle='rgba(55,242,255,.5)';g.beginPath();g.moveTo(W-16,6);g.lineTo(W-6,6);g.lineTo(W-6,16);g.moveTo(W-16,H-6);g.lineTo(W-6,H-6);g.lineTo(W-6,H-16);g.stroke();g.fillStyle='#37f2ff';g.font='10px "Courier New",monospace';g.fillText('⬡  '+m.id,14,24);g.fillStyle='#f4fbff';g.font='bold 17px "Courier New",monospace';g.fillText(m.title,14,48);let x=14,y=78;g.font='11px "Courier New",monospace';m.tags.forEach(t=>{const tw=g.measureText(t).width+14;if(x+tw>W-14){x=14;y+=26}g.fillStyle='rgba(28,40,54,.95)';g.fillRect(x,y-12,tw,22);g.strokeStyle='rgba(70,100,120,.55)';g.strokeRect(x,y-12,tw,22);g.fillStyle='#e8f4ff';g.fillText(t,x+7,y+3);x+=tw+6});const grd=g.createLinearGradient(14,H-14,W-14,H-14);grd.addColorStop(0,'#37f2ff');grd.addColorStop(1,'#8a5cff');g.fillStyle=grd;g.fillRect(14,H-12,W-28,2)},W,H)}
+const CHRON_W=960,CHRON_H=700,CHRON_PW=7.6,CHRON_PH=5.55;
+function paintChronicle(entries,sel,warn){return mkTex((g,W,H)=>{const acc=warn?'#ff3344':'#37f2ff',bg=warn?'#140408':'#060a10',fg=warn?'#ffe8e8':'#f5f9ff';g.fillStyle=bg;g.fillRect(0,0,W,H);g.strokeStyle=warn?'rgba(255,60,70,.7)':'rgba(55,242,255,.35)';g.lineWidth=warn?3:1;g.strokeRect(4,4,W-8,H-8);if(warn){g.fillStyle='rgba(255,20,40,.12)';g.fillRect(4,4,W-8,H-8);g.fillStyle='#ff2030';g.font='bold 13px "Courier New",monospace';g.fillText('⚠ SYSTEM FAULT  ·  LOG CORRUPTED  ·  EVACUATE',22,28);g.fillStyle='#ff6670';g.font='bold 28px Georgia,serif';g.fillText('CHRONICLE — ERROR',22,62);g.fillStyle='rgba(255,180,180,.7)';g.font='10px "Courier New",monospace';g.fillText('WARNING  ·  CORE LINK UNSTABLE  ·  DATA BLEED',22,82)}else{g.fillStyle=acc;g.font='11px "Courier New",monospace';g.fillText('EXPERIENCE & TIMELINE',22,28);g.fillStyle=fg;g.font='bold 30px Georgia,serif';g.fillText('CHRONICLE',22,62);g.fillStyle='rgba(55,242,255,.45)';g.font='10px "Courier New",monospace';g.fillText('click node  ·  ← →  ·  Enter = detail',22,82)}
+const lx=36,top=108,bot=H-36,n=entries.length,step=(bot-top)/Math.max(1,n-1),split=250;g.strokeStyle=warn?'rgba(255,80,90,.35)':'rgba(55,242,255,.25)';g.beginPath();g.moveTo(split,96);g.lineTo(split,H-28);g.stroke();g.strokeStyle=warn?'rgba(255,70,80,.75)':'rgba(55,242,255,.5)';g.lineWidth=2;g.beginPath();g.moveTo(lx,top);g.lineTo(lx,bot);g.stroke();entries.forEach((e,i)=>{const y=top+i*step,on=i===sel;g.fillStyle=on?acc:(warn?'rgba(255,80,90,.45)':(e.tag==='Field Ops'?'rgba(55,242,255,.4)':(e.tag==='Milestone'?'rgba(255,200,90,.55)':'rgba(140,100,220,.7)')));g.beginPath();g.arc(lx,y,on?7:4,0,Math.PI*2);g.fill();if(on){g.strokeStyle=warn?'rgba(255,120,120,.7)':'rgba(55,242,255,.55)';g.lineWidth=1.5;g.beginPath();g.arc(lx,y,11,0,Math.PI*2);g.stroke()}g.fillStyle=on?acc:(warn?'rgba(255,160,160,.55)':'rgba(150,170,190,.65)');g.font=(on?'bold ':'')+'10px "Courier New",monospace';g.fillText(e.date,lx+18,y+1);g.fillStyle=on?(warn?'rgba(255,210,210,.9)':'rgba(210,240,255,.85)'):(warn?'rgba(200,120,120,.5)':'rgba(130,150,170,.55)');g.font='9px "Courier New",monospace';g.fillText(warn&&on?'FAULT':e.tag,lx+18,y+12)});const e=entries[sel]||entries[0],dx=split+24;g.fillStyle=acc;g.font='11px "Courier New",monospace';g.fillText(warn?('⚠ CRITICAL  ·  '+e.date):(e.date+'  ·  '+e.tag).toUpperCase(),dx,128);g.fillStyle=fg;g.font='bold 28px Georgia,serif';g.fillText(warn?('ERR · '+e.role):e.role,dx,168);g.fillStyle=acc;g.font='13px "Courier New",monospace';g.fillText(warn?'SIGNAL LOST — '+e.org:e.org,dx,196);g.fillStyle=warn?'#ffc8c8':'#c5d4e4';g.font='13px "Courier New",monospace';let dy=230;wrapTxt(g,warn?('ALERT: '+(e.brief||e.detail)+' — connection unstable. Containment failing.'):(e.brief||e.detail),W-dx-28).forEach(r=>{g.fillText(r,dx,dy);dy+=19});if(warn){g.fillStyle='rgba(255,40,50,.9)';g.font='bold 14px "Courier New",monospace';g.fillText('>>> INITIATE EMERGENCY PROTOCOL <<<',dx,H-48)}g.fillStyle=warn?'rgba(255,120,120,.7)':'rgba(55,242,255,.6)';g.font='11px "Courier New",monospace';g.fillText((warn?'⚠ ':'')+'◀ ▶  '+(sel+1)+' / '+n,dx,H-28)},CHRON_W,CHRON_H)}
+function hp(tex,w,h,x,y,z,ry,ap,bp,g){const m=new T.ShaderMaterial({transparent:true,depthWrite:false,side:T.DoubleSide,uniforms:{map:{value:tex},t:{value:0},red:{value:0},a:{value:0},k:{value:1},sf:{value:tex.userData.sf||.06}},vertexShader:'varying vec2 u;void main(){u=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'uniform sampler2D map;uniform float t,red,a,k,sf;varying vec2 u;void main(){vec2 q=u;q.x+=red*step(.992,sin(t*11.+u.y*22.))*.01;vec4 c=texture2D(map,q);float s=1.-red*.08*(.5+.5*sin(u.y*40.+t*3.));c.a*=1.-step(u.y,sf)*red;vec3 r=mix(c.rgb,vec3(1.,.14,.18)*dot(c.rgb,vec3(.5))*1.4,red*.85);gl_FragColor=vec4(r*s,c.a*a*k);}'});m.userData.ap=ap;m.userData.bp=bp==null?.88:bp;HM.push(m);const o=new T.Mesh(new T.PlaneGeometry(w,h),m);o.position.set(x,y,z);o.rotation.y=ry;(g||int).add(o);return o}
+/* LEFT: Profile (own beat) then Skills 2×3 clean grid (own beat) */
+const PF=CONFIG.profile;hp(txProfile(PF),PF.w,PF.h,PF.x,PF.y,PF.z,PF.ry,PF.ap,PF.bp);
+const skillTitle=hp(tx('SKILLS',['Skill modules · stack & tools'],520,110),2.6,.52,-4.1,6.55,-126.55,.22,.49,.545);skillTitle.material.depthTest=false;skillTitle.renderOrder=90;
+CONFIG.skillModules.forEach((m,i)=>{const col=i%2,row=(i/2)|0;const x=-5.55+col*2.6,y=5.2-row*1.15,z=-126.55;const o=hp(txSkillCard(m),2.35,1.0,x,y,z,.22,.49,.545);o.material.depthTest=false;o.renderOrder=91+i});
+/* TRANSITION: compact archive wall — clear of capsule / bright props */
+const P=CONFIG.projects;
+const archTitle=hp(tx('Project Archive',['Verified Artifacts · click a card'],640,120),2.4,.58,9.4,6.55,-125.15,-.05,.555,.635);
+archTitle.material.depthTest=false;archTitle.renderOrder=80;
+const COLS=3,CW=1.72,CH=.82,SX=2.1,SY=1.12,BS=1;
+const cards=P.map((p,i)=>{const c=i%COLS,r=(i/COLS)|0;const o=hp(tx(p.name,[p.blurb,'▶'],400,180),CW,CH,8.0+c*SX,5.85-r*SY,-125.35,-.05,.56,.635);o.userData.i=i;o.userData.bs=BS;o.scale.setScalar(BS);o.material.depthTest=false;o.renderOrder=80+i;return o});
+/* Chronicle — large frontal + solid back (keeps depth on project→chronicle) */
+let chronIdx=0,chronWarn=false;const chronHits=[];
+const chronBack=new T.Mesh(new T.PlaneGeometry(CHRON_PW*1.06,CHRON_PH*1.08),new T.MeshBasicMaterial({color:0x071018,transparent:true,opacity:.82,depthWrite:false}));chronBack.position.set(0,3.5,-124.15);chronBack.renderOrder=90;int.add(chronBack);
+const chronMesh=hp(paintChronicle(CONFIG.chronicle,0,false),CHRON_PW,CHRON_PH,0,3.5,-123.8,0,.645,.868);
+chronMesh.userData.kind='chronicle';chronMesh.material.depthTest=false;chronMesh.renderOrder=999;
+function setChronicle(i,warn){const n=CONFIG.chronicle.length;if(i!=null)chronIdx=((i%n)+n)%n;if(warn!=null)chronWarn=!!warn;const old=chronMesh.material.uniforms.map.value;const tex=paintChronicle(CONFIG.chronicle,chronIdx,chronWarn);chronMesh.material.uniforms.map.value=tex;chronMesh.material.uniforms.sf.value=tex.userData.sf;if(old&&old.dispose)old.dispose()}
+(function buildChronHits(){const n=CONFIG.chronicle.length,top=108,bot=CHRON_H-36,step=(bot-top)/Math.max(1,n-1),lx=36;for(let i=0;i<n;i++){const cy=top+i*step,u=lx/CHRON_W,v=1-cy/CHRON_H;const hit=new T.Mesh(new T.SphereGeometry(.32,8,8),new T.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false,depthTest:false}));hit.position.set((u-.5)*CHRON_PW,(v-.5)*CHRON_PH,.06);hit.userData.chronI=i;hit.renderOrder=9;chronMesh.add(hit);chronHits.push(hit)}
+const body=new T.Mesh(new T.PlaneGeometry(CHRON_PW*.52,CHRON_PH*.62),new T.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false}));body.position.set(CHRON_PW*.2,0,.04);body.userData.chronNext=1;body.renderOrder=9;chronMesh.add(body);chronHits.push(body)})();
+/* nổ */
+B(7,.4,7,0,-.4,-130,MS(0x1d292e,0x37f2ff,.15),fx);const N=mob?800:(Q?3000:1400),eg=new T.BufferGeometry(),ep=new Float32Array(N*3),ev=[];for(let i=0;i<N;i++)ev.push(V(rn()-.5,rn()-.5,rn()-.5).normalize().multiplyScalar(.3+rn()*rn()*1.6));eg.setAttribute('position',new T.BufferAttribute(ep,3));
+const exp=new T.Points(eg,new T.PointsMaterial({color:0xff9a3c,size:.5,transparent:true,blending:T.AdditiveBlending,depthWrite:false}));exp.frustumCulled=false;fx.add(exp);
+const ND=Q?36:22,dm=new T.InstancedMesh(new T.BoxGeometry(1,1,1),mh,ND),dv=[],dsz=[],dd=new T.Object3D();for(let i=0;i<ND;i++){dv.push(V(rn()-.5,rn()-.5,rn()-.5).normalize().multiplyScalar(.5+rn()*1.2));dsz.push(.25+rn()*.9)}dm.frustumCulled=false;dm.visible=false;fx.add(dm);
+const swv=new T.Mesh(new T.SphereGeometry(1,Q?24:12,Q?16:8),new T.MeshBasicMaterial({color:0xffb060,transparent:true,opacity:0,wireframe:true,blending:T.AdditiveBlending}));fx.add(swv);const ol=new T.PointLight(0xff8a30,0,120);ol.position.set(0,4,-128);fx.add(ol);const OR=V(0,3.5,-128);
+/* không gian + cổng */
+const STARN=Q?1600:700,stg=new T.BufferGeometry(),sp=new Float32Array(STARN*3);for(let i=0;i<STARN;i++){const v=V(rn()-.5,rn()-.5,rn()-.5).normalize().multiplyScalar(320);sp.set([v.x,v.y,v.z],i*3)}stg.setAttribute('position',new T.BufferAttribute(sp,3));const stars=new T.Points(stg,new T.PointsMaterial({color:0xd0e0f0,size:.55,sizeAttenuation:true,transparent:true,opacity:.55,depthWrite:false}));sc.add(stars);
+const PZ=-170,portal=new T.Group();portal.position.set(0,0,PZ);sc.add(portal);const prs=[];let portalReady=null;
+const PTN=Q?360:180,pg=new T.BufferGeometry(),pp=new Float32Array(PTN*3);for(let i=0;i<PTN;i++){const a=rn()*6.28,r=1.6+rn()*1.2;pp.set([Math.cos(a)*r,1.6+Math.sin(a)*r*.1,(rn()-.5)*.8],i*3)}pg.setAttribute('position',new T.BufferAttribute(pp,3));const pts=new T.Points(pg,new T.PointsMaterial({color:0x7ffcff,size:.055,sizeAttenuation:true,transparent:true,opacity:.5,blending:T.AdditiveBlending,depthWrite:false}));portal.add(pts);
+/* mưa bão */
+const RN=mob?600:(Q?2500:1100),rg=new T.BufferGeometry(),rp=new Float32Array(RN*3);for(let i=0;i<RN;i++)rp.set([(rn()-.5)*120,rn()*50-10,(rn()-.5)*120],i*3);rg.setAttribute('position',new T.BufferAttribute(rp,3));const rain=new T.Points(rg,new T.PointsMaterial({color:0xbfe8d8,size:.18,transparent:true,opacity:.6,depthWrite:false}));rain.frustumCulled=false;sc.add(rain);
+/* Phase 6 — lazy GLB by beat + shared clones */
+const GL=T.GLTFLoader?new T.GLTFLoader():null;if(GL&&T.DRACOLoader){const dr=new T.DRACOLoader();dr.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');GL.setDRACOLoader(dr)}
+let _loadN=0,_loadOk=0,_loadFail=0;const _loadTotal=(CONFIG.models||[]).length+2;const _beatStarted={},_bootReady={ok:false};let _b0Pend=0;
+function _loadUI(){const el=$('loadstat');if(!el)return;const done=_loadOk+_loadFail>=_loadTotal;el.textContent=done?('Assets '+_loadOk+'/'+_loadTotal+(_loadFail?' · '+_loadFail+' missing':'')+' · '+CONFIG.quality):(('Streaming… '+_loadOk+'/'+_loadTotal)+(_bootReady.ok?' · enter OK':''))}
+/* Phase 7G — instance LOD registry (distance cull by Z proximity) */
+const lodNodes=[],capHide=[];
+function cloneShare(src){const c=src.clone(false);if(src.isMesh){c.geometry=src.geometry;c.material=src.material;c.frustumCulled=true}src.children.forEach(ch=>c.add(cloneShare(ch)));return c}
+function tuneMats(o,lod,opts){const aniso=mob?1:(Q?4:1);const dropAo=!!mob||lod===1;const planet=!!(opts&&opts.planet);const ship=!!(opts&&opts.ship);o.traverse(n=>{if(!n.isMesh||!n.material)return;n.frustumCulled=true;if(n.geometry)n.geometry.computeBoundingSphere();const mats=Array.isArray(n.material)?n.material:[n.material];mats.forEach(mat=>{['map','normalMap','roughnessMap','metalnessMap','aoMap','emissiveMap'].forEach(k=>{const tex=mat[k];if(!tex)return;tex.anisotropy=aniso;if(planet&&(k==='map'||k==='normalMap'||k==='roughnessMap')){tex.wrapS=tex.wrapT=T.RepeatWrapping;tex.repeat.set(k==='map'?4:3,k==='map'?4:3);tex.needsUpdate=true}});if(planet){const nm=((n.name||'')+'|'+(mat.name||'')).toLowerCase();const flora=!!(opts&&opts.flora)||/flora|bio|plant|moss|vine|leaf/.test(nm);if(mat.emissiveIntensity!=null)mat.emissiveIntensity=Math.min(mat.emissiveIntensity,flora?0.03:0.06);if(flora){if(mat.color)mat.color.setHex(0x152618);if(mat.emissive)mat.emissive.setHex(0x07140a);mat.emissiveIntensity=.02;if(mat.map)mat.color.multiplyScalar(.55)}else{if(mat.color){const mx=Math.max(mat.color.r,mat.color.g,mat.color.b);if(mx>.72)mat.color.multiplyScalar(.55/mx)}if(!mat.map&&mat.color)mat.color.setHex(0x3a4a3c)}if(mat.roughness!=null)mat.roughness=Math.min(.96,Math.max(.62,mat.roughness));if(mat.metalness!=null)mat.metalness=Math.min(mat.metalness,.12);if(mat.emissiveIntensity!=null)mat.emissiveIntensity=Math.min(mat.emissiveIntensity,.05)}if(ship){if(mat.color){mat.color.offsetHSL(.02,-.08,-.04);mat.color.r=Math.min(1,mat.color.r*.85+.08);mat.color.g=Math.min(1,mat.color.g*.9+.04);mat.color.b=Math.min(1,mat.color.b*.7);const mx=Math.max(mat.color.r,mat.color.g,mat.color.b);if(mx<.1)mat.color.setRGB(.18,.2,.16)}if(mat.metalness!=null)mat.metalness=Math.min(.38,Math.max(.08,mat.metalness*.7));if(mat.roughness!=null)mat.roughness=Math.min(.95,Math.max(.62,mat.roughness+.12));if(mat.emissiveIntensity!=null&&mat.emissiveIntensity>0)mat.emissiveIntensity=Math.min(mat.emissiveIntensity,.12);else if(mat.emissive){mat.emissive.setHex(0x081410);mat.emissiveIntensity=.03}}if(dropAo&&mat.aoMap){mat.aoMap=null;mat.needsUpdate=true}if(lod===1&&mat.normalMap&&mat.normalScale)mat.normalScale.set(.35,.35);mat.needsUpdate=true})})}
+function unlockBoot(){if(_bootReady.ok)return;_bootReady.ok=true;$('b1').disabled=false;$('b2').disabled=false;_loadUI()}
+function slot(m){if(!GL)return;/* Phase 7G: mobile skips far wreck (heavy + rarely framed) */if(mob&&/wreck_silhouette/.test(m.file)){_loadOk++;_loadUI();return}_loadN++;const isB0=(m.beat||0)===0;if(isB0)_b0Pend++;const ok=g=>{const o=g.scene;o.traverse(n=>{if(n.isMesh&&n.material&&n.material.isMeshBasicMaterial){const q=n.material;n.material=new T.MeshStandardMaterial({color:q.color,vertexColors:q.vertexColors,roughness:.8,metalness:.3,emissive:q.color,emissiveIntensity:.07})}});const isPlanet=/planet\//.test(m.file),isFlora=/flora/.test(m.file),isCap=/capsule/.test(m.file),isShip=/airlock|hull_module|wreck_silhouette|corridor|bridge|console|cabinet|capsule|interior_prop/.test(m.file);tuneMats(o,0,isPlanet?{planet:true,flora:isFlora}:isShip?{ship:true}:null);if(isCap)o.traverse(n=>{if(!n.isMesh||!n.material)return;[].concat(n.material).forEach(mat=>{if(mat.emissiveIntensity!=null)mat.emissiveIntensity=Math.min(mat.emissiveIntensity||0,.08);if(mat.emissive&&mat.emissive.r+mat.emissive.g+mat.emissive.b>1.8)mat.emissive.multiplyScalar(.25)})});
+const w=new T.Group();if(m.fit===false){w.add(o)}else{const b=new T.Box3().setFromObject(o),z=b.getSize(V(0,0,0)),k=(m.size||1)/Math.max(z.x,z.y,z.z,.001);o.scale.setScalar(k);b.setFromObject(o);const ct=b.getCenter(V(0,0,0));o.position.set(-ct.x,-b.min.y,-ct.z);w.add(o)}
+(m.at||[{p:[0,0,0]}]).forEach(a=>{const q=cloneShare(w);q.position.set(...a.p);q.rotation.set(...(a.r||[0,0,0]).map(d=>d*Math.PI/180));q.scale.setScalar(a.s||1);if(m.parent==='int'){q.userData.lodZ=a.p[2];q.userData.lodR=m.lodR||58;lodNodes.push(q);if(isCap||/bridge_shell|cabinet|console|corridor/.test(m.file)||(/interior_prop/.test(m.file)&&a.p[0]>3)||(/hull_module|airlock/.test(m.file)&&Math.abs(a.p[2]+130)<20))capHide.push(q)}(m.parent=='int'?int:ext).add(q)});(m.hide||[]).forEach(n=>{const h=sc.getObjectByName(n);if(!h)return;h.traverse(c=>{if(c.isLight)return;if(c.isMesh||c.isPoints)c.visible=false})});_loadOk++;if(isB0){_b0Pend--;if(_b0Pend<=0||_loadOk>=3)unlockBoot()}_loadUI()};
+const fail=()=>{_loadFail++;if(isB0){_b0Pend--;if(_b0Pend<=0||_loadOk+_loadFail>=3)unlockBoot()}_loadUI();console.warn('GLB fail',m.file)};
+const e=EMBED[m.file];if(e){const bin=atob(e),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);GL.parse(u.buffer,'',ok,fail)}else GL.load((CONFIG.modelDir||'assets/')+m.file,ok,undefined,fail)}
+function ensureBeat(b){if(_beatStarted[b])return;_beatStarted[b]=true;if(b===3){loadPortal();return}(CONFIG.models||[]).filter(m=>(m.beat||0)===b).forEach(slot);_loadUI()}
+function loadPortal(){if(!GL){_loadFail++;_loadUI();return}if(portalReady)return;
+const WANT_RING=9.2;/* aperture radius in world units — dominates climax */
+const placeFit=(o,size)=>{const b0=new T.Box3().setFromObject(o),sz=b0.getSize(V(0,0,0)),k=size/Math.max(sz.x,sz.y,sz.z,.001);o.scale.setScalar(k);const b=new T.Box3().setFromObject(o),c=b.getCenter(V(0,0,0));o.position.set(-c.x,-b.min.y,-c.z);return o};
+const measureRings=o=>{const rings=[];let ringLocal=V(0,0,0),rc=0,spinR=.01,aperR=.01,aperLocal=null;o.updateMatrixWorld(true);o.traverse(n=>{if(!n.isMesh)return;const b=new T.Box3().setFromObject(n),c=b.getCenter(V(0,0,0)),s=b.getSize(V(0,0,0)),rad=Math.max(s.x,s.y)*.5;if(/^Ring_/.test(n.name)){rings.push(n);prs.push(n);o.worldToLocal(c);ringLocal.add(c);rc++;spinR=Math.max(spinR,rad)}if(/^(ApertureFrame|PrimaryRing|PrimaryInnerBand)$/.test(n.name)){aperR=Math.max(aperR,rad);const lc=c.clone();o.worldToLocal(lc);aperLocal=lc}});if(rc)ringLocal.multiplyScalar(1/rc);else ringLocal.set(0,WANT_RING*.55,0);if(aperLocal)ringLocal.copy(aperLocal);const ringR=Math.max(aperR>1?aperR:spinR,spinR);if(!rc&&aperR<.1)ringLocal.set(0,WANT_RING*.55,0);return{ringLocal,ringR:ringR>1?ringR:WANT_RING,spinR,rings}};
+const seedFx=(parent,ringLocal,ringR)=>{const inv=1/Math.max(parent.scale.x,.001),R=ringR*inv;for(let i=0;i<PTN;i++){const a=rn()*6.28,r=R*(.86+rn()*.16);pp.set([Math.cos(a)*r,Math.sin(a)*r,(rn()-.5)*R*.04],i*3)}pg.attributes.position.needsUpdate=true;pts.material.color.setHex(0x3dffb0);pts.material.size=.22;pts.material.opacity=.78;parent.add(pts);pts.position.copy(ringLocal);pts.rotation.set(0,0,0);
+/* cool teal core — avoid white wash so particle depth still reads */
+const core=new T.Mesh(new T.CircleGeometry(R*.92,48),new T.MeshBasicMaterial({color:0x1a8f6a,transparent:true,opacity:.32,blending:T.AdditiveBlending,depthWrite:false,side:T.DoubleSide}));core.position.copy(ringLocal);parent.add(core);
+const bloomDisk=new T.Mesh(new T.CircleGeometry(R*1.02,40),new T.MeshBasicMaterial({color:0x2dff88,transparent:true,opacity:.16,blending:T.AdditiveBlending,depthWrite:false,side:T.DoubleSide}));bloomDisk.position.copy(ringLocal);parent.add(bloomDisk);
+const halo=new T.Mesh(new T.TorusGeometry(R*.98,R*.05,10,64),new T.MeshBasicMaterial({color:0x37f2ff,transparent:true,opacity:.72,blending:T.AdditiveBlending,depthWrite:false}));halo.position.copy(ringLocal);parent.add(halo);prs.push(halo)};
+const pad=new T.Mesh(new T.CylinderGeometry(10.5,11,.3,40),new T.MeshStandardMaterial({color:0x080c0e,emissive:0x020604,emissiveIntensity:.02,roughness:.98,metalness:.04}));pad.position.y=.14;portal.add(pad);
+GL.load('assets/mythos/models/nexus_portal_v3.glb',g=>{const o=g.scene;tuneMats(o,0,{ship:true});
+placeFit(o,18);prs.length=0;let m=measureRings(o);o.scale.multiplyScalar(WANT_RING/Math.max(m.spinR||m.ringR,.01));
+const bG=new T.Box3().setFromObject(o),cG=bG.getCenter(V(0,0,0));o.position.set(-cG.x,-bG.min.y,-cG.z);
+prs.length=0;m=measureRings(o);portal.add(o);portalReady=o;
+o.updateMatrixWorld(true);const ringW=o.localToWorld(m.ringLocal.clone());
+const wantCY=m.ringR+.55;o.position.x+=-ringW.x;o.position.y+=(wantCY-ringW.y);o.position.z+=PZ-ringW.z;
+o.updateMatrixWorld(true);prs.length=0;m=measureRings(o);seedFx(o,m.ringLocal,m.ringR);
+portalFill.position.set(0,wantCY,PZ);portalFill.distance=80;window.__portalWantCY=wantCY;
+o.traverse(n=>{if(!n.isMesh||/^Ring_/.test(n.name))return;const nm=n.name||'',b=new T.Box3().setFromObject(n),s=b.getSize(V(0,0,0));
+if(b.max.y<.55||(s.y<1.4&&Math.max(s.x,s.z)>5&&b.min.y<1.6))n.visible=false;
+if(/^(CoreDisk|ApertureInner|PrimaryOuterBand|PylonDebris|PylonFall|PylonStump|Foundation|FoundLip|FloorPanel|Plinth|PlinthCap|PlinthInlay|Trench)/.test(nm))n.visible=false;
+if(/^Pylon(Shaft|Cap|Rib|Emit|Base)_4/.test(nm))n.visible=false;
+const mats=[].concat(n.material||[]);if(/Primary(Inner)?Band|PrimaryRing|ApertureFrame/.test(nm))mats.forEach(mat=>{if(!mat)return;if(mat.color)mat.color.multiplyScalar(.4);if(mat.emissive){mat.emissive.setHex(0x08180f);mat.emissiveIntensity=.1}})});
+if(!prs.length)prs.push(o);_loadOk++;_loadUI();_loadOk++;_loadUI()
+},undefined,()=>{_loadFail++;_loadUI();_loadFail++;_loadUI();const cy=WANT_RING+.55;for(let i=0;i<8;i++){const r=new T.Mesh(new T.TorusGeometry(WANT_RING*.85+i*.28,.08,8,48),new T.MeshBasicMaterial({color:i%2?0x5dff8a:0x37f2ff,transparent:true,opacity:.85}));r.position.set(0,cy,-i*.35);portal.add(r);prs.push(r)}seedFx(portal,V(0,cy,0),WANT_RING);window.__portalWantCY=cy})}
+ensureBeat(0);setTimeout(()=>ensureBeat(1),Q?1200:800);setTimeout(()=>ensureBeat(2),Q?2800:2000);setTimeout(()=>ensureBeat(3),Q?5000:3500);setTimeout(unlockBoot,8000);_loadUI();
+/* hậu kỳ — bloom on cinematic / desktop only (Aspire DEV skips composer) */
+let comp=null,bloom=null;if(Q&&!mob&&T.EffectComposer&&T.UnrealBloomPass){comp=new T.EffectComposer(rd);comp.addPass(new T.RenderPass(sc,cam));bloom=new T.UnrealBloomPass(new T.Vector2(innerWidth,innerHeight),BLOOM_BASE,.55,.88);comp.addPass(bloom)}
+/* âm thanh */
+let AC,wg,hg,sg,sr,tg;function audio(){AC=new(window.AudioContext||window.webkitAudioContext)();const nb=AC.createBuffer(1,AC.sampleRate*2,AC.sampleRate),d=nb.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;const n=AC.createBufferSource();n.buffer=nb;n.loop=true;const f=AC.createBiquadFilter();f.type='lowpass';f.frequency.value=500;wg=AC.createGain();wg.gain.value=0;n.connect(f);f.connect(wg);wg.connect(AC.destination);n.start();const o=AC.createOscillator();o.frequency.value=55;hg=AC.createGain();hg.gain.value=0;o.connect(hg);hg.connect(AC.destination);o.start();sr=AC.createOscillator();sr.type='sawtooth';sg=AC.createGain();sg.gain.value=0;sr.connect(sg);sg.connect(AC.destination);sr.start();const tn=AC.createOscillator();tn.frequency.value=3200;tg=AC.createGain();tg.gain.value=0;tn.connect(tg);tg.connect(AC.destination);tn.start();window._nb=nb}
+function boom(v){if(!AC)return;const s=AC.createBufferSource();s.buffer=window._nb;const f=AC.createBiquadFilter();f.type='lowpass';f.frequency.value=300;const g=AC.createGain();g.gain.setValueAtTime(v||.9,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+2.5);s.connect(f);f.connect(g);g.connect(AC.destination);s.start()}
+$('b1').onclick=()=>{audio();$('boot').style.display='none'};$('b2').onclick=()=>$('boot').style.display='none';
+/* tương tác — archive cards + chronicle nodes */
+const rc=new T.Raycaster(),ms=new T.Vector2(9,9);let hov=-1,chronHov=-1;
+function openProject(i){const p=P[i];if(!p)return;$('it').textContent=p.name;const sec=(t,b)=>'<div class="sec"><b>'+t+'</b>'+b+'</div>';let h=sec('Overview','<p>'+p.blurb+'</p>');if(p.purpose)h+=sec('Problem & Purpose','<p>'+p.purpose+'</p>');if(p.contribution)h+=sec('Contribution','<p>'+p.contribution+'</p>');if(p.features&&p.features.length)h+=sec('Features','<ul>'+p.features.map(f=>'<li>'+f+'</li>').join('')+'</ul>');$('id').innerHTML=h;$('ic').innerHTML=sec('Technology Stack',(p.stack||[]).map(t=>'<span class=chip>'+t+'</span>').join(''));$('il').innerHTML=(p.links||[]).map(l=>'<a target=_blank rel=noopener href="'+l.url+'">'+l.label+'</a>').join('');$('info').style.display='block'}
+function showChronicleInfo(){const e=CONFIG.chronicle[chronIdx];$('it').textContent=e.role;const sec=(t,b)=>'<div class="sec"><b>'+t+'</b>'+b+'</div>';$('id').innerHTML=sec('Period','<p>'+e.date+'</p>')+sec('Organization','<p>'+e.org+'</p>')+sec('Overview','<p>'+e.detail+'</p>');$('ic').innerHTML='<span class=chip>'+e.tag+'</span>';$('il').innerHTML='';$('info').style.display='block'}
+addEventListener('pointermove',e=>{ms.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1)});
+addEventListener('click',e=>{if(e.target!==rd.domElement)return;ms.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);
+if(pr>.645&&pr<.78){rc.setFromCamera(ms,cam);const ch=rc.intersectObjects(chronHits,false)[0];if(ch){const ud=ch.object.userData;if(ud.chronI!=null){setChronicle(ud.chronI);return}if(ud.chronNext){showChronicleInfo();return}}
+const hit=rc.intersectObject(chronMesh)[0];if(hit&&hit.uv){const n=CONFIG.chronicle.length,top=100,bot=CHRON_H-40,step=(bot-top)/Math.max(1,n-1),cy=(1-hit.uv.y)*CHRON_H;if(hit.uv.x<.32){let best=0,bd=1e9;for(let i=0;i<n;i++){const d=Math.abs(top+i*step-cy);if(d<bd){bd=d;best=i}}setChronicle(best);return}showChronicleInfo();return}}
+if(hov>=0&&pr>.55&&pr<.635)openProject(hov)});
+addEventListener('keydown',e=>{if(e.key=='Escape')$('info').style.display='none';if(pr>.645&&pr<.78){if(e.key==='ArrowDown'||e.key==='ArrowRight'||e.key==='j'){e.preventDefault();setChronicle(chronIdx+1)}if(e.key==='ArrowUp'||e.key==='ArrowLeft'||e.key==='k'){e.preventDefault();setChronicle(chronIdx-1)}if(e.key==='Enter')showChronicleInfo()}});
+addEventListener('wheel',e=>{if(!(pr>.645&&pr<.78)||!e.shiftKey)return;e.preventDefault();setChronicle(chronIdx+(e.deltaY>0?1:-1))},{passive:false});
+let suck=null;document.querySelectorAll('#ct a').forEach(a=>a.onclick=e=>{e.preventDefault();if(suck)return;suck={u:a.href,t:0};document.body.style.overflow='hidden';$('ct').classList.remove('on')});
+/* camera — dedicated frames per beat so panels face readable */
+const K=[[0,[6,10.5,62],[0,2.8,-58]],[.05,[3,8.2,44],[0,3.0,-60]],[.1,[0,6.0,20],[0,3.2,-62]],[.14,[0,4.4,-2],[0,3.4,-62]],[.2,[0,3.6,-48],[0,3.6,-68]],[.28,[0,3.4,-66],[0,3.8,-88]],[.34,[0,3.3,-86],[0,3.6,-112]],[.42,[0,3.5,-112],[0,3.9,-127]],[.45,[-2.4,4.25,-121.4],[-5.0,4.2,-126.8]],[.49,[-2.2,4.2,-121.5],[-4.9,4.15,-126.7]],[.53,[-2.2,3.65,-121.6],[-4.2,4.0,-126.4]],[.555,[-1.6,3.55,-121.5],[-3.6,3.85,-126.2]],[.57,[6.2,3.95,-120.6],[9.4,4.6,-125.2]],[.63,[6.4,3.9,-120.8],[9.6,4.3,-125.3]],[.65,[0,3.55,-117.2],[0,3.5,-123.8]],[.72,[0,3.5,-116.9],[0,3.5,-123.8]],[.78,[0,3.45,-116.6],[0,3.5,-123.8]],[.84,[0,3.4,-118],[0,3.8,-128]],[.875,[0,3.2,-124],[0,4.0,-128]],[.90,[0,2.8,-126],[0,3.5,-128]],[.93,[0,6.5,-136],[0,9.0,-168]],[.96,[0,7.8,-144],[0,9.4,-169]],[.985,[0,8.6,-148],[0,9.5,-170]],[1,[0,9.0,-150],[0,9.5,-170]]],L=V(0,0,0);
+function camAt(p){let i=0;while(i<K.length-2&&p>K[i+1][0])i++;const a=K[i],b=K[i+1];let u=cl((p-a[0])/(b[0]-a[0]),0,1);u=u*u*(3-2*u);cam.position.set(a[1][0],a[1][1],a[1][2]).lerp(V(...b[1]),u);L.set(a[2][0],a[2][1],a[2][2]).lerp(V(...b[2]),u);if(cam.aspect<1&&p<.22){const f=L.clone().sub(cam.position).normalize();cam.position.addScaledVector(f,-2.2)}}
+const CAP=[[0,'01 · HÀNH TINH HOANG TÀN'],[.12,'02 · TÀU BỎ HOANG'],[.28,'03 · PHÒNG ĐIỀU KHIỂN'],[.38,'04 · PROFILE'],[.50,'05 · SKILL MODULES'],[.54,'06 · PROJECT ARCHIVE · click'],[.645,'07 · CHRONICLE · click node / ←→'],[.74,'⚠ WARNING · CHRONICLE FAULT'],[.82,'⚠ ALARM · CORE OVERLOAD'],[.875,'✦ DETONATION'],[.90,''],[.96,'08 · CỔNG LIÊN HỆ']];
+let pr=0,sm=0,ci=-1,lg=0,wasBoom=false;const clk=new T.Clock(),dum=new T.Object3D();let _fc=0,_ft=0,_fps=0;
+function upd(){const m=document.documentElement.scrollHeight-innerHeight;pr=m>0?scrollY/m:0;if(pr>.05)ensureBeat(1);if(pr>.18)ensureBeat(2);if(pr>.65)ensureBeat(3)}addEventListener('scroll',upd);upd();
+addEventListener('resize',()=>{rd.setSize(innerWidth,innerHeight);if(comp)comp.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.fov=innerWidth<innerHeight?72:58;cam.updateProjectionMatrix()});
+cam.fov=innerWidth<innerHeight?72:58;cam.updateProjectionMatrix();
+function loop(){const dt=Math.min(clk.getDelta(),.05),t=clk.elapsedTime;if(Math.abs(pr-sm)>.18)sm=pr;else sm+=(pr-sm)*(1-Math.exp(-dt*2.6));const p=sm,vis=p<E0;
+/* warn builds slowly on Chronicle → long alarm before boom */
+const warnW=cl((p-.74)/.05,0,1)*cl((E0-p)/.02,0,1),a=cl((p-.74)/.06,0,1)*(vis?1:0),st=Math.sin(t*(2.4+a*10))>0?1:.22;
+const post=Math.max(0,p-E0),ko=p>=E0?cl(1-cl((post-.04)/.05,0,1),0,1):0;/* full black after boom */
+const wakeW=cl((post-.05)/.055,0,1),boomLive=p>E0&&post<.12;/* eyes fully open by p≈.98 so contact HUD is clear */
+const extW=cl(1-p/.35,0,1),intW=cl((p-.18)/.28,0,1),capW=cl((p-.36)/.12,0,1)*cl((.545-p)/.06,0,1),projW=cl((p-.54)/.08,0,1)*cl((.74-p)/.05,0,1),doorW=cl((p-.24)/.1,0,1)*cl((.45-p)/.12,0,1);
+const archW=cl((p-.54)/.05,0,1)*cl((.64-p)/.025,0,1),chronW=cl((p-.645)/.04,0,1)*cl((.868-p)/.03,0,1),skillW=cl((p-.49)/.04,0,1)*cl((.545-p)/.025,0,1);
+ext.visible=vis&&p<.26;int.visible=vis&&p>.1&&ko<.85;stars.visible=(p>E0&&wakeW>.45)||(vis&&p<.16);portal.visible=p>E0&&wakeW>.35;rain.visible=vis&&p>.08&&p<.24;fx.visible=boomLive;dust.visible=vis&&p>.18&&p<.74&&archW<.2&&chronW<.15&&skillW<.4;gDust.visible=vis&&p<.26;
+chronBack.visible=chronW>.05&&ko<.5;cards.forEach(c=>{c.visible=archW>.02});archTitle.visible=archW>.02;
+/* Phase 7G — distance LOD cull; hard-hide bright near-capsule props during HUD */
+const cz=cam.position.z;for(let i=0;i<lodNodes.length;i++){const n=lodNodes[i],dz=Math.abs((n.userData.lodZ||0)-cz);let on=dz<(n.userData.lodR||45);const hudClear=chronW>.08||archW>.08||capW>.45;if(hudClear&&Math.abs((n.userData.lodZ||0)+130)<18)on=false;if(n.visible!==on)n.visible=on}
+if(SHOW_FPS){_fc++;if(t-_ft>=.5){_fps=Math.round(_fc/(t-_ft));_fc=0;_ft=t;$('fps').textContent=_fps+' FPS · '+(Q?'CINE':'DEV')+' · PR '+rd.getPixelRatio().toFixed(2)+' · LOD '+lodNodes.filter(n=>n.visible).length+'/'+lodNodes.length}}
+hazeMats.forEach((m,i)=>{m.opacity=(vis?(.22-i*.05):0)*extW});
+/* fog: atmospheric not crushed; clear interiors */
+sc.fog.density=vis?(p<.18?.0032:.0026+Math.max(0,.3-p)*.006):.0016;
+FOG_COL.setRGB(vis?.08+.03*extW:.015,vis?.11+.03*extW+.015*intW:.02,vis?.14+.025*extW:.03);
+const hudDim=Math.max(skillW,archW,chronW*.45);hemi.intensity=(.72+extW*.32+intW*.12)*(1-hudDim*.4);rim.intensity=.38+extW*.28;planetFill.intensity=.42+extW*.32;keyWarm.intensity=(intW*.55+projW*.35+capW*.28)*(1-hudDim*.5);
+intFill.intensity=(intW*.85+capW*.55+projW*.4)*(1-hudDim*.45);bridgeKey.intensity=(intW*1.1+capW*1.4)*(1-Math.max(skillW,archW)*.8)*(chronW>.1?.35:1);
+airKey.intensity=extW*.85+doorW*1.25;corrL.forEach((l,i)=>{l.intensity=intW*(1.45+.35*Math.sin(t*1.2+i))*(p>.18&&p<.58?1:.25)});corrSpot.intensity=intW*2.4*(p>.2&&p<.5?1:.15);
+cabFill.intensity=archW*1.05;chronFill.intensity=chronW*.55;portalFill.intensity=p>E0?(.55+cl((p-.94)/.05,0,1)*.85+Math.sin(t*1.6)*.12):0;
+capKey.intensity=capW*1.8;capRim.intensity=capW*1.0;if(typeof cl1!=='undefined')cl1.intensity=.35+capW*.55;
+rl[0].intensity=(archW>.1||chronW>.1)?0:(.7+intW*.75+capW*.55);rl[1].intensity=(archW>.1||chronW>.1)?0:(.4+archW*.5);rl[2].intensity=.7+intW*.85;rl[3].intensity=.5+extW*.55+doorW*.85;rl[4].intensity=(chronW>.08||archW>.08)?0:(.65+capW*1.6);
+/* shafts pulse with beat — hide near capsule during HUD beats (they bloom into white rings) */
+const shaftA=(extW*.04+intW*.055+capW*.07)*(Q?.9:.7);shafts.forEach((s,i)=>{s.material.opacity=shaftA*(.65+.35*Math.sin(t*.8+i*1.3));s.visible=vis&&!(chronW>.08||archW>.08)});
+/* dust drift */
+if(dust.visible){const q=dg.attributes.position;for(let i=0;i<DN;i++){let y=q.getY(i)+dt*(.15+.1*Math.sin(t+i));if(y>7.2)y=1;q.setY(i,y)}q.needsUpdate=true}
+if(gDust.visible){const q=gdg.attributes.position;for(let i=0;i<GN;i++){let x=q.getX(i)+dt*(.4+.2*Math.sin(t*.3+i)),z=q.getZ(i)-dt*.6;if(x>50)x=-50;if(z<-80)z=40;q.setX(i,x);q.setZ(i,z)}q.needsUpdate=true}
+/* sét */
+if(vis&&p<.28&&rn()<dt*.18)lg=1;lg*=.88;dir.intensity=1.05+lg*1.5+extW*.4;if(vis)sc.background.setRGB(.08+.07*lg,.11+.06*lg,.16+.08*lg);else sc.background.setRGB(.01,.015,.03);
+/* mưa & dây leo */
+if(rain.visible){const q=rg.attributes.position;for(let i=0;i<RN;i++){let y=q.getY(i)-dt*38,x=q.getX(i)-dt*14;if(y<-10)y=40;if(x<-60)x=60;q.setXYZ(i,x,y,q.getZ(i))}q.needsUpdate=true;rain.position.set(cam.position.x,cam.position.y,cam.position.z-30)}
+/* vines fully grown — crash site already overgrown */
+vines.forEach(v=>{if(v.geometry.setDrawRange)v.geometry.setDrawRange(0,v.userData.n||0)});
+/* cửa */
+const d=cl((p-.28)/.07,0,1);dl.position.x=-2-d*4.2;dr.position.x=2+d*4.2;rl[3].intensity+=d*1.1;
+lamps.forEach((l,i)=>l.material.emissiveIntensity=.15+.35*Math.abs(Math.sin(t*(1+i%4)+i)));
+rings.forEach((r,i)=>{r.position.y=3.5+Math.sin(t*(.8+i*.3)+i*2)*2;r.rotation.z=t*(.4+i*.2)});
+/* báo động — long strobe; chronicle flips to ERROR panel */
+rl.forEach(l=>l.color.lerpColors(CY,RD,a));if(a>.15&&vis){for(let i=0;i<3;i++)rl[i].intensity=Math.max(rl[i].intensity,.35)+a*st*3.4*(rn()<.45?.35:1.2)}al.forEach(m=>m.material.emissiveIntensity=a*st*4.2);bl.forEach((l,i)=>{const an=t*1.35+i*3.14;l.position.set(5+Math.cos(an)*14,8.5,-124+Math.sin(an)*14);l.intensity=a*9*st});
+$('red').style.opacity=a*(.4+.7*st);$('vg').style.opacity=vis?(.05+extW*.1+intW*.05+a*.32):(p>E0?cl(1.05-wakeW,0,1)*.9:0);
+if(warnW>.35&&!chronWarn)setChronicle(null,true);if(warnW<.15&&chronWarn&&vis)setChronicle(null,false);
+/* hologram — per-band fade so beats don't overlap in space */
+HM.forEach(m=>{const u=m.uniforms;u.t.value=t;const isChron=m===chronMesh.material;u.red.value=isChron?Math.max(a,warnW*.95):a;u.a.value=cl((p-m.userData.ap)/.03,0,1)*cl((m.userData.bp-p)/.03,0,1)*(1-ko);u.k.value=a>0?(rn()<(isChron?.28:.18)?.4:1):1});
+/* hover — archive cards + chronicle nodes */
+rc.setFromCamera(ms,cam);hov=-1;chronHov=-1;
+if(p>.55&&p<.635){const h=rc.intersectObjects(cards)[0];if(h)hov=h.object.userData.i}
+if(p>.645&&p<.78){const h=rc.intersectObjects(chronHits,false)[0];if(h)chronHov=h.object.userData.chronI!=null?h.object.userData.chronI:(h.object.userData.chronNext?chronIdx:-2)}
+cards.forEach(o=>{const s=o.scale.x+((o.userData.i==hov?1.06:1)*o.userData.bs-o.scale.x)*.22;o.scale.setScalar(s)});
+chronHits.forEach(h=>{if(h.userData.chronI==null)return;const on=h.userData.chronI===chronIdx||h.userData.chronI===chronHov;h.scale.setScalar(on?1.35:1)});
+document.body.style.cursor=(hov>=0||chronHov!==-1)?'pointer':'';
+/* nổ */
+let imp=0,lv=0;EV.forEach((e,i)=>{const d=p-e[0];for(let j=0;j<90;j++){const k=i*90+j;if(d>0){const r=(1-Math.pow(1-cl(d/.03,0,1),2))*6,g=d*d*900;spa.set([e[1]+spv[k].x*r,e[2]+spv[k].y*r-g,e[3]+spv[k].z*r],k*3)}else spa.set([0,-999,0],k*3)}
+if(d>0&&d<.02){const v=1-d/.02;imp=Math.max(imp,v);if(v>lv){lv=v;el.position.set(e[1],e[2],e[3])}}const on=d>0&&vis;if(on&&!evd[i])boom(.5);evd[i]=on});spg.attributes.position.needsUpdate=true;el.intensity=lv*70;sprk.visible=p>.76;
+/* boom → blackout → wake; debris only in first moments after E0 */
+const te=cl(post/.1,0,1),fxFade=1-cl((post-.02)/.1,0,1),R=(1-Math.pow(1-te,2.2))*28*fxFade;
+if(p>E0&&fxFade>.02){exp.visible=true;dm.visible=true;swv.visible=true;
+for(let i=0;i<N;i++)ep.set([OR.x+ev[i].x*R,OR.y+ev[i].y*R,OR.z+ev[i].z*R],i*3);eg.attributes.position.needsUpdate=true;
+for(let i=0;i<ND;i++){dum.position.set(OR.x+dv[i].x*R*.7,OR.y+dv[i].y*R*.7,OR.z+dv[i].z*R*.7);dum.rotation.set(t*dv[i].x*2,t*dv[i].y*2,i);dum.scale.setScalar(dsz[i]*fxFade);dum.updateMatrix();dm.setMatrixAt(i,dum.matrix)}dm.instanceMatrix.needsUpdate=true;
+swv.position.copy(OR);swv.scale.setScalar(1+te*52);swv.material.opacity=.75*(1-te)*fxFade;ol.intensity=Math.max(0,1-te*1.4)*40*fxFade}
+else{exp.visible=false;dm.visible=false;swv.visible=false;ol.intensity=0}
+$('flash').style.opacity=suck?$('flash').style.opacity:(p<E0?Math.pow(cl((p-.84)/(E0-.84),0,1),1.8)*.9:cl(1-post/.045,0,1)*.95);
+$('ko').style.opacity=ko>.01?Math.min(1,ko):0;
+if(p>E0&&!wasBoom)boom(1.25);wasBoom=p>E0;
+/* cổng — only after eyes open past blackout */
+prs.forEach((r,i)=>{r.rotation.z=t*(.22+i*.05)*(i%2?-1:1);r.scale.setScalar(1+.03*Math.sin(t*1.6+i))});pts.rotation.z=t*.25;pts.visible=portal.visible&&wakeW>.45;
+/* camera — hard shake in alarm, settle in blackout, wake toward portal */
+if(!suck){camAt(p);const sh=ko>.4?0:(p>E0?Math.max(0,1-post/.08)*.55:(a>0?.06+a*1.25+imp*.7:0));cam.position.add(V(Math.sin(t*36),Math.sin(t*41+1),Math.sin(t*33+2)).multiplyScalar(sh*.12));cam.lookAt(L);if(p>E0&&wakeW>.2){cam.position.y+=Math.sin(t*1.1)*.02;cam.rotation.z=Math.sin(t*.55)*.018}else if(a>0)cam.rotation.z=Math.sin(t*1.8)*a*.03;else if(extW>.4)cam.rotation.z=Math.sin(t*.2)*.008;else cam.rotation.z*=.88}
+else{suck.t+=dt;const s=cl(suck.t/1.8,0,1);const cy=window.__portalWantCY||5.8;cam.position.lerp(V(0,cy*.9,PZ-10),s*s*.12+.02);cam.lookAt(0,cy,PZ-14);cam.fov=(innerWidth<innerHeight?72:58)+s*55;cam.updateProjectionMatrix();if(bloom)bloom.strength=BLOOM_BASE+s*1.8;prs.forEach(r=>r.scale.multiplyScalar(1.008));$('flash').style.opacity=s>.6?(s-.6)/.4:0;
+if(s>=1){const u=suck.u;if(/^https?:/.test(u))location.href=u;else{location.href=u;suck=null;document.body.style.overflow='';$('flash').style.opacity=0;cam.fov=innerWidth<innerHeight?72:58;cam.updateProjectionMatrix();if(bloom)bloom.strength=BLOOM_BASE;$('ct').classList.add('on')}}}
+/* HUD */
+let c=0;CAP.forEach((x,i)=>{if(p>=x[0])c=i});if(a>0&&vis){$('hud').textContent=WM[Math.floor(t*(1.1+a*3.5))%WM.length]+' · QUÁ TẢI '+Math.min(99,Math.round(55+a*44))+'%';ci=-1}else if(ko>.5)$('hud').textContent='';else if(c!=ci){ci=c;$('hud').textContent=CAP[c][1]}
+$('bar').style.width=p*100+'%';$('ct').classList.toggle('on',(p>.97||pr>.985)&&!suck);
+/* tỉnh dậy — stay shut through blackout, then slow eye open into portal */
+const w=wakeW,EY=[[0,0],[.15,0],[.28,.08],[.4,.2],[.52,.45],[.65,.72],[.8,.92],[1,1]];let o=1;if(p>E0){if(ko>.55)o=0;else{for(let i=0;i<EY.length-1;i++)if(w>=EY[i][0]&&w<=EY[i+1][0]){const u=(w-EY[i][0])/(EY[i+1][0]-EY[i][0]);o=EY[i][1]+(EY[i+1][1]-EY[i][1])*u*u*(3-2*u)}}}
+const lt=$('lt'),lb=$('lb');lt.style.display=lb.style.display=p>E0&&o<.995&&p<.975?'block':'none';lt.style.height=lb.style.height=(1-o)*50+'%';
+rd.domElement.style.filter=p>E0&&w<.5&&ko<.4?'blur('+((1-cl((w-.1)/.4,0,1))*3.2).toFixed(1)+'px)':'';
+if(bloom&&!suck){bloom.strength=p>E0?BLOOM_BASE*.4+(1-Math.min(1,w))*.25:(chronW>.05||archW>.05||skillW>.2||a>.1?0:BLOOM_BASE*(capW>.15?.1:1))}
+const hideCap=chronW>.05||archW>.05||skillW>.2||(p>.53&&p<.86)||ko>.3;cp.visible=!hideCap;cl1.visible=!hideCap;rings.forEach(r=>r.visible=!hideCap);
+capHide.forEach(n=>{if(n.visible!==!hideCap)n.visible=!hideCap});
+/* mute bright props on archive/skills only — keep ship shell behind Chronicle */
+const hudMute=skillW>.18||archW>.06;if(hudMute!==window.__hudMute){window.__hudMute=hudMute;int.traverse(n=>{if(!(n.isMesh||n.isPoints))return;if(n===chronBack)return;const keep=n.material&&n.material.isShaderMaterial&&n.material.uniforms&&n.material.uniforms.map;if(keep)return;if(hudMute){if(n.userData._hv==null)n.userData._hv=n.visible;n.visible=false}else if(n.userData._hv!=null){n.visible=n.userData._hv;delete n.userData._hv}})}
+if(AC){const n=AC.currentTime;wg.gain.setTargetAtTime(vis&&p<.3?.25:(suck?.3:0),n,.3);hg.gain.setTargetAtTime(vis&&p>.3&&!ko?.12:.02,n,.3);sg.gain.setTargetAtTime(a>0?.08+.12*a:0,n,.14);sr.frequency.value=400+260*Math.sin(t*(2.6+a*7));tg.gain.setTargetAtTime(p>E0&&w<.6&&!ko?.02*(1-w):0,n,.2)}
+comp?comp.render():rd.render(sc,cam);requestAnimationFrame(loop)}
+loop();
+})();
+</script></body></html>
