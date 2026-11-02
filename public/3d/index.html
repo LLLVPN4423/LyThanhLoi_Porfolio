@@ -275,10 +275,10 @@ const RN=mob?180:(Q?700:360),rg=new T.BufferGeometry(),rp=new Float32Array(RN*3)
 const GL=T.GLTFLoader?new T.GLTFLoader():null;if(GL&&T.DRACOLoader){const dr=new T.DRACOLoader();dr.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');GL.setDRACOLoader(dr)}
 let _loadN=0,_loadOk=0,_loadFail=0,_critOk=0,_entered=false,_lateQueued=false;
 const _models=CONFIG.models||[],_critNeed=_models.filter(m=>m.crit).length||3,_loadTotal=_models.length+1;
-const _beatStarted={},_bootReady={ok:false},_q=[],_maxC=mob?2:3;let _active=0;
+const _beatStarted={},_bootReady={ok:false},_lq=[],_maxC=mob?2:3;let _active=0;
 function _loadUI(){const el=$('loadstat');if(!el)return;const done=_loadOk+_loadFail>=_loadTotal;if(_bootReady.ok)el.textContent=done?('Assets ready · '+CONFIG.quality):('Ready — enter anytime · background '+_loadOk+'/'+_loadTotal);else el.textContent='Preparing first view… '+Math.min(_critOk,_critNeed)+'/'+_critNeed}
-function enqueue(m){if(!m||m._queued)return;m._queued=1;_q.push(m);pump()}
-function pump(){while(_active<_maxC&&_q.length){const m=_q.shift();_active++;slot(m)}}
+function enqueue(m){if(!m||m._queued)return;m._queued=1;_lq.push(m);pump()}
+function pump(){while(_active<_maxC&&_lq.length){const m=_lq.shift();_active++;slot(m)}}
 /* Phase 7G — instance LOD registry (distance cull by Z proximity) */
 const lodNodes=[],capHide=[];
 function cloneShare(src){const c=src.clone(false);if(src.isMesh){c.geometry=src.geometry;c.material=src.material;c.frustumCulled=true}src.children.forEach(ch=>c.add(cloneShare(ch)));return c}
