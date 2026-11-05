@@ -1,0 +1,19 @@
+---
+description: Read/update CONTEXT.md so agents understand the portfolio without full-repo scans
+alwaysApply: true
+---
+
+# Project context discipline
+
+Before exploring the codebase broadly:
+
+1. **Read** [`CONTEXT.md`](CONTEXT.md) at the repo root.
+2. Prefer files listed in CONTEXT over hunting the whole tree.
+3. For Mythos 3D: edit the external workspace HTML when noted in CONTEXT, then sync with `node scripts/sync-mythos-3d.mjs` into `public/3d/`.
+
+After finishing a meaningful task (feature, fix, content fill, deploy wiring):
+
+1. **Append** a dated entry under **Change log** in `CONTEXT.md` (what changed, why, key paths).
+2. Keep entries short (3–6 bullets max). Do not dump full diffs into CONTEXT.
+
+Do not reinvent architecture already documented in CONTEXT. Do not load unused Mythos asset trees into `public/3d`.
